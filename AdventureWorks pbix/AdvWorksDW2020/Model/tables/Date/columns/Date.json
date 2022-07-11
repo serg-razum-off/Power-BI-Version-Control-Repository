@@ -1,8 +1,10 @@
 {
   "name": "Date",
   "dataType": "dateTime",
+  "isKey": true,
   "sourceColumn": "Date",
   "formatString": "Long Date",
+  "sortByColumn": "MonthKey",
   "summarizeBy": "none",
   "annotations": [
     {
@@ -12,6 +14,10 @@
     {
       "name": "UnderlyingDateTimeDataType",
       "value": "Date"
+    },
+    {
+      "name": "PBI_ChangedProperties",
+      "value": "[\"SortByColumn\"]"
     }
   ]
 }

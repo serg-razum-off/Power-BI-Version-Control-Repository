@@ -8,6 +8,7 @@
       "returnErrorValuesAsNull": true
     },
     "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "discourageImplicitMeasures": true,
     "sourceQueryCulture": "en-US",
     "relationships": [
       {
@@ -99,6 +100,10 @@
       {
         "name": "PBI_QueryOrder",
         "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\"]"
+      },
+      {
+        "name": "__TEdtr",
+        "value": "1"
       }
     ]
   }
