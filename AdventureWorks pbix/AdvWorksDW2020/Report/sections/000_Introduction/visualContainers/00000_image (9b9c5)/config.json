@@ -1,0 +1,36 @@
+{
+  "name": "9b9c579dc40505920798",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 41,
+        "y": 345,
+        "width": 280,
+        "height": 280,
+        "z": 1001
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "image",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "imageUrl": {
+              "expr": {
+                "ResourcePackageItem": {
+                  "PackageName": "RegisteredResources",
+                  "PackageType": 1,
+                  "ItemName": "vlcsnap-2022-04-25-18h06m46s008169695442633111.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
