@@ -1,5 +1,5 @@
 {
-  "version": "5.9",
+  "version": "5.24",
   "themeCollection": {
     "baseTheme": {
       "name": "CY19SU12",
@@ -44,7 +44,7 @@
           "expanded": {
             "expr": {
               "Literal": {
-                "Value": "false"
+                "Value": "true"
               }
             }
           }
