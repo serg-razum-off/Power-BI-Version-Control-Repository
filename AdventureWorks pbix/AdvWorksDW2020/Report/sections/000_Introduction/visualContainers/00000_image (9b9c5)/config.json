@@ -1,14 +1,14 @@
 {
-  "name": "8e32815c186232f25e33",
+  "name": "9b9c579dc40505920798",
   "layouts": [
     {
       "id": 0,
       "position": {
-        "x": 40.884520884520889,
-        "y": 54.512694512694516,
-        "z": 0,
-        "width": 279.9017199017199,
-        "height": 279.9017199017199
+        "x": 41,
+        "y": 345,
+        "width": 280,
+        "height": 280,
+        "z": 1001
       }
     }
   ],
@@ -24,7 +24,7 @@
                 "ResourcePackageItem": {
                   "PackageName": "RegisteredResources",
                   "PackageType": 1,
-                  "ItemName": "AdventureWorksLogo08110190716818466.jpg"
+                  "ItemName": "vlcsnap-2022-04-25-18h06m46s008169695442633111.png"
                 }
               }
             }
