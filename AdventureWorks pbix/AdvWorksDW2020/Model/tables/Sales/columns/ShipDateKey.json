@@ -4,7 +4,7 @@
   "isHidden": true,
   "sourceColumn": "ShipDateKey",
   "formatString": "0",
-  "summarizeBy": "count",
+  "summarizeBy": "none",
   "annotations": [
     {
       "name": "SummarizationSetBy",
