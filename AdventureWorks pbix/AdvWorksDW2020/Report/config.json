@@ -1,5 +1,5 @@
 {
-  "version": "5.9",
+  "version": "5.24",
   "themeCollection": {
     "baseTheme": {
       "name": "CY19SU12",
@@ -32,6 +32,19 @@
             "expr": {
               "Literal": {
                 "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
               }
             }
           }
