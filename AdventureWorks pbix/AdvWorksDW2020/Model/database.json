@@ -1,5 +1,5 @@
 {
-  "name": "10520861-a219-4e01-9104-b3fc84d88b92",
+  "name": "15078e06-359a-488b-88f3-cee09901369a",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -99,7 +99,7 @@
       },
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\"]"
+        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\",\"@ReportInfo\"]"
       },
       {
         "name": "__TEdtr",
