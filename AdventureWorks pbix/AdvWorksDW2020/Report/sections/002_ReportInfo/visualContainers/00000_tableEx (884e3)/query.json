@@ -1,0 +1,113 @@
+{
+  "Commands": [
+    {
+      "SemanticQueryDataShapeCommand": {
+        "Query": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "@",
+              "Entity": "@ReportInfo",
+              "Type": 0
+            }
+          ],
+          "Select": [
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "@"
+                  }
+                },
+                "Property": "Property"
+              },
+              "Name": "@ReportInfo.Property"
+            },
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "@"
+                  }
+                },
+                "Property": "Value"
+              },
+              "Name": "@ReportInfo.Value"
+            },
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "@"
+                  }
+                },
+                "Property": "StartDate"
+              },
+              "Name": "@ReportInfo.StartDate"
+            },
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "@"
+                  }
+                },
+                "Property": "EndDate"
+              },
+              "Name": "@ReportInfo.EndDate"
+            },
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "@"
+                  }
+                },
+                "Property": "Email"
+              },
+              "Name": "@ReportInfo.Email"
+            },
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "@"
+                  }
+                },
+                "Property": "Comment"
+              },
+              "Name": "@ReportInfo.Comment"
+            }
+          ]
+        },
+        "Binding": {
+          "Primary": {
+            "Groupings": [
+              {
+                "Projections": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                "Subtotal": 1
+              }
+            ]
+          },
+          "DataReduction": {
+            "DataVolume": 3,
+            "Primary": {
+              "Window": {
+                "Count": 500
+              }
+            }
+          },
+          "Version": 1
+        },
+        "ExecutionMetricsKind": 1
+      }
+    }
+  ]
+}

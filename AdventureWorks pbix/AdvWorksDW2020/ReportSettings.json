@@ -1,6 +1,8 @@
 {
   "Version": 1,
-  "ReportSettings": {},
+  "ReportSettings": {
+    "ShowHiddenFields": true
+  },
   "QueriesSettings": {
     "TypeDetectionEnabled": true,
     "RelationshipImportEnabled": true,

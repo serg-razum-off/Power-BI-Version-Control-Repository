@@ -1,0 +1,27 @@
+{
+  "name": "@ReportInfo",
+  "isHidden": true,
+  "partitions": [
+    {
+      "name": "@ReportInfo-2d078dea-e724-4c4f-b8b9-0de7bd738450",
+      "mode": "import",
+      "source": {
+        "type": "m"
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "name": "PBI_ResultType",
+      "value": "Table"
+    },
+    {
+      "name": "PBI_NavigationStepName",
+      "value": "Navigation"
+    },
+    {
+      "name": "PBI_ChangedProperties",
+      "value": "[\"IsHidden\"]"
+    }
+  ]
+}

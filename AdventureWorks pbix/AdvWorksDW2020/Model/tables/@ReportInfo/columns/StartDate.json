@@ -1,0 +1,26 @@
+{
+  "name": "StartDate",
+  "dataType": "dateTime",
+  "isHidden": true,
+  "sourceColumn": "StartDate",
+  "formatString": "dd-mm-yyyy",
+  "summarizeBy": "none",
+  "annotations": [
+    {
+      "name": "SummarizationSetBy",
+      "value": "Automatic"
+    },
+    {
+      "name": "PBI_ChangedProperties",
+      "value": "[\"IsHidden\",\"FormatString\"]"
+    },
+    {
+      "name": "UnderlyingDateTimeDataType",
+      "value": "Date"
+    },
+    {
+      "name": "PBI_FormatHint",
+      "value": "{\"isCustom\":true}"
+    }
+  ]
+}

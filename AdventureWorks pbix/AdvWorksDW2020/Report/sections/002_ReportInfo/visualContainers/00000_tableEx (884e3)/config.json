@@ -1,0 +1,134 @@
+{
+  "name": "884e3fb59d12b2447b49",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 159.19597989949747,
+        "y": 119.39698492462311,
+        "z": 0,
+        "width": 798.39195979899489,
+        "height": 255.67839195979897
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "tableEx",
+    "projections": {
+      "Values": [
+        {
+          "queryRef": "@ReportInfo.Property"
+        },
+        {
+          "queryRef": "@ReportInfo.Value"
+        },
+        {
+          "queryRef": "@ReportInfo.StartDate"
+        },
+        {
+          "queryRef": "@ReportInfo.EndDate"
+        },
+        {
+          "queryRef": "@ReportInfo.Email"
+        },
+        {
+          "queryRef": "@ReportInfo.Comment"
+        }
+      ]
+    },
+    "prototypeQuery": {
+      "Version": 2,
+      "From": [
+        {
+          "Name": "@",
+          "Entity": "@ReportInfo",
+          "Type": 0
+        }
+      ],
+      "Select": [
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "@"
+              }
+            },
+            "Property": "Property"
+          },
+          "Name": "@ReportInfo.Property"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "@"
+              }
+            },
+            "Property": "Value"
+          },
+          "Name": "@ReportInfo.Value"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "@"
+              }
+            },
+            "Property": "StartDate"
+          },
+          "Name": "@ReportInfo.StartDate"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "@"
+              }
+            },
+            "Property": "EndDate"
+          },
+          "Name": "@ReportInfo.EndDate"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "@"
+              }
+            },
+            "Property": "Email"
+          },
+          "Name": "@ReportInfo.Email"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "@"
+              }
+            },
+            "Property": "Comment"
+          },
+          "Name": "@ReportInfo.Comment"
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "textSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
