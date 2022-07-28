@@ -3,7 +3,7 @@
   "dataType": "decimal",
   "sourceColumn": "Extended Amount",
   "formatString": "\"£\"#,0.###############;-\"£\"#,0.###############;\"£\"#,0.###############",
-  "summarizeBy": "none",
+  "summarizeBy": "sum",
   "annotations": [
     {
       "name": "SummarizationSetBy",
