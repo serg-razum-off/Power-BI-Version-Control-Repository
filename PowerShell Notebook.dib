@@ -1,20 +1,31 @@
 #!markdown
 
 # PowerShell Notebook
+> VS Code CShP --> Reload Window \
+> VS Code CShP --> Restart Kernel
 
 #!pwsh
 
-cd ..
-ls
+# cmd line for quick dir surfing
+# cd ..
+
+pwd
+
+#!markdown
+
+### Compiling .pbix and launching .pbit
 
 #!pwsh
 
 #debug
 $pbit = Get-ChildItem *.pbit -Recurse
-$base_path = $pbit.DirectoryName
-$md_dir = ($pbit.FullName -split ".pbit" -split "\\")
-$md_dir = $md_dir[$md_dir.Count-2]
-"$base_path\$md_dir"
+# $base_path = $pbit.DirectoryName
+
+$pbit
+
+# $md_dir = ($pbit.FullName -split ".pbit" -split "\\")
+# $md_dir = $md_dir[$md_dir.Count-2]
+# "$base_path\$md_dir"
 
 #!pwsh
 
@@ -27,4 +38,18 @@ $md_dir = ($pbit.FullName -split ".pbit" -split "\\")
 $md_dir = $md_dir[$md_dir.Count-2]
 
 #SR: compiling .pbit and launching it
-pbi-tools compile-pbix -folder "$base_path\$md_dir" -format PBIT -overwrite; pbi-tools.exe launch-pbi $pbit.FullName
+$res = pbi-tools compile-pbix -folder "$base_path\$md_dir" -outPath "$base_path" -format PBIT -overwrite;     
+$substring_list = @("Error", "Global")
+if (($substring_list | %{($res -join "").contains($_)}) -contains $true) {
+    Write-Host ">>> Error: `n"; Write-Host ($res -join " <<>> ")
+    throw
+} else {
+    Write-Host ">>> Compiled successfully: `n"; Write-Host $("-"*100)
+    Write-Host "$res `n"; Write-Host $("-"*100)
+}
+pbi-tools.exe launch-pbi $pbit.FullName
+
+#!pwsh
+
+$substring_list = @("Error", "Global")
+if (($substring_list | %{"  sdcsadGlobaladsfs  ".contains($_)}) -contains $true) {"TRue"}
