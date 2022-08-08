@@ -1,0 +1,30 @@
+#!markdown
+
+# PowerShell Notebook
+
+#!pwsh
+
+cd ..
+ls
+
+#!pwsh
+
+#debug
+$pbit = Get-ChildItem *.pbit -Recurse
+$base_path = $pbit.DirectoryName
+$md_dir = ($pbit.FullName -split ".pbit" -split "\\")
+$md_dir = $md_dir[$md_dir.Count-2]
+"$base_path\$md_dir"
+
+#!pwsh
+
+#SR: getting pbit
+$pbit = Get-ChildItem *.pbit -Recurse
+$base_path = $pbit.DirectoryName
+
+#SR: getting metadata dir
+$md_dir = ($pbit.FullName -split ".pbit" -split "\\")
+$md_dir = $md_dir[$md_dir.Count-2]
+
+#SR: compiling .pbit and launching it
+pbi-tools compile-pbix -folder "$base_path\$md_dir" -format PBIT -overwrite; pbi-tools.exe launch-pbi $pbit.FullName
