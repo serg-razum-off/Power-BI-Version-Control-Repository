@@ -2,13 +2,46 @@
 This repository is a place to test VC approaches for Power BI
 
 
-Main attention is dedicated to VS Code integration via PBI Tools.
+Main attention is dedicated to VS Code integration via PBI Tools.       
 
 # pbi-tools Actions 
-[[Link to Actions]](https://toolkit.action-bi.com/pbi-tools/usage.html)
+[[About PBI Tools]](https://pbi.tools/)
+        [[Link to PBI Tools Actions]](https://toolkit.action-bi.com/pbi-tools/usage.html)
 
-* ```extract <pbixPath> [<pbiPort>] [<extractFolder>] [<mode>] [<modelSerialization>] [<mashupSerialization>]``` [[go]](https://toolkit.action-bi.com/pbi-tools/usage.html#extract)
+## PBI Tools Actions automation with PowerShell
+PS Scripts, included into Project:
+* PowerShell-Scripts\Compile-Build.ps1
+* PowerShell-Scripts\Launch-PBIX-PBIT.ps1
+* PowerShell-Scripts\Watch-Mode.ps1
 
-        ** watch mode: pbi-tools.exe extract -pid [<processId>] -watch
-* ```compile-pbix <folder> [<outPath>] [<format>] [<overwrite>]``` [[go]](https://toolkit.action-bi.com/pbi-tools/usage.html#compile-pbix)
-* ```launch-pbi <pbixPath>``` [[go]](https://toolkit.action-bi.com/pbi-tools/usage.html#launch-pbi)
+To operate with these scripts properly, add this section to VS Code keyboard shoertcuts JSON:
+
+```// Place your key bindings in this file to override the defaultsauto[]
+[
+    // --------------------------------------------------------------------------------------------
+    //SR [2022-07-28]: This section is for automation of Terminal pbi-tools commands
+    // --------------------------------------------------------------------------------------------
+    {
+        "key": "ctrl+shift+l",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "./PowerShell-Scripts/Launch-PBIX-PBIT.ps1"
+        }
+    },
+    {
+        "key": "ctrl+shift+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "./PowerShell-Scripts/Compile-Build.ps1"
+        }
+    },
+    {
+        "key": "ctrl+shift+w",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "./PowerShell-Scripts/Watch-Mode.ps1"
+        }
+    }
+    // ---------------------------------------------------------------
+]
+```
