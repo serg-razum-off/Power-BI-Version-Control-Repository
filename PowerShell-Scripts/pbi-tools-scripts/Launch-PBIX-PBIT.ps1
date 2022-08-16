@@ -1,5 +1,6 @@
 
-$pbixType = Read-Host -Prompt ">>> type 'PBIT' if you need to launch template, for PBIX leave it blank... --> "
+$pbixType = Read-Host -Prompt ">>> type 'PBIT' to launch template, leave blank for PBIX ... --> "
+
 if ($pbixType -eq "") {
     $trgFile = Get-ChildItem *.pbix -Recurse
     pbi-tools.exe launch-pbi $trgFile.FullName
