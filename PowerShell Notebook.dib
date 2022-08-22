@@ -6,59 +6,24 @@
 
 #!markdown
 
-### Compiling and launching .pbit
+## TESTING Missile site
 
 #!markdown
 
-debugging area
+Get content of Json file into a PS object, amend properties and save back
 
 #!pwsh
 
-#SR: getting pbit
-$pbit = Get-ChildItem *.pbit -Recurse
-$base_path = $pbit.DirectoryName
+$comment = Get-Content 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\AdventureWorks pbix\AdvWorksDW2020\Model\tables\@ReportInfo\columns\Comment.json' | ConvertFrom-Json
 
-#SR: getting metadata dir
-$md_dir = ($pbit.FullName -split "\\" ) 
-$md_dir = ($md_dir[$md_dir.Count-1] -split ".pbit")
-$md_dir 
+$comment
 
 #!markdown
 
-Below is ready to use script
+Adding proprerty to PS object
 
 #!pwsh
 
-#SR: getting pbit
-$pbit = Get-ChildItem *.pbit -Recurse
-$base_path = $pbit.DirectoryName
+$comment.annotations | Add-Member  -MemberType NoteProperty -Name 'CreatedBy' -Value 'SR: 2022-08-19'
 
-#SR: getting metadata dir
-$md_dir = ($pbit.FullName -split "\\" ) 
-$md_dir = ($md_dir[$md_dir.Count-1] -split ".pbit")
-
-#SR: compiling .pbit and launching it
-$res = pbi-tools compile-pbix -folder "$base_path\$md_dir" -outPath "$base_path" -format PBIT -overwrite;     
-$substring_list = @("Error", "Global")
-if (($substring_list | %{($res -join "").contains($_)}) -contains $true) {
-    Write-Output ">>> Error: `n"; Write-Output ($res -join " <<>> ")
-    throw
-} else {
-    Write-Output ">>> Compiled successfully: `n"; Write-Output $("-"*100)
-    Write-Output "$res `n"; Write-Output $("-"*100)
-}
-pbi-tools.exe launch-pbi $pbit.FullName
-
-#!markdown
-
-### Watch Mode
-
-#!pwsh
-
-$PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId
-if($PrId -eq $null){
-    throw ">>> Launch .pbix first, attach Watch Mode only after..."
-}
-else{
-    pbi-tools.exe extract -pid $PrId -watch
-}
+$comment

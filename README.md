@@ -2,7 +2,9 @@
 This repository is a place to test VC approaches for Power BI
 
 
-Main attention is dedicated to VS Code integration via PBI Tools.       
+Main attention is dedicated to VS Code integration vith PBI-Tools parsing model.
+* VS Code inbuilt 
+* PowerShell as 
 
 # pbi-tools Actions 
 [[About PBI Tools]](https://pbi.tools/)
