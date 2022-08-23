@@ -1,0 +1,57 @@
+#!markdown
+
+# PowerShell Notebook
+> VS Code CShP --> Reload Window \
+> VS Code CShP --> Restart Kernel
+
+#!markdown
+
+## TESTING Missile site
+
+#!pwsh
+
+powershell.exe -File (Get-ChildItem 'PS_Init.ps1' -r) 
+
+#!pwsh
+
+class Pbix {
+
+    #properties
+    [int]$filtersLine_Y
+    [int]$firstLine_Y
+    [int]$secondLine_Y
+    
+    #Constructor
+    Pbix(
+        [int]$fltr, 
+        [int]$fLine, 
+        [int]$secLine
+        
+        ) {
+            $this.filtersLine_Y = $fltr
+            $this.firstLine_Y = $fLine
+            $this.secondLine_Y = $secLine          
+         
+            $this.Init()
+        }
+    
+    #methods    
+
+    [void] Init() {
+        Set-Alias -Name touch -Value New-Item -Scope Global
+        Write-Host ">>> Init Completed..."
+    }
+
+}
+
+#!pwsh
+
+[pbix]$a = [pbix]::new(1,2,3)
+
+#!pwsh
+
+$a.Init()
+
+#!pwsh
+
+rm 1
