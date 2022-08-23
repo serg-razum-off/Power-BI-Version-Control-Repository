@@ -1,12 +1,7 @@
-# script to init updated env at a start.
+# script to init updated env at a start. Works as stand-alone copy of [PBIX].Init()
 
 # ------------------------ My Aliases ---------------------------
 Set-Alias -Name touch -Value New-Item -Scope Global
-
-# ------------------------ My Class init ------------------------
-# $global:filterRow =  $null
-# $global:firstRow =  $null
-# $global:secondRow =  $null
 
 
 # ------------------------ Wrapping up --------------------------

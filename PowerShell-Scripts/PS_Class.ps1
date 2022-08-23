@@ -1,18 +1,25 @@
 #SR: this is PowerShell Class to handle interactions with pbi-tools splitted .pbx
 
-class Pbix {
+class PBIX {
 
-    #properties
+    #PROPERTIES
     [int]$filtersLine_Y
     [int]$firstLine_Y
     [int]$secondLine_Y
     
-    #Constructor
-    Pbix(
+    #CONSTRUCTOR default
+    PBIX() {
+            $this.filtersLine_Y = 10
+            $this.firstLine_Y = 150
+            $this.secondLine_Y = 300
+         
+            $this.Init()
+        }
+    #CONSTRUCTOR params
+    PBIX(
         [int]$fltr, 
         [int]$fLine, 
-        [int]$secLine
-        
+        [int]$secLine        
         ) {
             $this.filtersLine_Y = $fltr
             $this.firstLine_Y = $fLine
@@ -21,11 +28,11 @@ class Pbix {
             $this.Init()
         }
     
-    #methods    
-
+    #METHODS    
     [void] Init() {
+        # SR: setting starting Environment
         Set-Alias -Name touch -Value New-Item -Scope Global
-        Write-Host ">>> Init Completed..."
+        Write-Host ">>> Class Init Completed..."
     }
 
 }

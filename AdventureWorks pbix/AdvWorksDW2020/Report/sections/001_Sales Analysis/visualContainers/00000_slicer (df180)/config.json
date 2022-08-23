@@ -1,0 +1,65 @@
+{
+  "name": "df18038b4346bc38ba79",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 9.64824120603015,
+        "y": 0,
+        "z": 0,
+        "width": 195.37688442211055,
+        "height": 188.14070351758792
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "slicer",
+    "projections": {
+      "Values": [
+        {
+          "queryRef": "Customer.Customer",
+          "active": true
+        }
+      ]
+    },
+    "prototypeQuery": {
+      "Version": 2,
+      "From": [
+        {
+          "Name": "c",
+          "Entity": "Customer",
+          "Type": 0
+        }
+      ],
+      "Select": [
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "c"
+              }
+            },
+            "Property": "Customer"
+          },
+          "Name": "Customer.Customer"
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Basic'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -46,11 +46,11 @@ class Pbix {
 
 #!pwsh
 
-[pbix]$a = [pbix]::new(1,2,3)
+[pbix]$a = [pbix]::new()#new(1,2,3)
 
 #!pwsh
 
-$a.Init()
+$a.firstLine_Y
 
 #!pwsh
 

@@ -1,0 +1,87 @@
+{
+  "name": "aa92722f4d500768bc61",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 9.64824120603015,
+        "y": 233.96984924623115,
+        "z": 1,
+        "width": 476.38190954773864,
+        "height": 188.14070351758792
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "lineChart",
+    "projections": {
+      "Category": [
+        {
+          "queryRef": "Date.Fiscal Year",
+          "active": true
+        }
+      ],
+      "Y": [
+        {
+          "queryRef": "Sales.SumSales"
+        }
+      ]
+    },
+    "prototypeQuery": {
+      "Version": 2,
+      "From": [
+        {
+          "Name": "d",
+          "Entity": "Date",
+          "Type": 0
+        },
+        {
+          "Name": "s",
+          "Entity": "Sales",
+          "Type": 0
+        }
+      ],
+      "Select": [
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "d"
+              }
+            },
+            "Property": "Fiscal Year"
+          },
+          "Name": "Date.Fiscal Year"
+        },
+        {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "s"
+              }
+            },
+            "Property": "SumSales"
+          },
+          "Name": "Sales.SumSales"
+        }
+      ],
+      "OrderBy": [
+        {
+          "Direction": 2,
+          "Expression": {
+            "Measure": {
+              "Expression": {
+                "SourceRef": {
+                  "Source": "s"
+                }
+              },
+              "Property": "SumSales"
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "hasDefaultSort": true
+  }
+}
