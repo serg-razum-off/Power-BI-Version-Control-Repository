@@ -52,4 +52,4 @@ To operate with these scripts properly, add this section to VS Code keyboard sho
 ```
 ## PS Class
 PS Class added to project under .\PowerShell-Scripts\PS_Class.ps1  <br>
-Run VS Code as Admin for it successfull operation.
+Run VS Code as Admin for successfull operations.
