@@ -1,0 +1,66 @@
+{
+  "name": "b09a9b1d7c50c0127a96",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 10,
+        "y": 467,
+        "width": 476,
+        "height": 188,
+        "z": 1001
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "just some text"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "and another"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "some ",
+                    "textStyle": {
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "bold ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#41a4ff"
+                    }
+                  },
+                  {
+                    "value": "text",
+                    "textStyle": {
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

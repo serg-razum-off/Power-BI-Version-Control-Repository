@@ -8,7 +8,7 @@ Main attention is dedicated to VS Code integration vith PBI-Tools parsing model.
 
 # pbi-tools Actions 
 [[About PBI Tools]](https://pbi.tools/)
-        [[Link to PBI Tools Actions]](https://toolkit.action-bi.com/pbi-tools/usage.html)
+[[Link to PBI Tools Actions]](https://toolkit.action-bi.com/pbi-tools/usage.html)
 
 ## PBI Tools Actions automation with PowerShell
 PS Scripts, included into Project:
@@ -20,30 +20,36 @@ To operate with these scripts properly, add this section to VS Code keyboard sho
 
 ```// Place your key bindings in this file to override the defaultsauto[]
 [
-    // --------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------
     //SR [2022-07-28]: This section is for automation of Terminal pbi-tools commands
-    // --------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------
     {
         "key": "ctrl+shift+l",
         "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
         "args": {
-            "text": "./PowerShell-Scripts/Launch-PBIX-PBIT.ps1"
+            "text": "./PowerShell-Scripts/pbi-tools-scripts/Launch-PBIX-PBIT.ps1"
         }
     },
     {
         "key": "ctrl+shift+b",
         "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
         "args": {
-            "text": "./PowerShell-Scripts/Compile-Build.ps1"
+            "text": "./PowerShell-Scripts/pbi-tools-scripts/Compile-Build.ps1"
         }
     },
     {
         "key": "ctrl+shift+w",
         "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
         "args": {
-            "text": "./PowerShell-Scripts/Watch-Mode.ps1"
+            "text": "./PowerShell-Scripts/pbi-tools-scripts/Watch-Mode.ps1"
         }
     }
-    // ---------------------------------------------------------------
+    // ------------------------------------------------------------------------------------
 ]
 ```
+## PS Class
+PS Class added to project under .\PowerShell-Scripts\PS_Class.ps1  <br>
+Run VS Code as Admin for it successfull operation.
