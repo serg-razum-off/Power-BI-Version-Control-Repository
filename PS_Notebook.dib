@@ -21,6 +21,19 @@ pwd
 $pl = (Import-Excel (Get-ChildItem *.xls* -r) -StartRow 3) 
 $pl | ForEach-Object { "{0} --> {1}" -f $_.Object, $_.Developer}
 
+#!markdown
+
+Getting key - values from mgm Plan Qwr
+
 #!pwsh
 
-$pl[0]
+$qwr = cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Internet Sales.m'
+$pattern = @"
+(?<=\[).+?(?=\])
+"@
+
+# https://github.com/DBremen/PowerShellScripts/blob/master/Data%20Wrangling/Get-TextWithin.ps1
+
+(([regex]::Matches($qwr, $pattern).Value)[0])
+
+if(.length -eq 1) {([regex]::Matches($qwr, $pattern).Value)} else {([regex]::Matches($qwr, $pattern).Value)[0]}
