@@ -1,5 +1,5 @@
 {
-  "name": "16afcacc-c6a4-4c0b-a345-601e8a41ffac",
+  "name": "34c98d43-7d09-4050-bdb1-991cf3aa387a",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -86,6 +86,16 @@
             "value": "Text"
           }
         ]
+      },
+      {
+        "name": "Internet Sales",
+        "kind": "m",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          }
+        ]
       }
     ],
     "annotations": [
@@ -99,7 +109,7 @@
       },
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\",\"@ReportInfo\"]"
+        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\",\"@ReportInfo\",\"Internet Sales\"]"
       },
       {
         "name": "__TEdtr",

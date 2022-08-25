@@ -1,0 +1,26 @@
+#!markdown
+
+# PowerShell Notebook
+> VS Code CShP --> Reload Window \
+> VS Code CShP --> Restart Kernel
+
+#!markdown
+
+moved to Project Root to have actual pwd
+
+#!markdown
+
+## TESTING Missile site
+
+#!pwsh
+
+pwd
+
+#!pwsh
+
+$pl = (Import-Excel (Get-ChildItem *.xls* -r) -StartRow 3) 
+$pl | ForEach-Object { "{0} --> {1}" -f $_.Object, $_.Developer}
+
+#!pwsh
+
+$pl[0]
