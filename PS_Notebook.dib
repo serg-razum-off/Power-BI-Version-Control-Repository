@@ -25,7 +25,7 @@ $objKeys
 #!pwsh
 
 $pq = @()
-$objKeys | ForEach-Object {$pq += ($_ +" = " + """" + $pl[0].$_ + """")} 
+$objKeys | ForEach-Object {$pq += ($_ +" = " + """" + $xls[0].$_ + """")} 
 $required_qwr = "[ " + ($pq -join ",`n `t") + " ]"
 $required_qwr
 
@@ -35,7 +35,20 @@ Getting key - values from mgm Plan Qwr
 
 #!pwsh
 
- (cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Internet Sales.m') -join "`n" `
-   -replace '\[(.|\n)*\]', $required_qwr `
-   | Set-Content '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Internet Sales1.m'
+$res = [regex]::Match('.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Customer.m', '\[(.|\n)*\]')
+
+(cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Customer.m') -join "`n" 
+  #  -replace '\[(.|\n)*\]', $required_qwr 
+  #  | Set-Content '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Customer.m'
  #TODO: check if further stepps will not be hurt
+
+#!pwsh
+
+$pattern = '\[(.|\n)?\]'
+$res = [regex]::Match((cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Customer.m'), $pattern)
+if ($res.Length -eq 0)  {$pattern = '\[(.|\n)*\]'}
+[regex]::Match((cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Customer.m'), $pattern)
+
+#!pwsh
+
+(cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Customer.m') -join "`n" 
