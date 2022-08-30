@@ -18,15 +18,16 @@ pwd
 
 #!pwsh
 
-$pl = (Import-Excel (Get-ChildItem *.xls* -r) -StartRow 3) 
-$objKeys = ($pl | Get-Member -MemberType NoteProperty).Name
+$xls = (Import-Excel (Get-ChildItem *.xls* -r) -StartRow 3) 
+$objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
 $objKeys
 
 #!pwsh
 
 $pq = @()
 $objKeys | ForEach-Object {$pq += ($_ +" = " + """" + $pl[0].$_ + """")} 
-"[ " + ($pq -join "; ") + " ]"
+$required_qwr = "[ " + ($pq -join ",`n `t") + " ]"
+$required_qwr
 
 #!markdown
 
@@ -34,14 +35,7 @@ Getting key - values from mgm Plan Qwr
 
 #!pwsh
 
-$qwr = cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Internet Sales.m'
-$pattern = "\[.+?\]"
-
-$res = (([regex]::Matches($qwr, $pattern).Value)[0])
-
-$a = if($res.length -eq 1) { ([regex]::Matches($qwr, $pattern).Value) } else { $res } 
-$a
-
-#!pwsh
-
-@{ Object = "Internet Sales"; Type = "Table"; Link to Specification = "https://onedrive.live.com/view.aspx?resid=43FC8CA3B17868DD%21806&id=documents&wd=target%28VS%20Code.one%7C062DAB10-4A3E-4127-8D96-1AB4A4286FC7%2FDummyTask%3A%20Add%20Internet-Sales%7CC38A5B3B-DB39-4862-8800-09D041CB42B0%2F%29"; Developer = "Sergii Razumov"; Due Date = "30/08/2022"; Sprint = "1;2;3"; Ready pct = "0.85"; PM Comment = ""}
+ (cat '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Internet Sales.m') -join "`n" `
+   -replace '\[(.|\n)*\]', $required_qwr `
+   | Set-Content '.\AdventureWorks pbix\AdvWorksDW2020\Model\queries\Internet Sales1.m'
+ #TODO: check if further stepps will not be hurt
