@@ -87,26 +87,8 @@
       }
     ]
   },
-  "queryMetadata": {
-    "Select": [
-      {
-        "Restatement": "Country-Region",
-        "Name": "Customer.Country-Region",
-        "Type": 2048
-      }
-    ]
-  },
-  "visualElements": [
-    {
-      "DataRoles": [
-        {
-          "Name": "Values",
-          "Projection": 0,
-          "isActive": true
-        }
-      ]
-    }
-  ],
+  "queryMetadata": null,
+  "visualElements": null,
   "selects": [
     {
       "displayName": "Country-Region",

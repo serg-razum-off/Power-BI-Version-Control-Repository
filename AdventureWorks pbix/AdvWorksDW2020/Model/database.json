@@ -1,5 +1,5 @@
 {
-  "name": "e9b58ab9-2499-415e-a25f-cc3fe96f4993",
+  "name": "b38877e0-1adc-459d-af36-153b83f769ff",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -105,7 +105,7 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.107.841.0 (22.07)"
+        "value": "2.108.997.0 (22.08)"
       },
       {
         "name": "PBI_QueryOrder",

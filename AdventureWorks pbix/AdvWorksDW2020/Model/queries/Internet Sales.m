@@ -1,5 +1,5 @@
 let
-    ObjectInfo = 
+    Specification = 
         [
             Object = "Internet Sales",
             Type = "Table",
@@ -9,6 +9,7 @@ let
             Sprint = "1,2,3",
             Ready pct = "0.85",
             PM Comment = ""
+
         ]
     in 
-ObjectInfo
+Specification

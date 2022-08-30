@@ -1,4 +1,5 @@
 {
   "name": "SumSales",
+  "description": "This is a description for SumSales measure",
   "displayFolder": ".Measures"
 }
