@@ -35,7 +35,7 @@ Getting required record
 
 #!pwsh
 
-$currObject = $xls | Where-Object {$_.'01_Object Name' -eq 'Product'}
+$currObject = $xls | Where-Object {$_.'01_Object Name' -eq 'Custom Sales'}
 $currObject
 
 #!markdown
@@ -51,11 +51,30 @@ $required_qwr
 
 #!markdown
 
-Considering if PQ qwr doesn't have "Specification". If not -- injecting it
+Checking if target PQwr exists. If not -- creating one with code == Record
 
 #!pwsh
 
-$path = (ls ($currObject.'01_Object Name'+ '.m') -r).FullName; 
+$path = (ls ($currObject.'01_Object Name'+ '.m') -r).FullName;
+
+if ($path -eq $null) {
+    $path = (ls queries -r).FullName + '\' + ($currObject.'01_Object Name'+ '.m')
+
+    @"
+let
+    Specification = []
+    in 
+Specification
+"@ | Set-Content $path
+
+}
+
+#!markdown
+
+Checking if PQ qwr doesn't have "Specification". If not -- injecting it
+
+#!pwsh
+
 if(([regex]::Match((cat $path), 'let.*Source = ') -replace " ", "").Length -eq 10) #there is no "Specification" step in PQ Qwr
 {
     (cat $path) -join "`n" `
