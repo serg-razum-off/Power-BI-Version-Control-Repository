@@ -18,7 +18,12 @@ pwd
 
 #!pwsh
 
-$xls = (Import-Excel (Get-ChildItem *.xls* -r) -StartRow 3) 
+$projectRoot = (Get-ChildItem .gitignore -r).DirectoryName
+$projectRoot
+
+#!pwsh
+
+$xls = (Import-Excel (Get-ChildItem -Path $projectRoot *.xls* -r)  -WorksheetName "Planned Objects" -StartRow 3) 
 $objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
 
 "=== Names of the Objects in MGM xls ===" ; "-" * 40
