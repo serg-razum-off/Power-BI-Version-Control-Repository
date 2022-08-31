@@ -1,5 +1,6 @@
 let
-    Source = Csv.Document(Web.Contents(HttpSource & "Product.csv"),[Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+    Specification = [],
+    Source =               Csv.Document(Web.Contents(HttpSource & "Product.csv"),[Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
     #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
     #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",
         {
