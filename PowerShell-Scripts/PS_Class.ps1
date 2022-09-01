@@ -98,9 +98,9 @@ class PBIX {
             # combining Specification for current record to inject to PQ qwr
             $pq = @()
             $objKeys | ForEach-Object { $pq += ($_ + " = " + """" + $currObject.$_ + """") } 
-            $required_qwr = "[ " + ($pq -join ",`n `t") + " ]"
+            $required_qwr = "[ `n`t" + ($pq -join ",`n `t`t") + " `n`t]"
             
-            # Checking if target PQwr exists. If not -- creating one with code == Record
+            # Checking if target PQwr file exists. If not -- creating one with code == Spec template
             $path = (Get-ChildItem ($currObject.'01_Object Name' + '.m') -r).FullName;
 
             if ($null -eq $path) {
@@ -111,7 +111,7 @@ class PBIX {
 Specification" | Set-Content $path
             }
             
-            # Checking if PQ qwr doesn't have "Specification". If not -- injecting it
+            # Checking if in existing PQ file we doesn't have "Specification". If not -- injecting it
             if(([regex]::Match((cat $path), 'let.*Source = ') -replace " ", "").Length -eq 10) #there is no "Specification" step in PQ Qwr
                 {
                     (cat $path) -join "`n" `
@@ -138,6 +138,6 @@ Specification" | Set-Content $path
             | Set-Content $path
         }
         
-    } # UpdateManagementPlan
+    } # } UpdateManagementPlan
     
-} # PBIX Class
+} # } PBIX Class
