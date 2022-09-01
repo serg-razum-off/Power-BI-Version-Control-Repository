@@ -93,18 +93,18 @@ class PBIX {
         $xls = (Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3) | Where-Object {$_.'02_Type' -eq 'Table'}
         $objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
 
-        foreach ($currObject in $xls) {
+        foreach ($xlsRecord in $xls) {
             
             # combining Specification for current record to inject to PQ qwr
             $pq = @()
-            $objKeys | ForEach-Object { $pq += ($_ + " = " + """" + $currObject.$_ + """") } 
+            $objKeys | ForEach-Object { $pq += ($_ + " = " + """" + $xlsRecord.$_ + """") } 
             $required_qwr = "[ `n`t" + ($pq -join ",`n `t`t") + " `n`t]"
             
             # Checking if target PQwr file exists. If not -- creating one with code == Spec template
-            $path = (Get-ChildItem ($currObject.'01_Object Name' + '.m') -r).FullName;
+            $path = (Get-ChildItem ($xlsRecord.'01_Object Name' + '.m') -r).FullName;
 
             if ($null -eq $path) {
-                $path = (Get-ChildItem queries -r).FullName + '\' + ($currObject.'01_Object Name' + '.m')
+                $path = (Get-ChildItem queries -r).FullName + '\' + ($xlsRecord.'01_Object Name' + '.m')
 "let
     Specification = []
     in 

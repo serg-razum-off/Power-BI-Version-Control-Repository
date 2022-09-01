@@ -11,7 +11,6 @@ let
  		09_Ready for pct = "",
  		10_Dev Comment  = "Waiting for specification",
  		11_PM Comment = "" 
-	],
-    Custom1 = Specification
+	]
     in 
-Custom1
+Specification
