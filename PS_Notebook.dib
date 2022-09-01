@@ -23,7 +23,7 @@ $projectRoot
 
 #!pwsh
 
-$xls = (Import-Excel (Get-ChildItem -Path $projectRoot *.xls* -r)  -WorksheetName "Planned Objects" -StartRow 3) 
+$xls = (Import-Excel (Get-ChildItem -Path $projectRoot *.xls* -r)  -WorksheetName "Planned Objects" -StartRow 3) | Where-Object {$_.'02_Type' -eq 'Table'}
 $objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
 
 "=== Names of the Objects in MGM xls ===" ; "-" * 40
@@ -45,7 +45,7 @@ $currObject
 
 #!markdown
 
-combining required record to inject to PQ qwr
+combining required Specification record to inject to PQ qwr
 
 #!pwsh
 
@@ -65,12 +65,10 @@ $path = (ls ($currObject.'01_Object Name'+ '.m') -r).FullName;
 if ($path -eq $null) {
     $path = (ls queries -r).FullName + '\' + ($currObject.'01_Object Name'+ '.m')
 
-    @"
-let
+"let
     Specification = []
     in 
-Specification
-"@ | Set-Content $path
+Specification" | Set-Content $path
 
 }
 
@@ -84,11 +82,11 @@ if(([regex]::Match((cat $path), 'let.*Source = ') -replace " ", "").Length -eq 1
 {
     (cat $path) -join "`n" `
         -replace "let(.|\n)*Source = ", `
-@"
+"
 let
     Specification = [],
     Source =        
-"@ 
+" 
         | Set-Content $path
 }
 

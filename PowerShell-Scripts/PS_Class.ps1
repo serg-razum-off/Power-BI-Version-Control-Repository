@@ -1,5 +1,7 @@
 class PBIX {
     <#
+        .AUTHOR
+            sergiy.razumov@gmail.com
         .SYNOPSYS
             PowerShell Class to handle interactions with pbi-tools --> splitted .pbx
         .EXAMPLE
@@ -39,10 +41,11 @@ class PBIX {
     
     #=============== #METHODS =============================    
     #-----------------------------------------------------
-    hidden [void] Init([string]$jprop, [bool]$Verbose) {
+    hidden [void] 
+    Init([string]$jprop, [bool]$Verbose) {
         <#
             .SYNOPSYS
-                Inner method for init requires values of the Obj
+                Method for init required values of the Obj. Use $Verbose to set it desired output.
         #>
         Write-Verbose ">>> Starting PBIX Cls Init <<<"
         
@@ -69,7 +72,7 @@ class PBIX {
         }
         
         # SR: calculatable properties
-        $this.managementPlan =  Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3
+        $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3
         # SR:   setting personal aliases
         Set-Alias -Name touch -Value New-Item -Scope Global
         
@@ -79,42 +82,49 @@ class PBIX {
     }
     #-----------------------------------------------------
     
-    [void] UpdateManagementPlan() {    
+    [void] 
+    UpdateManagementPlan() {    
         <#
             .SYNOPSYS
                 Method for updating "Specification" record in each of the tables in PBI --> PQ
         #>    
-        #gettign content of mgm xls file
-        $xls = (Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3) 
+        
+        #gettign content of mgm xls file -- only Tables
+        $xls = (Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3) | Where-Object {$_.'02_Type' -eq 'Table'}
         $objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
 
         foreach ($xls_rec in $xls) {
             # Getting required record
-	        $currObject = $xls | Where-Object {$_.'01_Object Name' -eq $xls_rec.'01_Object'}
+            $currObject = $xls | Where-Object { $_.'01_Object Name' -eq $xls_rec.'01_Object' }
             
             # combining Specification for current record to inject to PQ qwr
             $pq = @()
-            $objKeys | ForEach-Object {$pq += ($_ +" = " + """" + $currObject.$_ + """")} 
+            $objKeys | ForEach-Object { $pq += ($_ + " = " + """" + $currObject.$_ + """") } 
             $required_qwr = "[ " + ($pq -join ",`n `t") + " ]"
             
             # Checking if target PQwr exists. If not -- creating one with code == Record
-            $path = (ls ($currObject.'01_Object Name'+ '.m') -r).FullName;
+            $path = (Get-ChildItem ($currObject.'01_Object Name' + '.m') -r).FullName;
 
             if ($null -eq $path) {
-                $path = (ls queries -r).FullName + '\' + ($currObject.'01_Object Name'+ '.m')
-
-                "
-                let
-                    Specification = []
-                    in 
-                Specification
-                " | Set-Content $path
-
-}
-
-}
-
-        Write-Host "TBD!!!"
-    }
+                $path = (Get-ChildItem queries -r).FullName + '\' + ($currObject.'01_Object Name' + '.m')
+"let
+    Specification = []
+    in 
+Specification" | Set-Content $path
+            }
+            
+            # Evaluating correct RegEx to get key - values from mgm Plan Qwr
+            $pattern = '\[(.|\n)?\]'; 
+            if (([regex]::Match((Get-Content $path), $pattern)).Length -eq 0) { 
+                $pattern = '\[(.|\n)*\]' 
+            }
+            
+            # writing to the target file
+            (Get-Content $path) -join "`n" `
+                -replace $pattern, $required_qwr `
+            | Set-Content $path
+        }
+        
+    } # UpdateManagementPlan
     
-}
+} # PBIX Class
