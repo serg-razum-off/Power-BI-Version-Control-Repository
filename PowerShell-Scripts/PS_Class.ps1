@@ -93,9 +93,7 @@ class PBIX {
         $xls = (Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3) | Where-Object {$_.'02_Type' -eq 'Table'}
         $objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
 
-        foreach ($xls_rec in $xls) {
-            # Getting required record
-            $currObject = $xls | Where-Object { $_.'01_Object Name' -eq $xls_rec.'01_Object' }
+        foreach ($currObject in $xls) {
             
             # combining Specification for current record to inject to PQ qwr
             $pq = @()
@@ -113,10 +111,25 @@ class PBIX {
 Specification" | Set-Content $path
             }
             
-            # Evaluating correct RegEx to get key - values from mgm Plan Qwr
+            # Checking if PQ qwr doesn't have "Specification". If not -- injecting it
+            if(([regex]::Match((cat $path), 'let.*Source = ') -replace " ", "").Length -eq 10) #there is no "Specification" step in PQ Qwr
+                {
+                    (cat $path) -join "`n" `
+                        -replace "let(.|\n)*Source = ", `
+"let
+    Specification = [],
+    Source = " | Set-Content $path
+                }
+            
+            # Evaluating correct RegEx for replacement in PQwr
             $pattern = '\[(.|\n)?\]'; 
             if (([regex]::Match((Get-Content $path), $pattern)).Length -eq 0) { 
                 $pattern = '\[(.|\n)*\]' 
+            }
+
+            # if Specification is already filled up, skip to next $xsl item
+            if (([regex]::Match((Get-Content $path), $pattern)).Length -gt 200) {
+                continue
             }
             
             # writing to the target file
