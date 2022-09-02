@@ -1,5 +1,8 @@
 # Power-BI-Version-Control-Repository
 This repository is a place to test VC approaches for Power BI
+* Each Repository is created for managing ONE couple of (.pbix -- . pbit)
+    * in future improvements can be done to manage several .pbix-es with one Project
+    * current limitations are identification of model--> queries folder, where new PQwrs (.m) will be automatically created
 
 
 Main attention is dedicated to VS Code integration vith PBI-Tools parsing model.
@@ -52,4 +55,4 @@ To operate with these scripts properly, add this section to VS Code keyboard sho
 ```
 ## PS Class
 PS Class added to project under .\PowerShell-Scripts\PS_Class.ps1  <br>
-Run VS Code as Admin for it successfull operation.
+Run VS Code as Admin for successfull operations.

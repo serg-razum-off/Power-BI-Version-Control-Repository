@@ -1,5 +1,5 @@
 {
-  "name": "16afcacc-c6a4-4c0b-a345-601e8a41ffac",
+  "name": "6295691c-3f87-4c49-aabc-0105eb1a06d4",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -78,14 +78,28 @@
         "kind": "m",
         "annotations": [
           {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
-          },
-          {
             "name": "PBI_ResultType",
             "value": "Text"
           }
         ]
+      },
+      {
+        "name": "Internet Sales",
+        "kind": "m",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          }
+        ]
+      },
+      {
+        "name": "Custom Sales",
+        "kind": "m"
+      },
+      {
+        "name": "Custom Internet Sales",
+        "kind": "m"
       }
     ],
     "annotations": [
@@ -95,11 +109,11 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.107.841.0 (22.07)"
+        "value": "2.108.997.0 (22.08)"
       },
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\",\"@ReportInfo\"]"
+        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\",\"@ReportInfo\",\"Internet Sales\",\"Custom Sales\",\"Custom Internet Sales\"]"
       },
       {
         "name": "__TEdtr",
