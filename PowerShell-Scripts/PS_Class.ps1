@@ -9,8 +9,8 @@ class PBIX {
             $pbix = [pbix]::new(10, 175, 325, $false)
     #>
     #============ #PROPERTIES ================================
-    # for searches
-    [string]$projectRoot = (Get-ChildItem .gitignore -r).DirectoryName
+    # for searches cat's and ls's
+    [string]$projectRoot
     # For lining up visual
     [int]$filtersLine_Y;     
     [int]$firstLine_Y;     
@@ -49,13 +49,13 @@ class PBIX {
         #>
         Write-Verbose ">>> Starting PBIX Cls Init <<<"
         
-        # SR:   setting up required modules        
+        # setting up required modules        
         @('ImportExcel') | ForEach-Object {
             if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ }
             else { Write-Verbose "module '$_' is already installed..." }
         }
         
-        # SR:  setting starting Environment        
+        #  starting Environment        
         if ($Verbose) { $VerbosePreference = "Continue" ; $this.verbose = $Verbose }
 
         if ($jprop -ne "") {
@@ -71,9 +71,17 @@ class PBIX {
             $this.secondLine_Y = 300
         }
         
-        # SR: calculatable properties
-        $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3
-        # SR:   setting personal aliases
+        #  properties
+        $this.projectRoot = (Get-ChildItem -Path ../.gitignore -r).DirectoryName
+        $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
+                -WorksheetName "Planned Objects" `
+                -StartRow 3
+        
+        # Updating Tables in Manage Plan
+        $this.UpdateManagementPlanTables();
+
+
+        # setting personal aliases
         Set-Alias -Name touch -Value New-Item -Scope Global
         
         # wrapping the Init up
@@ -83,17 +91,21 @@ class PBIX {
     #-----------------------------------------------------
     
     [void] 
-    UpdateManagementPlan() {    
+    UpdateManagementPlanTables() {    
         <#
             .SYNOPSYS
                 Method for updating "Specification" record in each of the tables in PBI --> PQ
         #>    
         
-        #gettign content of mgm xls file -- only Tables
-        $xls = (Import-Excel (Get-ChildItem -Path $this.projectRoot *.xls* -r) -StartRow 3) | Where-Object {$_.'02_Type' -eq 'Table'}
-        $objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
+        # gettign content of mgm xlsFile -- only Tables
+        #   1. updating mgm Plan --> this Meth is called directly, so it implies that mgm Plan was updated and is to be re-loaded
+        $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
+                -WorksheetName "Planned Objects" `
+                -StartRow 3
+        $mgmPlanTables = $this.managementPlan | Where-Object {$_.'02_Type' -eq 'Table'}
+        $objKeys = ($mgmPlanTables | Get-Member -MemberType NoteProperty).Name
 
-        foreach ($xlsRecord in $xls) {
+        foreach ($xlsRecord in $mgmPlanTables) {
             
             # combining Specification for current record to inject to PQ qwr
             $pq = @()
@@ -112,9 +124,9 @@ Specification" | Set-Content $path
             }
             
             # Checking if in existing PQ file we doesn't have "Specification". If not -- injecting it
-            if(([regex]::Match((cat $path), 'let.*Source = ') -replace " ", "").Length -eq 10) #there is no "Specification" step in PQ Qwr
+            if(([regex]::Match((Get-Content $path), 'let.*Source = ') -replace " ", "").Length -eq 10) #there is no "Specification" step in PQ Qwr
                 {
-                    (cat $path) -join "`n" `
+                    (Get-Content $path) -join "`n" `
                         -replace "let(.|\n)*Source = ", `
 "let
     Specification = [],
@@ -122,22 +134,23 @@ Specification" | Set-Content $path
                 }
             
             # Evaluating correct RegEx for replacement in PQwr
-            $pattern = '\[(.|\n)?\]'; 
+            $pattern = '\[(.|\n)?\]'; # Specification is [], not filled with data
+            $endingComma = ''
             if (([regex]::Match((Get-Content $path), $pattern)).Length -eq 0) { 
-                $pattern = '\[(.|\n)*\]' 
+                $pattern = '\[(.|\n)*\],' # grabs Specification Record in PQwr
+                $endingComma = ','
             }
 
             # if Specification is already filled up, skip to next $xsl item
             if (([regex]::Match((Get-Content $path), $pattern)).Length -gt 200) {
-                continue
+                # continue ##! impoertant: if Specification is not updated, we will lose changes, that were potentially made in it
             }
             
             # writing to the target file
             (Get-Content $path) -join "`n" `
-                -replace $pattern, $required_qwr `
+                -replace $pattern, ($required_qwr + $endingComma) `
             | Set-Content $path
-        }
-        
-    } # } UpdateManagementPlan
+        }        
+    } # } UpdateManagementPlanTables
     
 } # } PBIX Class

@@ -1,5 +1,5 @@
 {
-  "name": "28be3fab-9a63-4390-9190-5c142e897545",
+  "name": "6295691c-3f87-4c49-aabc-0105eb1a06d4",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -98,18 +98,8 @@
         "kind": "m"
       },
       {
-        "name": "Some New Table",
-        "kind": "m",
-        "annotations": [
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
-          },
-          {
-            "name": "PBI_ResultType",
-            "value": "Record"
-          }
-        ]
+        "name": "Custom Internet Sales",
+        "kind": "m"
       }
     ],
     "annotations": [
@@ -123,7 +113,7 @@
       },
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\",\"@ReportInfo\",\"Internet Sales\",\"Custom Sales\",\"Some New Table\"]"
+        "value": "[\"HttpSource\",\"Customer\",\"Date\",\"Product\",\"Reseller\",\"Sales\",\"Sales Order\",\"Sales Territory\",\"@ReportInfo\",\"Internet Sales\",\"Custom Sales\",\"Custom Internet Sales\"]"
       },
       {
         "name": "__TEdtr",
