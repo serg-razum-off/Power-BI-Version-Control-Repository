@@ -1,9 +1,9 @@
 class PBIX {
-    <#
+<#
         .AUTHOR
             sergiy.razumov@gmail.com
         .SYNOPSYS
-            PowerShell Class to handle interactions with pbi-tools --> splitted .pbx
+            PowerShell Class to handle interactions with pbi-tools --> JSON splitted .pbx
         .EXAMPLE
             $pbix = [pbix]::new()
             $pbix = [pbix]::new(10, 175, 325, $false)
@@ -19,12 +19,17 @@ class PBIX {
     [array]$managementPlan
 
     # for paramless Ctor. See TODO: on param Ctor -- use ommitable (below)
-    [bool]$verbose = $false 
+    [bool]$verbose = $false  ##TODO: use this Prop for identification of level of details of Methods
     
     #============== #CONSTRUCTORS ===========================
     #def
     PBIX() {
         $this.Init("", $this.verbose)
+    }
+    #verbose
+    PBIX($configString, $verbose) { 
+        # $configString -- all 3 Y params: "{'filtersLine_Y':$filtersLine_Y, 'firstLine_Y':$firstLine_Y, 'secondLine_Y':$secondLine_Y}",
+        $this.Init("", $verbose)
     }
     #param
     PBIX(
@@ -41,23 +46,24 @@ class PBIX {
     
     #=============== #METHODS =============================    
     #-----------------------------------------------------
-    hidden [void] 
-    Init([string]$jprop, [bool]$Verbose) {
+    hidden [void] Init([string]$jprop, [bool]$Verbose) {
         <#
             .SYNOPSYS
                 Method for init required values of the Obj. Use $Verbose to set it desired output.
         #>
+        #  starting Environment        
+        if ($Verbose) { $VerbosePreference = "Continue" ; $this.verbose = $Verbose }        
         Write-Verbose ">>> Starting PBIX Cls Init <<<"
         
         # setting up required modules        
+        Write-Verbose ">>> Setting up Required Modules..."
         @('ImportExcel') | ForEach-Object {
             if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ }
             else { Write-Verbose "module '$_' is already installed..." }
         }
         
-        #  starting Environment        
-        if ($Verbose) { $VerbosePreference = "Continue" ; $this.verbose = $Verbose }
-
+        
+        Write-Verbose ">>> Setting up Properties... "
         if ($jprop -ne "") {
             $junpacked = $jprop | ConvertFrom-Json
             
@@ -71,17 +77,18 @@ class PBIX {
             $this.secondLine_Y = 300
         }
         
-        #  properties
+        Write-Verbose ">>> Updating Data from Management Excle file..."
+        # setting properties
         $this.projectRoot = (Get-ChildItem -Path ../.gitignore -r).DirectoryName
         $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
-                -WorksheetName "Planned Objects" `
-                -StartRow 3
+            -WorksheetName "Planned Objects" `
+            -StartRow 3
         
         # Updating Tables in Manage Plan
         $this.UpdateManagementPlanTables();
-
-
+        
         # setting personal aliases
+        Write-Verbose ">>> Setting personal Aliases..."
         Set-Alias -Name touch -Value New-Item -Scope Global
         
         # wrapping the Init up
@@ -89,9 +96,75 @@ class PBIX {
         if ($Verbose) { $VerbosePreference = 'SilentlyContinue' }         
     }
     #-----------------------------------------------------
-    
-    [void] 
-    UpdateManagementPlanTables() {    
+    [void] Build() {
+        <#
+            .SYNOPSYS
+                Compile PBIT from pbi-tools JSON model, launch PBIT. If Compillation was successful, data will start refresh
+        #>    
+
+        #SR: getting pbit
+        $pbit = Get-ChildItem -Path $this.projectRoot *.pbit -Recurse
+        $base_path = $pbit.DirectoryName
+
+        #SR: getting metadata dir
+        $md_dir = ($pbit.FullName -split "\\" ) 
+        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")
+
+        #SR: compiling .pbit and launching it
+        $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" -outPath "$base_path" -format PBIT -overwrite;     
+
+        #SR: if having Errs while compile
+        $substring_list = @("Error", "Global")
+        if (($substring_list | ForEach-Object { ($res -join "").contains($_) }) -contains $true) {
+            Write-host ">>> Error: `n"; Write-host ($res -join " <<>> ")
+            throw
+        }
+        else {
+            Write-host ">>> Compiled successfully: `n"; Write-host $("-" * 100)
+            Write-host "$res `n"; Write-host $("-" * 100)
+        }
+
+        #SR: launching
+        pbi-tools.exe launch-pbi $pbit.FullName
+        
+    }
+    [void] Launch() { $this.Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
+
+    [void] Launch($pbixType) {
+        <#
+            .SYNOPSYS
+                Launches PBI file. Arg $pbixType = {"pbix" | "", "pbit"}
+                Example: $pbix.Launch("pbix") #$pbix --> object; "pbix" same as "" OR "pbit" --> type of the file that is to be launched
+        #>
+
+        $trgFile = $null
+
+        if ($pbixType -eq "" -or $pbixType -eq "pbix") {
+            $trgFile = Get-ChildItem *.pbix -Recurse
+        }
+        elseif ($pbixType -eq "PBIT") {
+            $trgFile = Get-ChildItem *.pbit -Recurse
+        }
+        else {
+            Write-Output ">> Wrong type of the Power BI file entered..."
+        }
+
+        $fileName = $trgFile.Name
+
+        if ($null -eq $trgFile) {
+            Write-Host "`n >>> No file '$trgFile' found... `n"
+            throw
+        }
+        
+        pbi-tools.exe launch-pbi $trgFile.FullName
+
+        if ($this.verbose) {
+            Write-Host ">>> File '$fileName' was launched..."
+        }
+    }
+    [void] WatchMode() {}
+
+    [void] UpdateManagementPlanTables() {    
         <#
             .SYNOPSYS
                 Method for updating "Specification" record in each of the tables in PBI --> PQ
@@ -100,9 +173,12 @@ class PBIX {
         # gettign content of mgm xlsFile -- only Tables
         #   1. updating mgm Plan --> this Meth is called directly, so it implies that mgm Plan was updated and is to be re-loaded
         $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
-                -WorksheetName "Planned Objects" `
-                -StartRow 3
-        $mgmPlanTables = $this.managementPlan | Where-Object {$_.'02_Type' -eq 'Table'}
+            -WorksheetName "Planned Objects" `
+            -StartRow 3
+        $mgmPlanTables = $this.managementPlan `
+        | Where-Object { $_.'02_Type' -eq 'Table' } `
+        | Where-Object { $_.'08_Status' -ne 'Removed' }
+            
         $objKeys = ($mgmPlanTables | Get-Member -MemberType NoteProperty).Name
 
         foreach ($xlsRecord in $mgmPlanTables) {
@@ -117,21 +193,21 @@ class PBIX {
 
             if ($null -eq $path) {
                 $path = (Get-ChildItem queries -r).FullName + '\' + ($xlsRecord.'01_Object Name' + '.m')
-"let
+                "let
     Specification = []
     in 
 Specification" | Set-Content $path
             }
             
             # Checking if in existing PQ file we doesn't have "Specification". If not -- injecting it
-            if(([regex]::Match((Get-Content $path), 'let.*Source = ') -replace " ", "").Length -eq 10) #there is no "Specification" step in PQ Qwr
-                {
+            if (([regex]::Match((Get-Content $path), 'let.*Source = ') -replace " ", "").Length -eq 10) {
+                #there is no "Specification" step in PQ Qwr
                     (Get-Content $path) -join "`n" `
-                        -replace "let(.|\n)*Source = ", `
-"let
+                    -replace "let(.|\n)*Source = ", `
+                    "let
     Specification = [],
     Source = " | Set-Content $path
-                }
+            }
             
             # Evaluating correct RegEx for replacement in PQwr
             $pattern = '\[(.|\n)?\]'; # Specification is [], not filled with data
