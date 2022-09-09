@@ -1,6 +1,6 @@
 
 $pbixType = Read-Host -Prompt ">>> type 'PBIT' to launch template, leave blank for PBIX... --> "
-$pbixPartName = Read-Host -Prompt ">>> Input Part of the PBI File that you want to launch... --> " #if Proj has >1  PBI files #TODO: make this a functtion.
+$pbixPartName = Read-Host -Prompt ">>> Input Part of the PBI File that you want to launch... --> " #if Proj has >1  pbix. UPD: one Proj == 1 pbix File
 
 if ($pbixType -eq "") {
     $trgFile = Get-ChildItem *$pbixPartName*.pbix -Recurse

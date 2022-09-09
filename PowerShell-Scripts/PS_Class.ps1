@@ -2,7 +2,7 @@ class PBIX {
 <#
         .AUTHOR
             sergiy.razumov@gmail.com
-        .SYNOPSYS
+        .DESCRIPTION
             PowerShell Class to handle interactions with pbi-tools --> JSON splitted .pbx
         .EXAMPLE
             $pbix = [pbix]::new()
@@ -11,12 +11,13 @@ class PBIX {
     #============ #PROPERTIES ================================
     # for searches cat's and ls's
     [string]$projectRoot
-    # For lining up visual
+    # for import tables and measures specification
+    [array]$managementPlan
+
+    #TODO: For lining up visuals 
     [int]$filtersLine_Y;     
     [int]$firstLine_Y;     
     [int]$secondLine_Y
-    # for dummy tables and measures creation    
-    [array]$managementPlan
 
     # for paramless Ctor. See TODO: on param Ctor -- use ommitable (below)
     [bool]$verbose = $false  ##TODO: use this Prop for identification of level of details of Methods
@@ -48,12 +49,12 @@ class PBIX {
     #-----------------------------------------------------
     hidden [void] Init([string]$jprop, [bool]$Verbose) {
         <#
-            .SYNOPSYS
+            .DESCRIPTION
                 Method for init required values of the Obj. Use $Verbose to set it desired output.
         #>
         #  starting Environment        
         if ($Verbose) { $VerbosePreference = "Continue" ; $this.verbose = $Verbose }        
-        Write-Verbose ">>> Starting PBIX Cls Init <<<"
+        Write-Verbose "=== Starting PBIX Cls Init ==="
         
         # setting up required modules        
         Write-Verbose ">>> Setting up Required Modules..."
@@ -92,13 +93,13 @@ class PBIX {
         Set-Alias -Name touch -Value New-Item -Scope Global
         
         # wrapping the Init up
-        Write-Verbose ">>> PBIX Cls Init Completed <<<"        
+        Write-Verbose "=== PBIX Cls Init Completed ==="        
         if ($Verbose) { $VerbosePreference = 'SilentlyContinue' }         
     }
     #-----------------------------------------------------
     [void] Build() {
         <#
-            .SYNOPSYS
+            .DESCRIPTION
                 Compile PBIT from pbi-tools JSON model, launch PBIT. If Compillation was successful, data will start refresh
         #>    
 
@@ -111,12 +112,15 @@ class PBIX {
         $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")
 
         #SR: compiling .pbit and launching it
-        $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" -outPath "$base_path" -format PBIT -overwrite;     
+        $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" `
+            -outPath "$base_path" `
+            -format PBIT -overwrite;     
 
         #SR: if having Errs while compile
         $substring_list = @("Error", "Global")
         if (($substring_list | ForEach-Object { ($res -join "").contains($_) }) -contains $true) {
-            Write-host ">>> Error: `n"; Write-host ($res -join " <<>> ")
+            Write-host ">>> Error: `n"; 
+            Write-host ($res -join " <<>> ")
             throw
         }
         else {
@@ -132,7 +136,7 @@ class PBIX {
 
     [void] Launch($pbixType) {
         <#
-            .SYNOPSYS
+            .DESCRIPTION
                 Launches PBI file. Arg $pbixType = {"pbix" | "", "pbit"}
                 Example: $pbix.Launch("pbix") #$pbix --> object; "pbix" same as "" OR "pbit" --> type of the file that is to be launched
         #>
@@ -166,7 +170,7 @@ class PBIX {
 
     [void] UpdateManagementPlanTables() {    
         <#
-            .SYNOPSYS
+            .DESCRIPTION
                 Method for updating "Specification" record in each of the tables in PBI --> PQ
         #>    
         
@@ -176,8 +180,8 @@ class PBIX {
             -WorksheetName "Planned Objects" `
             -StartRow 3
         $mgmPlanTables = $this.managementPlan `
-        | Where-Object { $_.'02_Type' -eq 'Table' } `
-        | Where-Object { $_.'08_Status' -ne 'Removed' }
+            | Where-Object { $_.'02_Type' -eq 'Table' } `
+            | Where-Object { $_.'08_Status' -ne 'Removed' }
             
         $objKeys = ($mgmPlanTables | Get-Member -MemberType NoteProperty).Name
 
@@ -225,7 +229,7 @@ Specification" | Set-Content $path
             # writing to the target file
             (Get-Content $path) -join "`n" `
                 -replace $pattern, ($required_qwr + $endingComma) `
-            | Set-Content $path
+                | Set-Content $path
         }        
     } # } UpdateManagementPlanTables
     

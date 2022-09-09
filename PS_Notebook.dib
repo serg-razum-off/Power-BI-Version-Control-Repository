@@ -6,107 +6,12 @@
 
 #!markdown
 
-moved to Project Root to have actual pwd
-
-#!markdown
-
-## TESTING Missile site
+## Init PBIX Class
 
 #!pwsh
 
-pwd
+. ./PowerShell-Scripts/PS_Class.ps1; $pbx = [pbix]::new('', $true)
 
 #!pwsh
 
-$projectRoot = (Get-ChildItem .gitignore -r).DirectoryName
-$projectRoot
-
-#!pwsh
-
-$xls = (Import-Excel (Get-ChildItem -Path $projectRoot *.xls* -r)  -WorksheetName "Planned Objects" -StartRow 3) | Where-Object {$_.'02_Type' -eq 'Table'}
-$objKeys = ($xls | Get-Member -MemberType NoteProperty).Name
-
-"=== Names of the Objects in MGM xls ===" ; "-" * 40
-$objKeys
-
-#!pwsh
-
-'=== Object Names  ==='; '-' * 20
-$xls | ForEach-Object {$_.'01_Object Name'}
-
-#!markdown
-
-Getting required record
-
-#!pwsh
-
-$currObject = $xls | Where-Object {$_.'01_Object Name' -eq 'Custom Sales'}
-$currObject
-
-#!markdown
-
-combining required Specification record to inject to PQ qwr
-
-#!pwsh
-
-$pq = @()
-$objKeys | ForEach-Object {$pq += ($_ +" = " + """" + $currObject.$_ + """")} 
-$required_qwr = "[ " + ($pq -join ",`n `t") + " ]"
-$required_qwr
-
-#!markdown
-
-Checking if target PQwr exists. If not -- creating one with code == Record
-
-#!pwsh
-
-$path = (ls ($currObject.'01_Object Name'+ '.m') -r).FullName;
-
-if ($path -eq $null) {
-    $path = (ls queries -r).FullName + '\' + ($currObject.'01_Object Name'+ '.m')
-
-"let
-    Specification = []
-    in 
-Specification" | Set-Content $path
-
-}
-
-#!markdown
-
-Checking if PQ qwr doesn't have "Specification". If not -- injecting it
-
-#!pwsh
-
-if(([regex]::Match((cat $path), 'let.*Source = ') -replace " ", "").Length -eq 10) #there is no "Specification" step in PQ Qwr
-{
-    (cat $path) -join "`n" `
-        -replace "let(.|\n)*Source = ", `
-"
-let
-    Specification = [],
-    Source =        
-" 
-        | Set-Content $path
-}
-
-#!markdown
-
-Evaluating correct RegEx to get key - values from mgm Plan Qwr
-
-#!pwsh
-
-$pattern = '\[(.|\n)?\]'; 
-
-if (([regex]::Match((cat $path), $pattern)).Length -eq 0)  { $pattern = '\[(.|\n)*\]' }
-
-Write-Host "curr obj: " $currObject.'01_Object Name'; 
-[regex]::Match((cat $path), $pattern)
-
-#!pwsh
-
-$res = [regex]::Match($path, $pattern)
-
-(cat $path) -join "`n" `
-   -replace $pattern, $required_qwr 
-   | Set-Content $path
+$pbx | Get-Member 
