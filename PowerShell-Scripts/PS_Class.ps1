@@ -48,8 +48,8 @@ class PBIX {
         )
     }
     
-    #=============== #METHODS =============================    
-    #-----------------------------------------------------
+    #==================== #METHODS ===========================
+    #--------------------- Helpers -------------------------
     hidden [void] WriteVerbose([string]$message) {
         # Printing Verbose messages
         if ($this.verbose) { 
@@ -108,7 +108,7 @@ class PBIX {
         # wrapping the Init up
         $this.WriteVerbose( "=== PBIX Cls Init Completed ===" )        
     }
-    #-----------------------------------------------------
+    #--------------- Pbi-tools utilization ----------------
     [void] Build() {
         <#
             .DESCRIPTION
@@ -116,14 +116,17 @@ class PBIX {
         #>    
 
         #SR: getting pbit
-        $this.pbit = Get-ChildItem -Path $this.projectRoot *.pbit -Recurse
-        $base_path = $this.pbit.DirectoryName
+        
+        $pbit_O = (Get-Item $this.pbit)
+        $base_path = $pbit_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
 
         #SR: getting metadata dir
-        $md_dir = ($this.pbit.FullName -split "\\" ) 
-        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")
+        $md_dir = ($pbit_O.FullName -split "\\" ) #get Arr of folder path
+        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
 
-        #SR: compiling .pbit and launching it
+        $tmp = "$base_path\$md_dir" #* for debugging only
+        
+        #SR: compiling .pbit and launching #++
         $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" `
             -outPath "$base_path" `
             -format PBIT -overwrite;     
@@ -136,12 +139,12 @@ class PBIX {
             throw
         }
         else {
-            $this.WriteVerbose(">>> Compiled successfully: `n"); $this.WriteVerbose( $("-" * 100)   )
-            $this.WriteVerbose("$res `n"); $this.WriteVerbose( $("-" * 100) )
+            $this.WriteVerbose(">>> Compiled successfully: `n"); $this.WriteVerbose( $("-" * 70)   )
+            $this.WriteVerbose("$res `n"); $this.WriteVerbose( $("-" * 70) )
         }
 
         #SR: launching
-        pbi-tools.exe launch-pbi $this.pbit.FullName
+        pbi-tools.exe launch-pbi $this.pbit
     }
     [void] Launch() { $this.Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
     [void] Launch($pbixType) {
@@ -190,6 +193,7 @@ class PBIX {
         pbi-tools.exe extract -pid $PrId -watch
     }
 
+    #---------------- managerment Plan --------------------
     [void] UpdateManagementPlanTables() {    
         <#
             .DESCRIPTION
@@ -243,9 +247,17 @@ Specification" | Set-Content $path
                 $endingComma = ','
             }
 
-            # if Specification is already filled up, skip to next $xsl item
-            if (([regex]::Match((Get-Content $path), $pattern)).Length -gt 200) {
-                # continue ##! impoertant: if Specification is not updated, we will lose changes, that were potentially made in it
+            # if Specification is already as required, skip to next $xsl item
+            if (
+                [regex]::Match((Get-Content $path), $pattern) `
+                    -replace ' ', '' `
+                    -replace '`n', ''`
+                    -eq ` 
+                $required_qwr `
+                    -replace ' ', '' `
+                    -replace '`n', ''
+            ) {
+                continue 
             }
             
             # writing to the target file
