@@ -11,7 +11,7 @@ $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" -outPath "$base_path"
 
 #SR: if having Errs while compile
 $substring_list = @("Error", "Global")
-if (($substring_list | %{($res -join "").contains($_)}) -contains $true) {
+if (($substring_list | ForEach-Object{($res -join "").contains($_)}) -contains $true) {
     Write-Output ">>> Error: `n"; Write-Output ($res -join " <<>> ")
     throw
 } else {
