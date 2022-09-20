@@ -5,6 +5,12 @@ class PBIX {
         .DESCRIPTION
             PowerShell Class to handle interactions with pbi-tools --> JSON splitted .pbx 
             One Proj for one pbi file --> number of changes is high. Several pbixes in one proj will mess up VC
+
+            Methods are clustered into categories:
+                $this.inner_
+                $this.pbiTools_
+                $this.managementTool_
+
         .EXAMPLE
             $pbix = [pbix]::new()
             $pbix = [pbix]::new(10, 175, 325, $false)
@@ -28,21 +34,21 @@ class PBIX {
     #============== #CONSTRUCTORS ===========================
     #def
     PBIX() {
-        $this.Init("", $this.verbose)
+        $this.inner_Init("", $this.verbose)
     }
     #verbose
     PBIX($configString, $verbose) { 
         # $configString -- all 3 Y params: "{'filtersLine_Y':$filtersLine_Y, 'firstLine_Y':$firstLine_Y, 'secondLine_Y':$secondLine_Y}",
-        $this.Init("", $verbose)
+        $this.inner_Init("", $verbose)
     }
-    #param
+    #param-d
     PBIX(
         [int]$filtersLine_Y, 
         [int]$firstLine_Y, 
         [int]$secondLine_Y,
         [bool]$verbose = $null 
     ) {         
-        $this.Init(
+        $this.inner_Init(
             "{'filtersLine_Y':$filtersLine_Y, 'firstLine_Y':$firstLine_Y, 'secondLine_Y':$secondLine_Y}",
             $verbose
         )
@@ -50,7 +56,7 @@ class PBIX {
     
     #==================== #METHODS ===========================
     #--------------------- Helpers -------------------------
-    hidden [void] WriteVerbose([string]$message) {
+    hidden [void] inner_WriteVerbose([string]$message) {
         # Printing Verbose messages
         if ($this.verbose) { 
             $VerbosePreference = "Continue" 
@@ -58,7 +64,7 @@ class PBIX {
             $VerbosePreference = 'SilentlyContinue' 
         }           
     }
-    hidden [void] Init([string]$jprop, [bool]$Verbose) {
+    hidden [void] inner_Init([string]$jprop, [bool]$Verbose) {
         <#
             .DESCRIPTION
                 Method for init required values of the Obj. Use $Verbose to set it desired output.
@@ -66,16 +72,16 @@ class PBIX {
         if ($Verbose) {
             $this.verbose = $true
         }
-        $this.WriteVerbose("=== Starting PBIX Cls Init ===")
+        $this.inner_WriteVerbose("=== Starting PBIX Cls inner_Init ===")
         
         # setting up required modules        
-        $this.WriteVerbose(">>> Setting up Required Modules...")
+        $this.inner_WriteVerbose(">>> Setting up Required Modules...")
         @('ImportExcel') | ForEach-Object {
             if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ }
-            else { $this.WriteVerbose( "module '$_' is already installed..." ) }
+            else { $this.inner_WriteVerbose( "module '$_' is already installed..." ) }
         }        
         
-        $this.WriteVerbose( ">>> Setting up Properties... " )
+        $this.inner_WriteVerbose( ">>> Setting up Properties... " )
         if ($jprop -ne "") {
             $junpacked = $jprop | ConvertFrom-Json
             
@@ -89,7 +95,7 @@ class PBIX {
             $this.secondLine_Y = 300
         }
         
-        $this.WriteVerbose( ">>> Updating Data from Management Excle file..." )
+        $this.inner_WriteVerbose( ">>> Updating Data from Management Excle file..." )
         # setting properties
         $this.projectRoot = (Get-ChildItem -Path ../.gitignore -r).DirectoryName
         $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
@@ -99,17 +105,17 @@ class PBIX {
         $this.pbix = (Get-ChildItem -Path ../*.pbix -Recurse)
         $this.pbit = (Get-ChildItem -Path ../*.pbit -Recurse)
         # Updating Tables in Manage Plan
-        $this.UpdateManagementPlanTables();
+        $this.managementPlan_UpdateManagementPlanTables();
         
         # setting personal aliases
-        $this.WriteVerbose( ">>> Setting personal Aliases..." )
+        $this.inner_WriteVerbose( ">>> Setting personal Aliases..." )
         Set-Alias -Name touch -Value New-Item -Scope Global
         
-        # wrapping the Init up
-        $this.WriteVerbose( "=== PBIX Cls Init Completed ===" )        
+        # wrapping the inner_Init up
+        $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )        
     }
-    #--------------- Pbi-tools utilization ----------------
-    [void] Build() {
+    #--------------- Pbi-tools addressing  ----------------
+    [void] pbiTools_Build() {
         <#
             .DESCRIPTION
                 Compile PBIT from pbi-tools JSON model, launch PBIT. If Compillation was successful, data will start refresh
@@ -139,19 +145,20 @@ class PBIX {
             throw
         }
         else {
-            $this.WriteVerbose(">>> Compiled successfully: `n"); $this.WriteVerbose( $("-" * 70)   )
-            $this.WriteVerbose("$res `n"); $this.WriteVerbose( $("-" * 70) )
+            $this.inner_WriteVerbose(">>> PBIT: Compiled successfully: `n"); $this.inner_WriteVerbose( $("-" * 50)   )
+            $this.inner_WriteVerbose("$res `n"); $this.inner_WriteVerbose( $("-" * 50) )
         }
-
+        
         #SR: launching
+        $this.inner_WriteVerbose(">>> PBIT: Launched... `n"); $this.inner_WriteVerbose( $("-" * 50)   )
         pbi-tools.exe launch-pbi $this.pbit
     }
-    [void] Launch() { $this.Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
-    [void] Launch($pbixType) {
+    [void] pbiTools_Launch() { $this.pbiTools_Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
+    [void] pbiTools_Launch($pbixType) {
         <#
             .DESCRIPTION
                 Launches PBI file. Arg $pbixType = {"pbix" | "", "pbit"}
-                Example: $pbix.Launch("pbix") #$pbix --> object; "pbix" same as "" OR "pbit" --> type of the file that is to be launched
+                Example: $pbix.pbiTools_Launch("pbix") #$pbix --> object; "pbix" same as "" OR "pbit" --> type of the file that is to be launched
         #>
 
         $trgFile = $null
@@ -176,25 +183,25 @@ class PBIX {
         
         pbi-tools.exe launch-pbi $trgFile
 
-        $this.WriteVerbose( ">>> File '$fileName' was launched..." )
+        $this.inner_WriteVerbose( ">>> File '$fileName' was launched..." )
     }
-    [void] WatchMode() {
+    [void] pbiTools_WatchMode() {
         #SR: Turning ON the watch mode
         $PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId
 
         if ($null -eq $PrId) {
             Write-Output "`n"
-            throw ">>> Launch .pbix first, attach Watch Mode only after that..."
+            throw ">>> pbiTools_Launch .pbix first, attach Watch Mode only after that..."
         }
 
-        $this.WriteVerbose(">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab")
-        $this.WriteVerbose("--> Ctrt + C to Quit Watch Mode")
+        $this.inner_WriteVerbose(">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab")
+        $this.inner_WriteVerbose("--> Ctrt + C to Quit Watch Mode")
         
         pbi-tools.exe extract -pid $PrId -watch
     }
 
     #---------------- managerment Plan --------------------
-    [void] UpdateManagementPlanTables() {    
+    [void] managementPlan_UpdateManagementPlanTables() {    
         <#
             .DESCRIPTION
                 Method for updating "Specification" record in each of the tables in PBI --> PQ
@@ -266,5 +273,44 @@ Specification" | Set-Content $path
             | Set-Content $path
         }        
     } # } UpdateManagementPlanTables
+
+    #---------------- Git Automating --------------------
+    [void] git_NewBranch() {
+        #TODO: 	New Branch 
+        #       ask for BrName
+        $branchName = Read-Host -Prompt "Input name of new branch... ( [Q] to cancel ) --> "
+        if ($branchName -eq "Q") { break }
+        #       Create Br
+        git checkout -b $branchName
+    }
+    
+    [void] git_Commit() {
+        #TODO:	Stage; Commit 
+        #   Show changes
+        $this.inner_WriteVerbose(">>> Files Changed or Created...")
+        $res = @(); $res += git diff --stat; $res += git status -s -u  
+        write-host ("-" * 50 + "`n") ;  
+        $res | ForEach-Object {Write-Host $_ }
+        write-host ("`n"+"-" * 50 ) ;  
+        
+        if ((Read-Host -Prompt "Proceed? [Y] / N ") -eq "N"  ) { break }
+        
+        #   staging
+        git add -A
+        $this.inner_WriteVerbose(">>> Files Staged...")
+
+        #   Committing
+        $commMessage = Read-Host -Prompt "Insert Commit Message ([Q] to cancel) --> "
+        if ($commMessage -eq "Q") { break }
+        
+        git commit -a -m $commMessage
+    }
+    [void] git_Sync() {
+        #TODO:	Sync => pull ; push
+    }
+    [void] git_MergeToMain() {
+        #TODO:	Merge to Master should be done by TL only
+    }
+
     
 } # } PBIX Class
