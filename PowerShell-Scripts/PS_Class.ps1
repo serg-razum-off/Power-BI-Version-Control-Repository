@@ -300,9 +300,9 @@ Specification" | Set-Content $path
         $this.inner_WriteVerbose(">>> Files Staged...")
 
         #   Committing
-        Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [Emptyline] to finish input) --> "
+        Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [end] to finish input) --> "
         $commMessage = ""
-        while (1) { $newline = read-host ;  $commMessage+="$newline `n"; if (!$newline) {break}}
+        while (1) { $newline = read-host ;  if ($newline -eq "end") {break}; $commMessage+="$newline `n";}
         $commMessage = $commMessage.Trim()
         
         if ($commMessage -eq "Q") { break }
