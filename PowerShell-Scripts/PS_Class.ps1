@@ -281,7 +281,7 @@ Specification" | Set-Content $path
         $branches | ForEach-Object {Write-Host $_}        
         Write-Host("-" * 50)
 
-        git checkout Read-Host -Prompt "Enter branch name: "
+        git checkout (Read-Host -Prompt ">>> Enter branch name: ")
     }
     [void] git_NewBranch() {
         #TODO: 	New Branch 
