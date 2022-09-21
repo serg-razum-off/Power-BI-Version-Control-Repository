@@ -1,5 +1,5 @@
 class PBIX {
-    <#
+<#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -310,15 +310,16 @@ Specification" | Set-Content $path
         git commit -a -m $commMessage
         $this.inner_WriteVerbose(">>> Committed successfully")
     }
-    [void] git_Sync() {
+    [void] git_SyncBranch() {
         #   Synching
         if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
+        $currBranch = git branch --show-current
         
-        git pull
-        git push origin -u
+        git pull origin $currBranch
+        git push origin $currBranch
     }
     [void] git_MergeToMain() {
-        #TODO:	Merge to Master should be done by TL only]
+        #   Merge to Master can be done by priviliged users only]
         $currUser = git config user.email
 
         $currUser = git config user.email
@@ -330,7 +331,7 @@ Specification" | Set-Content $path
 
         ( $privilegedUsers | Where-Object { $_.MergeMain -eq $true } ).User `
         | ForEach-Object { 
-            if ($_ -eq $currUser) { $allowMergeMain = $true } 
+            if ($_ -eq $currUser) { $allowMergeMain = $true ; break } 
         }
 
         if (!$allowMergeMain) { Write-Host ">>> No Access to this Method..."; break }
