@@ -323,12 +323,10 @@ Specification" | Set-Content $path
         $cbUpper = $currBranch.ToUpper()
         if ((Read-Host -Prompt "Are you sure want to merge current branch >> $cbUpper << into main? [Y] / N") -eq "N") { break }
         
-        
-        
         git checkout main
-        # git pull
-        # git merge $currBranch
-        # git push main
+        git pull
+        git merge $currBranch
+        git push main
         git checkout $currBranch
     }
 
