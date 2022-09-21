@@ -14,6 +14,7 @@ Main attention is dedicated to VS Code integration vith PBI-Tools parsing model.
 [[Link to PBI Tools Actions]](https://toolkit.action-bi.com/pbi-tools/usage.html)
 
 ## PBI Tools Actions automation with PowerShell
+
 PS Scripts, included into Project:
 * PowerShell-Scripts\Compile-Build.ps1
 * PowerShell-Scripts\Launch-PBIX-PBIT.ps1
