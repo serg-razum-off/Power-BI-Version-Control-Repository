@@ -34,12 +34,19 @@ $pbx.git_MergeToMain()
 
 #!markdown
 
+<<<<<<< HEAD
 ## Switching Branch and update from Main
+=======
+## Switching Branch
+>>>>>>> main
 
 #!pwsh
 
 $pbx.git_SwitchBranch()
+<<<<<<< HEAD
 
 #!pwsh
 
 $pbx.git
+=======
+>>>>>>> main
