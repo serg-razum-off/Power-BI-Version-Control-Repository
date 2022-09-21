@@ -208,7 +208,7 @@ class PBIX {
         #>    
         
         # gettign content of mgm xlsFile -- only Tables
-        #   1. updating mgm Plan --> this Meth is called directly, so it implies that mgm Plan was updated and is to be re-loaded
+        #   1. read mgm Pln again (changes) 
         $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
             -WorksheetName "Planned Objects" `
             -StartRow 3
@@ -290,8 +290,8 @@ Specification" | Set-Content $path
         $this.inner_WriteVerbose(">>> Files Changed or Created...")
         $res = @(); $res += git diff --stat; $res += git status -s -u  
         write-host ("-" * 50 + "`n") ;  
-        $res | ForEach-Object {Write-Host $_ }
-        write-host ("`n"+"-" * 50 ) ;  
+        $res | ForEach-Object { Write-Host $_ }
+        write-host ("`n" + "-" * 50 ) ;  
         
         if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -eq "N"  ) { break }
         
@@ -302,7 +302,7 @@ Specification" | Set-Content $path
         #   Committing
         Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [end] to finish input) --> "
         $commMessage = ""
-        while (1) { $newline = read-host ;  if ($newline -eq "end") {break}; $commMessage+="$newline `n";}
+        while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
         $commMessage = $commMessage.Trim()
         
         if ($commMessage -eq "Q") { break }
@@ -319,6 +319,22 @@ Specification" | Set-Content $path
     }
     [void] git_MergeToMain() {
         #TODO:	Merge to Master should be done by TL only]
+        $currUser = git config user.email
+
+        $currUser = git config user.email
+        $allowMergeMain = $false
+
+        $privilegedUsers = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
+            -WorksheetName "PrivelegedUsers" `
+            -StartRow 1
+
+        ( $privilegedUsers | Where-Object { $_.MergeMain -eq $true } ).User `
+        | ForEach-Object { 
+            if ($_ -eq $currUser) { $allowMergeMain = $true } 
+        }
+
+        if (!$allowMergeMain) { Write-Host ">>> No Access to this Method..."; break }
+
         $currBranch = git branch --show-current
         $cbUpper = $currBranch.ToUpper()
         if ((Read-Host -Prompt "Are you sure want to merge current branch >> $cbUpper << into main? [Y] / N") -eq "N") { break }
@@ -326,7 +342,7 @@ Specification" | Set-Content $path
         git checkout main
         git pull
         git merge $currBranch
-        git push main
+        git push origin main
         git checkout $currBranch
     }
 
