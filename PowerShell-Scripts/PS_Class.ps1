@@ -275,6 +275,14 @@ Specification" | Set-Content $path
     } # } UpdateManagementPlanTables
 
     #---------------- Git Automating --------------------
+    [void] git_SwitchBranch() {
+        Write-Host ">>> Branches: "; Write-Host("-" * 50)
+        $branches = git branch
+        $branches | ForEach-Object {Write-Host $_}        
+        Write-Host("-" * 50)
+
+        git checkout Read-Host -Prompt "Enter branch name: "
+    }
     [void] git_NewBranch() {
         #TODO: 	New Branch 
         #       ask for BrName

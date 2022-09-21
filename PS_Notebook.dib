@@ -32,15 +32,10 @@ $pbx.git_Sync()
 
 $pbx.git_MergeToMain()
 
+#!markdown
+
+## Switching Branch
+
 #!pwsh
 
-$currUser = git config user.email
-$alloeMergeMain = $false
-
-$privilegedUsers = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
-        -WorksheetName "PrivelegedUsers" `
-        -StartRow 1
-
-($privilegedUsers | Where-Object {$_.MergeMain -eq $true}).User | ForEach-Object {if($_ -eq $currUser) {$alloeMergeMain = $true} }
-
-$alloeMergeMain
+$pbx.git_SwitchBranch()
