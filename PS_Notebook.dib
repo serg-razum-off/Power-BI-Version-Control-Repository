@@ -27,3 +27,19 @@ $pbx.git_Commit()
 #!pwsh
 
 $pbx.git_Sync()
+
+#!pwsh
+
+$pbx.git_MergeToMain()
+
+#!markdown
+
+## Switching Branch and update from Main
+
+#!pwsh
+
+$pbx.git_SwitchBranch()
+
+#!pwsh
+
+$pbx.git

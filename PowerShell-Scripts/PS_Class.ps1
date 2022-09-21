@@ -282,16 +282,15 @@ Specification" | Set-Content $path
         if ($branchName -eq "Q") { break }
 
         git checkout -b $branchName
-    }
-    
+    }    
     [void] git_Commit() {
         #TODO:	Stage; Commit 
         #   Show changes
         $this.inner_WriteVerbose(">>> Files Changed or Created...")
         $res = @(); $res += git diff --stat; $res += git status -s -u  
         write-host ("-" * 50 + "`n") ;  
-        $res | ForEach-Object {Write-Host $_ }
-        write-host ("`n"+"-" * 50 ) ;  
+        $res | ForEach-Object { Write-Host $_ }
+        write-host ("`n" + "-" * 50 ) ;  
         
         if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -eq "N"  ) { break }
         
@@ -302,7 +301,7 @@ Specification" | Set-Content $path
         #   Committing
         Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [end] to finish input) --> "
         $commMessage = ""
-        while (1) { $newline = read-host ;  if ($newline -eq "end") {break}; $commMessage+="$newline `n";}
+        while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
         $commMessage = $commMessage.Trim()
         
         if ($commMessage -eq "Q") { break }
@@ -328,6 +327,18 @@ Specification" | Set-Content $path
         git merge $currBranch
         git push main
         git checkout $currBranch
+    }
+    
+    [void] git_MergeFromMain() {
+        #TODO:	Merge from Master to FF other developers' changes
+        $currBranch = git branch --show-current
+        $cbUpper = $currBranch.ToUpper()
+        if ((Read-Host -Prompt "Are you sure want to merge Main into >> $cbUpper << ? [Y] / N") -eq "N") { break }
+        
+        git checkout main
+        git pull
+        git checkout $currBranch
+        git merge main    
     }
 
     
