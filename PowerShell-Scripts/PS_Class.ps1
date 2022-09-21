@@ -1,5 +1,5 @@
 class PBIX {
-<#
+    <#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -275,25 +275,35 @@ Specification" | Set-Content $path
     } # } UpdateManagementPlanTables
 
     #---------------- Git Automating --------------------
-    [void] git_SwitchBranch() {
+    [void] git_SwitchBranch([string]$param) {
+        #   Switching Branch
+        $this.inner_WriteVerbose(">>> git_SwitchBranch <<<")
         Write-Host ">>> Branches: "; Write-Host("-" * 50)
         $branches = git branch
-        $branches | ForEach-Object {Write-Host $_}        
+        $branches | ForEach-Object { Write-Host $_ }        
         Write-Host("-" * 50)
+        
+        if ($param -eq "") {
+            git checkout (Read-Host -Prompt ">>> Enter branch name: ")
+            break
+        }
+        git checkout $param
 
-        git checkout (Read-Host -Prompt ">>> Enter branch name: ")
     }
-    [void] git_NewBranch() {
-        #TODO: 	New Branch 
+    [void] git_NewBranch([string]$param) {
+        #TODO: use $param
+        $this.inner_WriteVerbose(">>> git_NewBranch <<<")
         #       ask for BrName
         $branchName = Read-Host -Prompt "Input name of new branch... ( [Q] to cancel ) --> "
         if ($branchName -eq "Q") { break }
 
         git checkout -b $branchName
     }    
-    [void] git_Commit() {
-        #TODO:	Stage; Commit 
+    [void] git_Commit([string]$param) {
+        #TODO: use $param
         #   Show changes
+        $this.inner_WriteVerbose(">>> git_Commit <<<")
+
         $this.inner_WriteVerbose(">>> Files Changed or Created...")
         $res = @(); $res += git diff --stat; $res += git status -s -u  
         write-host ("-" * 50 + "`n") ;  
@@ -307,27 +317,36 @@ Specification" | Set-Content $path
         $this.inner_WriteVerbose(">>> Files Staged...")
 
         #   Committing
-        Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [end] to finish input) --> "
         $commMessage = ""
-        while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
-        $commMessage = $commMessage.Trim()
-        
-        if ($commMessage -eq "Q") { break }
+        if ($param -eq "") {
+            Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [end] to finish input) --> "
+            while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
+            $commMessage = $commMessage.Trim()
+	        
+            if ($commMessage -eq "Q") { break }
+        }
+        else {
+            $commMessage = $param
+        }
         
         git commit -a -m $commMessage
         $this.inner_WriteVerbose(">>> Committed successfully")
     }
-    [void] git_SyncBranch() {
+    [void] git_SyncBranch([string]$param) {
+        #TODO: use $param
         #   Synching
+        $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
+
         if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
         $currBranch = git branch --show-current
         
         git pull origin $currBranch
         git push origin $currBranch
     }
-    [void] git_MergeToMain() {
+    [void] git_MergeToMain([string]$param) {
+        #TODO: use $param
         #   Merge to Master can be done by priviliged users only]
-        $currUser = git config user.email
+        $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
 
         $currUser = git config user.email
         $allowMergeMain = $false
@@ -352,10 +371,12 @@ Specification" | Set-Content $path
         git merge $currBranch
         git push origin main
         git checkout $currBranch
-    }
-    
-    [void] git_MergeFromMain() {
-        #TODO:	Merge from Master to FF other developers' changes
+    }    
+    [void] git_MergeFromMain([string]$param) {
+        #TODO: use $param
+        #	Merge from Master to FF other developers' changes
+        $this.inner_WriteVerbose(">>> git_MergeFromMain <<<")
+
         $currBranch = git branch --show-current
         $cbUpper = $currBranch.ToUpper()
         if ((Read-Host -Prompt "Are you sure want to merge Main into >> $cbUpper << ? [Y] / N") -eq "N") { break }

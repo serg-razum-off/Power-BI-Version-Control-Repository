@@ -34,19 +34,21 @@ $pbx.git_MergeToMain()
 
 #!markdown
 
-<<<<<<< HEAD
 ## Switching Branch and update from Main
-=======
-## Switching Branch
->>>>>>> main
 
 #!pwsh
 
 $pbx.git_SwitchBranch()
-<<<<<<< HEAD
 
 #!pwsh
 
-$pbx.git
-=======
->>>>>>> main
+$pbx.git_Commit()
+$pbx.git_MergeFromMain()
+
+#!pwsh
+
+git config user.name
+
+#!pwsh
+
+Get-Date -Format "yyyy-mm-dd"
