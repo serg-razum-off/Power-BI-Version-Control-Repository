@@ -15,3 +15,15 @@
 #!pwsh
 
 $pbx | Get-Member 
+
+#!markdown
+
+## Committing Changes
+
+#!pwsh
+
+$pbx.git_Commit()
+
+#!pwsh
+
+$pbx.git_Sync()

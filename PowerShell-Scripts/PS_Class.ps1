@@ -308,6 +308,7 @@ Specification" | Set-Content $path
         if ($commMessage -eq "Q") { break }
         
         git commit -a -m $commMessage
+        $this.inner_WriteVerbose(">>> Committed successfully")
     }
     [void] git_Sync() {
         #   Synching
@@ -318,8 +319,9 @@ Specification" | Set-Content $path
     }
     [void] git_MergeToMain() {
         #TODO:	Merge to Master should be done by TL only]
-        $currBranch = (git branch --show-current).ToUpper()
-        if ((Read-Host -Prompt "Are you sure want to merge current branch >> $currBranch << into main? [Y] / N") -eq "N") { break }
+        $currBranch = git branch --show-current
+        $cbUpper = $currBranch.ToUpper()
+        if ((Read-Host -Prompt "Are you sure want to merge current branch >> $cbUpper << into main? [Y] / N") -eq "N") { break }
         
         
         
