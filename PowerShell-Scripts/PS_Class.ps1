@@ -130,7 +130,7 @@ class PBIX {
         $md_dir = ($pbit_O.FullName -split "\\" ) #get Arr of folder path
         $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
 
-        $tmp = "$base_path\$md_dir" #* for debugging only
+        # $tmp = "$base_path\$md_dir" #* for debugging only
         
         #SR: compiling .pbit and launching #++
         $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" `
@@ -280,7 +280,7 @@ Specification" | Set-Content $path
         #       ask for BrName
         $branchName = Read-Host -Prompt "Input name of new branch... ( [Q] to cancel ) --> "
         if ($branchName -eq "Q") { break }
-        #       Create Br
+
         git checkout -b $branchName
     }
     
@@ -293,23 +293,35 @@ Specification" | Set-Content $path
         $res | ForEach-Object {Write-Host $_ }
         write-host ("`n"+"-" * 50 ) ;  
         
-        if ((Read-Host -Prompt "Proceed? [Y] / N ") -eq "N"  ) { break }
+        if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -eq "N"  ) { break }
         
         #   staging
         git add -A
         $this.inner_WriteVerbose(">>> Files Staged...")
 
         #   Committing
-        $commMessage = Read-Host -Prompt "Insert Commit Message ([Q] to cancel) --> "
+        $commMessage = Read-Host -Prompt "Insert Commit Message ([Q] to cancel, '<msg>' to miltiline) --> "
         if ($commMessage -eq "Q") { break }
         
         git commit -a -m $commMessage
     }
     [void] git_Sync() {
-        #TODO:	Sync => pull ; push
+        #   Synching
+        if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
+        
+        git pull
+        git push origin -u
     }
     [void] git_MergeToMain() {
-        #TODO:	Merge to Master should be done by TL only
+        #TODO:	Merge to Master should be done by TL only]
+        $currBranch = (git branch --show-current).ToUpper()
+        if ((Read-Host -Prompt "Are you sure want to merge current branch >> $currBranch << into main? [Y] / N") -eq "N") { break }
+
+        git checkout main
+        # git pull
+        # git merge $currBranch
+        # git push main
+        git checkout $currBranch
     }
 
     
