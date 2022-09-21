@@ -300,7 +300,11 @@ Specification" | Set-Content $path
         $this.inner_WriteVerbose(">>> Files Staged...")
 
         #   Committing
-        $commMessage = Read-Host -Prompt "Insert Commit Message ([Q] to cancel, '<msg>' to miltiline) --> "
+        Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [Emptyline] to finish input) --> "
+        $commMessage = ""
+        while (1) { $newline = read-host ;  $commMessage+="$newline `n"; if (!$newline) {break}}
+        $commMessage = $commMessage.Trim()
+        
         if ($commMessage -eq "Q") { break }
         
         git commit -a -m $commMessage
@@ -316,7 +320,9 @@ Specification" | Set-Content $path
         #TODO:	Merge to Master should be done by TL only]
         $currBranch = (git branch --show-current).ToUpper()
         if ((Read-Host -Prompt "Are you sure want to merge current branch >> $currBranch << into main? [Y] / N") -eq "N") { break }
-
+        
+        
+        
         git checkout main
         # git pull
         # git merge $currBranch
