@@ -1,5 +1,5 @@
 class PBIX {
-    <#
+<#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -16,7 +16,7 @@ class PBIX {
             $pbix = [pbix]::new(10, 175, 325, $false)
     #>
     #============ #PROPERTIES ================================
-    # for searches cat's and ls's
+    #for searches cat's and ls's
     [string]$projectRoot
     # for import tables and measures specification
     [array]$managementPlan
@@ -115,19 +115,40 @@ class PBIX {
         $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )        
     }
     #--------------- Pbi-tools addressing  ----------------
+    #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
+    [void] pbiTools_Extract() {
+        <#
+            .DESCRIPTION
+                Extracts PBI-JSON structured Metadata from .pbix file
+        #> 
+         #SR: getting pbix        
+         $pbix_O = (Get-Item $this.pbix)
+         $base_path = $pbix_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
+ 
+         #SR: getting metadata dir
+         $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
+         $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
+
+         # check if Dir exists
+         if ( -not (Test-Path "$base_path\$md_dir")  ) {
+            New-Item -ItemType Directory -Path "$base_path\$md_dir"
+         }
+
+         pbi-tools extract -pbixPath $this.pbix -extractFolder "$base_path\$md_dir" 
+    }
+    
     [void] pbiTools_Build() {
         <#
             .DESCRIPTION
                 Compile PBIT from pbi-tools JSON model, launch PBIT. If Compillation was successful, data will start refresh
         #>    
 
-        #SR: getting pbit
-        
-        $pbit_O = (Get-Item $this.pbit)
-        $base_path = $pbit_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
+        #SR: getting pbix location -- PBIT will be compiled to that folder,         
+        $pbix_O = (Get-Item $this.pbix)
+        $base_path = $pbix_O.DirectoryName #SR: $this.pbix contains only FullPath, not the Obj itself
 
         #SR: getting metadata dir
-        $md_dir = ($pbit_O.FullName -split "\\" ) #get Arr of folder path
+        $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
         $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
 
         # $tmp = "$base_path\$md_dir" #* for debugging only
@@ -135,7 +156,8 @@ class PBIX {
         #SR: compiling .pbit and launching #++
         $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" `
             -outPath "$base_path" `
-            -format PBIT -overwrite;     
+            -format PBIT `
+            -overwrite;     
 
         #SR: if having Errs while compile
         $substrings_list = @("Error", "Global")
@@ -275,6 +297,8 @@ Specification" | Set-Content $path
     } # } UpdateManagementPlanTables
 
     #---------------- Git Automating --------------------
+    #📚     README: all Git Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
+    [void] git_SwitchBranch() { $this.git_SwitchBranch("") }
     [void] git_SwitchBranch([string]$param) {
         #   Switching Branch
         $this.inner_WriteVerbose(">>> git_SwitchBranch <<<")
@@ -290,17 +314,22 @@ Specification" | Set-Content $path
         git checkout $param
 
     }
+    [void] git_NewBranch() { $this.git_NewBranch("") }
     [void] git_NewBranch([string]$param) {
-        #TODO: use $param
         $this.inner_WriteVerbose(">>> git_NewBranch <<<")
-        #       ask for BrName
-        $branchName = Read-Host -Prompt "Input name of new branch... ( [Q] to cancel ) --> "
-        if ($branchName -eq "Q") { break }
+        if ($param -eq "") {
+            #       ask for BrName
+            $branchName = Read-Host -Prompt "Input name of new branch... ( [Q] to cancel ) --> "
+            if ($branchName -eq "Q") { break }
+        }
+        else {
+            $branchName = $param
+        }
 
         git checkout -b $branchName
     }    
+    [void] git_Commit() { $this.git_Commit("") }
     [void] git_Commit([string]$param) {
-        #TODO: use $param
         #   Show changes
         $this.inner_WriteVerbose(">>> git_Commit <<<")
 
@@ -332,9 +361,8 @@ Specification" | Set-Content $path
         git commit -a -m $commMessage
         $this.inner_WriteVerbose(">>> Committed successfully")
     }
-    [void] git_SyncBranch([string]$param) {
-        #TODO: use $param
-        #   Synching
+    [void] git_SyncBranch() {
+        #   Synching current brach
         $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
 
         if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
@@ -344,8 +372,7 @@ Specification" | Set-Content $path
         git push origin $currBranch
     }
     [void] git_MergeToMain([string]$param) {
-        #TODO: use $param
-        #   Merge to Master can be done by priviliged users only]
+        #   Merge of current branch to Master --> can be done by priviliged users only
         $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
 
         $currUser = git config user.email
@@ -372,9 +399,8 @@ Specification" | Set-Content $path
         git push origin main
         git checkout $currBranch
     }    
-    [void] git_MergeFromMain([string]$param) {
-        #TODO: use $param
-        #	Merge from Master to FF other developers' changes
+    [void] git_MergeFromMain() {
+        #	Merge from Master to current branch --> to FF other developers' changes
         $this.inner_WriteVerbose(">>> git_MergeFromMain <<<")
 
         $currBranch = git branch --show-current
@@ -386,6 +412,4 @@ Specification" | Set-Content $path
         git checkout $currBranch
         git merge main    
     }
-
-    
-} # } PBIX Class
+} 

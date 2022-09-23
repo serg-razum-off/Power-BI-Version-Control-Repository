@@ -22,15 +22,17 @@ $pbx | Get-Member
 
 #!pwsh
 
-$pbx.git_Commit()
+$commMsg = "SR [2022-09-24]: PS.git_ methods -- pasing str values
+--> All git_ methods were equipped with parameters"
+$commMsg
 
 #!pwsh
 
-$pbx.git_Sync()
+$commMsg = "SR [2022-09-24]: PS.git_ methods -- pasing str values
+--> All git_ methods were equipped with parameters"
 
-#!pwsh
-
-$pbx.git_MergeToMain()
+$pbx.git_Commit($commMsg)
+#$pbx.git_Sync()
 
 #!markdown
 
