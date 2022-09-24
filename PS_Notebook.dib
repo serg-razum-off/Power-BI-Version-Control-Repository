@@ -25,11 +25,11 @@ $pbx | Get-Member
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'PS.git_ methods -- pasing str values'
+$commHeaderMessage = 'PS.git_ methods: little updates'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'--> All git_ methods were equipped with parameters'
+'--> All git_ methods developed. Moving to a new branch'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
@@ -38,5 +38,17 @@ $commMsg
 
 #!pwsh
 
-# $pbx.git_Commit($commMsg)
-# $pbx.git_SyncBranch()
+$pbx.git_Commit($commMsg)
+$pbx.git_SyncBranch()
+
+#!markdown
+
+## Create New Branch (and switching to it)
+
+#!pwsh
+
+$pbx.git_SwitchBranch("PS_CLASS_GIT_COMMANDS")
+
+#!pwsh
+
+$pbx.git_NewBranch("SR_PS_PBI_Actions_Automation")

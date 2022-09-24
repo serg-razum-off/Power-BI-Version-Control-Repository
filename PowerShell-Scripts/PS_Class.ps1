@@ -1,5 +1,5 @@
 class PBIX {
-<#
+    <#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -121,20 +121,20 @@ class PBIX {
             .DESCRIPTION
                 Extracts PBI-JSON structured Metadata from .pbix file
         #> 
-         #SR: getting pbix        
-         $pbix_O = (Get-Item $this.pbix)
-         $base_path = $pbix_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
+        #SR: getting pbix        
+        $pbix_O = (Get-Item $this.pbix)
+        $base_path = $pbix_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
  
-         #SR: getting metadata dir
-         $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
-         $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
+        #SR: getting metadata dir
+        $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
+        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
 
-         # check if Dir exists
-         if ( -not (Test-Path "$base_path\$md_dir")  ) {
+        # check if Dir exists
+        if ( -not (Test-Path "$base_path\$md_dir")  ) {
             New-Item -ItemType Directory -Path "$base_path\$md_dir"
-         }
+        }
 
-         pbi-tools extract -pbixPath $this.pbix -extractFolder "$base_path\$md_dir" 
+        pbi-tools extract -pbixPath $this.pbix -extractFolder "$base_path\$md_dir" 
     }
     
     [void] pbiTools_Build() {
@@ -298,28 +298,36 @@ Specification" | Set-Content $path
 
     #---------------- Git Automating --------------------
     #📚     README: all Git Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
-    [void] git_SwitchBranch() { $this.git_SwitchBranch("") }
-    [void] git_SwitchBranch([string]$param) {
-        #   Switching Branch
-        $this.inner_WriteVerbose(">>> git_SwitchBranch <<<")
+    [void] git_ShowBranches() { 
         Write-Host ">>> Branches: "; Write-Host("-" * 50)
         $branches = git branch
         $branches | ForEach-Object { Write-Host $_ }        
         Write-Host("-" * 50)
+    }
+    [void] git_SwitchBranch() { $this.git_SwitchBranch("") }
+    [void] git_SwitchBranch([string]$param) {
+        #   Switching Branch
+        $this.inner_WriteVerbose(">>> git_SwitchBranch <<<")
         
+        $this.git_ShowBranches()        
         if ($param -eq "") {
             git checkout (Read-Host -Prompt ">>> Enter branch name: ")
             break
         }
-        git checkout $param
-
+        git checkout $param        
+        $this.git_ShowBranches()
     }
     [void] git_NewBranch() { $this.git_NewBranch("") }
     [void] git_NewBranch([string]$param) {
         $this.inner_WriteVerbose(">>> git_NewBranch <<<")
+        if (
+            (Read-Host -Prompt ">>> You are branching from: |"( git branch --show-current )"|. 'Q' to Cancel, [Y] to continue") `
+                -in @("Q", "N", "end")
+        ) { break }
+
         if ($param -eq "") {
             #       ask for BrName
-            $branchName = Read-Host -Prompt "Input name of new branch... ( [Q] to cancel ) --> "
+            $branchName = Read-Host -Prompt "Input name of new branch... ( 'Q' to cancel ) --> "
             if ($branchName -eq "Q") { break }
         }
         else {
@@ -327,11 +335,12 @@ Specification" | Set-Content $path
         }
 
         git checkout -b $branchName
+
     }    
     [void] git_Commit() { $this.git_Commit("") }
     [void] git_Commit([string]$param) {
         #   Show changes
-        $this.inner_WriteVerbose(">>> git_Commit <<<")
+        $this.inner_WriteVerbose(">>> git_Commit on Branch |"+ ( git branch --show-current ) + "|" +" <<<")
 
         $this.inner_WriteVerbose(">>> Files Changed or Created...")
         $res = @(); $res += git diff --stat; $res += git status -s -u  
@@ -339,7 +348,7 @@ Specification" | Set-Content $path
         $res | ForEach-Object { Write-Host $_ }
         write-host ("`n" + "-" * 50 ) ;  
         
-        if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -eq "N"  ) { break }
+        if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
         
         #   staging
         git add -A
@@ -348,7 +357,7 @@ Specification" | Set-Content $path
         #   Committing
         $commMessage = ""
         if ($param -eq "") {
-            Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [end] to finish input) --> "
+            Write-Host "Insert Commit Message ('Q' to cancel, [Enter] to open new line, 'end' to finish input) --> "
             while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
             $commMessage = $commMessage.Trim()
 	        
