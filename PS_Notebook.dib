@@ -22,35 +22,21 @@ $pbx | Get-Member
 
 #!pwsh
 
-$commMsg = "SR [2022-09-24]: PS.git_ methods -- pasing str values
---> All git_ methods were equipped with parameters"
+$currentUser = git config user.name
+$date = Get-Date -Format "yyy-MM-dd"
+
+$commHeaderMessage = 'PS.git_ methods -- pasing str values'
+
+#Body can be multiline. Make a vivid separator for each of the lines, like '-->'
+$commBodyMessage = ` 
+'--> All git_ methods were equipped with parameters'
+
+
+$commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
+
 $commMsg
 
 #!pwsh
 
-$commMsg = "SR [2022-09-24]: PS.git_ methods -- pasing str values
---> All git_ methods were equipped with parameters"
-
-$pbx.git_Commit($commMsg)
-#$pbx.git_Sync()
-
-#!markdown
-
-## Switching Branch and update from Main
-
-#!pwsh
-
-$pbx.git_SwitchBranch()
-
-#!pwsh
-
-$pbx.git_Commit()
-$pbx.git_MergeFromMain()
-
-#!pwsh
-
-git config user.name
-
-#!pwsh
-
-Get-Date -Format "yyyy-mm-dd"
+# $pbx.git_Commit($commMsg)
+# $pbx.git_SyncBranch()

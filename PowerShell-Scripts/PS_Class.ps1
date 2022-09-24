@@ -222,7 +222,7 @@ class PBIX {
         pbi-tools.exe extract -pid $PrId -watch
     }
 
-    #---------------- managerment Plan --------------------
+    #---------------- Managerment Plan --------------------
     [void] managementPlan_UpdateManagementPlanTables() {    
         <#
             .DESCRIPTION
