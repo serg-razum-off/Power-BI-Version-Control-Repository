@@ -1,5 +1,5 @@
 class PBIX {
-<#
+    <#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -16,7 +16,7 @@ class PBIX {
             $pbix = [pbix]::new(10, 175, 325, $false)
     #>
     #============ #PROPERTIES ================================
-    # for searches cat's and ls's
+    #for searches cat's and ls's
     [string]$projectRoot
     # for import tables and measures specification
     [array]$managementPlan
@@ -115,19 +115,40 @@ class PBIX {
         $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )        
     }
     #--------------- Pbi-tools addressing  ----------------
+    #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
+    [void] pbiTools_Extract() {
+        <#
+            .DESCRIPTION
+                Extracts PBI-JSON structured Metadata from .pbix file
+        #> 
+        #SR: getting pbix        
+        $pbix_O = (Get-Item $this.pbix)
+        $base_path = $pbix_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
+ 
+        #SR: getting metadata dir
+        $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
+        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
+
+        # check if Dir exists
+        if ( -not (Test-Path "$base_path\$md_dir")  ) {
+            New-Item -ItemType Directory -Path "$base_path\$md_dir"
+        }
+
+        pbi-tools extract -pbixPath $this.pbix -extractFolder "$base_path\$md_dir" 
+    }
+    
     [void] pbiTools_Build() {
         <#
             .DESCRIPTION
                 Compile PBIT from pbi-tools JSON model, launch PBIT. If Compillation was successful, data will start refresh
         #>    
 
-        #SR: getting pbit
-        
-        $pbit_O = (Get-Item $this.pbit)
-        $base_path = $pbit_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
+        #SR: getting pbix location -- PBIT will be compiled to that folder,         
+        $pbix_O = (Get-Item $this.pbix)
+        $base_path = $pbix_O.DirectoryName #SR: $this.pbix contains only FullPath, not the Obj itself
 
         #SR: getting metadata dir
-        $md_dir = ($pbit_O.FullName -split "\\" ) #get Arr of folder path
+        $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
         $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
 
         # $tmp = "$base_path\$md_dir" #* for debugging only
@@ -135,7 +156,8 @@ class PBIX {
         #SR: compiling .pbit and launching #++
         $res = pbi-tools compile-pbix -folder "$base_path\$md_dir" `
             -outPath "$base_path" `
-            -format PBIT -overwrite;     
+            -format PBIT `
+            -overwrite;     
 
         #SR: if having Errs while compile
         $substrings_list = @("Error", "Global")
@@ -200,7 +222,7 @@ class PBIX {
         pbi-tools.exe extract -pid $PrId -watch
     }
 
-    #---------------- managerment Plan --------------------
+    #---------------- Managerment Plan --------------------
     [void] managementPlan_UpdateManagementPlanTables() {    
         <#
             .DESCRIPTION
@@ -275,60 +297,92 @@ Specification" | Set-Content $path
     } # } UpdateManagementPlanTables
 
     #---------------- Git Automating --------------------
-    [void] git_SwitchBranch() {
+    #📚     README: all Git Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
+    [void] git_ShowBranches() { 
         Write-Host ">>> Branches: "; Write-Host("-" * 50)
         $branches = git branch
-        $branches | ForEach-Object {Write-Host $_}        
+        $branches | ForEach-Object { Write-Host $_ }        
         Write-Host("-" * 50)
-
-        git checkout (Read-Host -Prompt ">>> Enter branch name: ")
     }
-    [void] git_NewBranch() {
-        #TODO: 	New Branch 
-        #       ask for BrName
-        $branchName = Read-Host -Prompt "Input name of new branch... ( [Q] to cancel ) --> "
-        if ($branchName -eq "Q") { break }
+    [void] git_SwitchBranch() { $this.git_SwitchBranch("") }
+    [void] git_SwitchBranch([string]$param) {
+        #   Switching Branch
+        $this.inner_WriteVerbose(">>> git_SwitchBranch <<<")
+        
+        $this.git_ShowBranches()        
+        if ($param -eq "") {
+            git checkout (Read-Host -Prompt ">>> Enter branch name: ")
+            break
+        }
+        git checkout $param        
+        $this.git_ShowBranches()
+    }
+    [void] git_NewBranch() { $this.git_NewBranch("") }
+    [void] git_NewBranch([string]$param) {
+        $this.inner_WriteVerbose(">>> git_NewBranch <<<")
+        if (
+            (Read-Host -Prompt ">>> You are branching from: |"( git branch --show-current )"|. 'Q' to Cancel, [Y] to continue") `
+                -in @("Q", "N", "end")
+        ) { break }
+
+        if ($param -eq "") {
+            #       ask for BrName
+            $branchName = Read-Host -Prompt "Input name of new branch... ( 'Q' to cancel ) --> "
+            if ($branchName -eq "Q") { break }
+        }
+        else {
+            $branchName = $param
+        }
 
         git checkout -b $branchName
-    }
-    
-    [void] git_Commit() {
-        #TODO:	Stage; Commit 
+
+    }    
+    [void] git_Commit() { $this.git_Commit("") }
+    [void] git_Commit([string]$param) {
         #   Show changes
+        $this.inner_WriteVerbose(">>> git_Commit on Branch |"+ ( git branch --show-current ) + "|" +" <<<")
+
         $this.inner_WriteVerbose(">>> Files Changed or Created...")
         $res = @(); $res += git diff --stat; $res += git status -s -u  
         write-host ("-" * 50 + "`n") ;  
         $res | ForEach-Object { Write-Host $_ }
         write-host ("`n" + "-" * 50 ) ;  
         
-        if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -eq "N"  ) { break }
+        if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
         
         #   staging
         git add -A
         $this.inner_WriteVerbose(">>> Files Staged...")
 
         #   Committing
-        Write-Host "Insert Commit Message ([Q] to cancel, [Enter] to open new line, [end] to finish input) --> "
         $commMessage = ""
-        while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
-        $commMessage = $commMessage.Trim()
-        
-        if ($commMessage -eq "Q") { break }
+        if ($param -eq "") {
+            Write-Host "Insert Commit Message ('Q' to cancel, [Enter] to open new line, 'end' to finish input) --> "
+            while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
+            $commMessage = $commMessage.Trim()
+	        
+            if ($commMessage -eq "Q") { break }
+        }
+        else {
+            $commMessage = $param
+        }
         
         git commit -a -m $commMessage
         $this.inner_WriteVerbose(">>> Committed successfully")
     }
     [void] git_SyncBranch() {
-        #   Synching
+        #   Synching current brach
+        $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
+
         if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
         $currBranch = git branch --show-current
         
         git pull origin $currBranch
         git push origin $currBranch
     }
-    [void] git_MergeToMain() {
-        #   Merge to Master can be done by priviliged users only]
-        $currUser = git config user.email
+    [void] git_MergeToMain([string]$param) {
+        #   Merge of current branch to Master --> can be done by priviliged users only
+        $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
 
         $currUser = git config user.email
         $allowMergeMain = $false
@@ -353,7 +407,18 @@ Specification" | Set-Content $path
         git merge $currBranch
         git push origin main
         git checkout $currBranch
-    }
+    }    
+    [void] git_MergeFromMain() {
+        #	Merge from Master to current branch --> to FF other developers' changes
+        $this.inner_WriteVerbose(">>> git_MergeFromMain <<<")
 
-    
-} # } PBIX Class
+        $currBranch = git branch --show-current
+        $cbUpper = $currBranch.ToUpper()
+        if ((Read-Host -Prompt "Are you sure want to merge Main into >> $cbUpper << ? [Y] / N") -eq "N") { break }
+        
+        git checkout main
+        git pull
+        git checkout $currBranch
+        git merge main    
+    }
+} 
