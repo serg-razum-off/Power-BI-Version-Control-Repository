@@ -360,7 +360,7 @@ Specification" | Set-Content $path
         
         git commit -a -m $commMessage
         $this.inner_WriteVerbose(">>> Committed successfully")
-    }
+    }   
     [void] git_SyncBranch() {
         #   Synching current brach
         $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
