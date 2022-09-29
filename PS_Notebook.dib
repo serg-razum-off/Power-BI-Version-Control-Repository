@@ -29,7 +29,8 @@ $commHeaderMessage = 'PS.git_ methods: little updates'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'--> All git_ methods developed. Moving to a new branch'
+'>>> Show_Branches --> Separate Method
+>>> Minor changes to Branch()'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
@@ -47,7 +48,11 @@ $pbx.git_SyncBranch()
 
 #!pwsh
 
-$pbx.git_SwitchBranch("PS_CLASS_GIT_COMMANDS")
+$pbx.git_ShowBranches()
+
+#!pwsh
+
+$pbx.git_SwitchBranch("SR_PS_PBI_Actions_Automation")
 
 #!pwsh
 
