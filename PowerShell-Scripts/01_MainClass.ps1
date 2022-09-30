@@ -323,7 +323,7 @@ Specification" | Set-Content $path
     [void] git_NewBranch([string]$param) {
         $this.inner_WriteVerbose(">>> git_NewBranch <<<")
         if (
-            (Read-Host -Prompt ">>> You are branching from: |"( git branch --show-current )"|. 'Q' to Cancel, [Y] to continue") `
+            (Read-Host -Prompt ">>> You are branching from: | $(git branch --show-current) |. 'Q' to Cancel, [Y] to continue") `
                 -in @("Q", "N", "end")
         ) { break }
 
