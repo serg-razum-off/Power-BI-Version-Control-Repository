@@ -10,7 +10,7 @@
 
 #!pwsh
 
-. ./PowerShell-Scripts/PS_Class.ps1; $pbx = [pbix]::new('', $true)
+. ./PowerShell-Scripts/01_MainClass.ps1; $pbx = [pbix]::new('', $true)
 
 #!pwsh
 
@@ -25,12 +25,11 @@ $pbx | Get-Member
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'PS.git_ methods: little updates'
+$commHeaderMessage = 'Final preparations before Class Refactor'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>>> Show_Branches --> Separate Method
->>> Minor changes to Branch()'
+'>> Class will be split into sub-Classes to imitate namespaces and create streams of development'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"

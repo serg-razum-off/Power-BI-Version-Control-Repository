@@ -6,15 +6,17 @@ class PBIX {
             PowerShell Class to handle interactions with pbi-tools --> JSON splitted .pbx 
             One Proj for one pbi file --> number of changes is high. Several pbixes in one proj will mess up VC
 
-            Methods are clustered into categories:
+            Methods are clustered into categories:  
                 $this.inner_
                 $this.pbiTools_
                 $this.managementTool_
+                #REFACTOR: #⚠ : move methods from clusters to separate classes, to have dot notation for them. => $this.pbiTools.<methodName>
 
         .EXAMPLE
             $pbix = [pbix]::new()
             $pbix = [pbix]::new(10, 175, 325, $false)
     #>
+    
     #============ #PROPERTIES ================================
     #for searches cat's and ls's
     [string]$projectRoot
