@@ -1,5 +1,5 @@
 {
-  "name": "83c732cc-8db2-4c57-bc58-716fa52aae10",
+  "name": "fe6c1aa1-5b38-4baf-a168-044c09137b0d",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -23,7 +23,7 @@
         "fromTable": "Sales",
         "fromColumn": "ProductKey",
         "toTable": "Product",
-        "toColumn": "ProductKey"
+        "toColumn": "🔑 ProductKey"
       },
       {
         "name": "ddc90e12-74d0-451e-87b6-3bc8d773bf07",
@@ -109,7 +109,7 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.108.997.0 (22.08)"
+        "value": "2.110.805.0 (22.10)"
       },
       {
         "name": "PBI_QueryOrder",

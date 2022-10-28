@@ -1,0 +1,60 @@
+{
+  "objects": {
+    "data": [
+      {
+        "properties": {
+          "mode": {
+            "expr": {
+              "Literal": {
+                "Value": "'Basic'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "general": [
+      {
+        "properties": {}
+      }
+    ]
+  },
+  "projectionOrdering": {
+    "Values": [
+      0
+    ]
+  },
+  "projectionActiveItems": {
+    "Values": [
+      {
+        "queryRef": "Customer.Customer",
+        "suppressConcat": false
+      }
+    ]
+  },
+  "queryMetadata": null,
+  "visualElements": null,
+  "selects": [
+    {
+      "displayName": "Customer",
+      "queryName": "Customer.Customer",
+      "roles": {
+        "Values": true
+      },
+      "type": {
+        "category": null,
+        "underlyingType": 1
+      },
+      "expr": {
+        "Column": {
+          "Expression": {
+            "SourceRef": {
+              "Entity": "Customer"
+            }
+          },
+          "Property": "Customer"
+        }
+      }
+    }
+  ]
+}
