@@ -16,6 +16,18 @@
 
 $pbx | Get-Member 
 
+#!pwsh
+
+$pbx.pbiTools_Launch()
+
+#!pwsh
+
+$pbx.pbiTools_WatchMode()
+
+#!pwsh
+
+$pbx.pbiTools_Build()
+
 #!markdown
 
 ## Committing Changes
@@ -25,11 +37,11 @@ $pbx | Get-Member
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Final preparations before Class Refactor'
+$commHeaderMessage = 'Minor changes'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> Class will be split into sub-Classes to imitate namespaces and create streams of development'
+'>> Verbose output of committed files removed. VS Code Source Control will be inspection playground'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"

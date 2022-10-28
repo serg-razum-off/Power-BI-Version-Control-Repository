@@ -151,7 +151,7 @@ class PBIX {
 
         #SR: getting metadata dir
         $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
-        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
+        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbix")[0] #from last el /pbix name/ get name wo extension
 
         # $tmp = "$base_path\$md_dir" #* for debugging only
         

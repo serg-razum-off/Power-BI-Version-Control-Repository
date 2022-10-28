@@ -32,8 +32,26 @@
       }
     ]
   },
-  "queryMetadata": null,
-  "visualElements": null,
+  "queryMetadata": {
+    "Select": [
+      {
+        "Restatement": "Customer",
+        "Name": "Customer.Customer",
+        "Type": 2048
+      }
+    ]
+  },
+  "visualElements": [
+    {
+      "DataRoles": [
+        {
+          "Name": "Values",
+          "Projection": 0,
+          "isActive": true
+        }
+      ]
+    }
+  ],
   "selects": [
     {
       "displayName": "Customer",

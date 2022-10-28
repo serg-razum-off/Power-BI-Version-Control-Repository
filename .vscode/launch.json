@@ -3,13 +3,14 @@
     //      https://docs.microsoft.com/en-us/powershell/scripting/dev-cross-plat/vscode/using-vscode?view=powershell-7.2#workspace-debugging 
     "version": "0.2.0",
     "configurations": [
-        // Debug for PS Class
+        
+        // // Debug for PS Class
         {
             "name": "PowerShell Interactive Session",
             "type": "PowerShell",
             "request": "launch",
             "cwd": ""
-        }
+        },
         
 
     ]
