@@ -344,12 +344,8 @@ Specification" | Set-Content $path
         #   Show changes
         $this.inner_WriteVerbose(">>> git_Commit on Branch |"+ ( git branch --show-current ) + "|" +" <<<")
 
-        $this.inner_WriteVerbose(">>> Files Changed or Created...")
-        $res = @(); $res += git diff --stat; $res += git status -s -u  
-        write-host ("-" * 50 + "`n") ;  
-        $res | ForEach-Object { Write-Host $_ }
-        write-host ("`n" + "-" * 50 ) ;  
-        
+        $this.inner_WriteVerbose(">>> Inspect files changed on VS Code Source Control Tab...")
+                
         if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
         
         #   staging
