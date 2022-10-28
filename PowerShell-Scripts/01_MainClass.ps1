@@ -339,15 +339,17 @@ Specification" | Set-Content $path
         git checkout -b $branchName
 
     }    
-    [void] git_Commit() { $this.git_Commit("") }
-    [void] git_Commit([string]$param) {
+    [void] git_Commit() { $this.git_Commit("", $true) }
+    [void] git_Commit([string]$param, [bool]$auto) {
         #   Show changes
-        $this.inner_WriteVerbose(">>> git_Commit on Branch |"+ ( git branch --show-current ) + "|" +" <<<")
+        $this.inner_WriteVerbose(">>> git_Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<")
 
-        $this.inner_WriteVerbose(">>> Inspect files changed on VS Code Source Control Tab...")
-                
-        if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
         
+        if (!$auto) {
+            $this.inner_WriteVerbose(">>> Inspect files changed on VS Code Source Control Tab if needed...")
+            if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
+	
+        }        
         #   staging
         git add -A
         $this.inner_WriteVerbose(">>> Files Staged...")
@@ -368,12 +370,15 @@ Specification" | Set-Content $path
         git commit -a -m $commMessage
         $this.inner_WriteVerbose(">>> Committed successfully")
     }   
-    [void] git_SyncBranch() {
+    [void] git_SyncBranch() { $this.git_SyncBranch($true) }
+    [void] git_SyncBranch([bool]$auto) {
         #   Synching current brach
         $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
 
-        if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
-        $currBranch = git branch --show-current
+        if (!$auto) {
+            if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
+	
+        }        $currBranch = git branch --show-current
         
         git pull origin $currBranch
         git push origin $currBranch

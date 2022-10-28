@@ -41,7 +41,7 @@ $commHeaderMessage = 'Minor changes'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> Verbose output of committed files removed. VS Code Source Control will be inspection playground'
+'>> 2 Git Methods updated: git_Commit; git_SyncBranch'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
@@ -50,7 +50,7 @@ $commMsg
 
 #!pwsh
 
-$pbx.git_Commit($commMsg)
+$pbx.git_Commit($commMsg, $true)
 $pbx.git_SyncBranch()
 
 #!markdown
