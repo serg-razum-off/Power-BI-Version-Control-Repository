@@ -41,7 +41,7 @@ $commHeaderMessage = 'Minor changes'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> 2 Git Methods updated: git_Commit; git_SyncBranch'
+'>> VS Code keybimdimgs were updated to operate with [PBIX] class objects; README.md was updated'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"

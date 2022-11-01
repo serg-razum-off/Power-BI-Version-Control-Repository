@@ -109,12 +109,15 @@ class PBIX {
         # Updating Tables in Manage Plan
         $this.managementPlan_UpdateManagementPlanTables();
         
-        # setting personal aliases
+        # 📝setting personal aliases:
+        #       Setting aliases with Class -- to have it run on every environm.  
+        #       Setting with $profile will require $profile modification on every env
         $this.inner_WriteVerbose( ">>> Setting personal Aliases..." )
         Set-Alias -Name touch -Value New-Item -Scope Global
         
         # wrapping the inner_Init up
-        $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )        
+        $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )
+        
     }
     #--------------- Pbi-tools addressing  ----------------
     #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
@@ -283,7 +286,7 @@ Specification" | Set-Content $path
                 [regex]::Match((Get-Content $path), $pattern) `
                     -replace ' ', '' `
                     -replace '`n', ''`
-                    -eq ` 
+                    -eq `
                 $required_qwr `
                     -replace ' ', '' `
                     -replace '`n', ''

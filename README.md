@@ -1,4 +1,8 @@
 # Power-BI-Version-Control-Repository
+``` 
+Ctrl+K, V or Ctrl+Shift+V --> to read this MD in VS Code 
+```
+
 This repository is a place to test VC approaches for Power BI
 * Each Repository is created for managing ONE couple of (.pbix -- . pbit)
     * in future improvements can be done to manage several .pbix-es with one Project
@@ -28,11 +32,19 @@ To operate with these scripts properly, add this section to VS Code keyboard sho
     //SR [2022-07-28]: This section is for automation of Terminal pbi-tools commands
     // ------------------------------------------------------------------------------------
     {
+        "key": "ctrl+shift+r",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+            "text": ". ./PowerShell-Scripts/01_MainClass.ps1; $pbix = [pbix]::new('', $true)"
+        }
+    },
+    {
         "key": "ctrl+shift+l",
         "command": "workbench.action.terminal.sendSequence",
         "when": "terminalFocus",
         "args": {
-            "text": "./PowerShell-Scripts/pbi-tools-scripts/Launch-PBIX-PBIT.ps1"
+            "text": "$pbix.pbiTools_Launch()"
         }
     },
     {
@@ -40,7 +52,7 @@ To operate with these scripts properly, add this section to VS Code keyboard sho
         "command": "workbench.action.terminal.sendSequence",
         "when": "terminalFocus",
         "args": {
-            "text": "./PowerShell-Scripts/pbi-tools-scripts/Compile-Build.ps1"
+            "text": "$pbix.pbiTools_Build()"
         }
     },
     {
@@ -48,8 +60,13 @@ To operate with these scripts properly, add this section to VS Code keyboard sho
         "command": "workbench.action.terminal.sendSequence",
         "when": "terminalFocus",
         "args": {
-            "text": "./PowerShell-Scripts/pbi-tools-scripts/Watch-Mode.ps1"
+            "text": "$pbix.pbiTools_WatchMode()"
         }
+    },
+    {
+        "key": "ctrl+alt+\\",
+        "when": "editorFocus",
+        "command": "workbench.action.splitEditorDown"
     }
     // ------------------------------------------------------------------------------------
 ]
