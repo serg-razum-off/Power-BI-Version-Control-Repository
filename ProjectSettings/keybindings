@@ -1,0 +1,65 @@
+// Place your key bindings in this file to override the defaultsauto[]
+//C:\Users\<UserName>\AppData\Roaming\Code\User\keybindings.json
+[
+    // SR: Key bindings for VS UI
+    // ------------------------------------------------------------------------------------
+    // SR: Search Editor: Apply Changes --> 
+    //      https://marketplace.visualstudio.com/items?itemName=jakearl.search-editor-apply-changes
+    {
+        "key": "ctrl+s", 
+        "command": "searchEditorApplyChanges.apply",
+        "when": "inSearchEditor"
+    },
+    // Save all open windows
+    {
+        "key": "shift+alt+s",
+        "command": "workbench.action.files.saveFiles"
+    },
+    // Mx Min Terminal
+    {
+        "key": "ctrl+alt+numpad_add",
+        "when": "terminalFocus",
+        "command": "workbench.action.toggleMaximizedPanel"
+    },
+    // ------------------------------------------------------------------------------------
+    //SR [2022-07-28]: This section is for automation of Terminal pbi-tools commands
+    // ------------------------------------------------------------------------------------
+    {
+        "key": "ctrl+shift+r",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+            "text": ". ./PowerShell-Scripts/01_MainClass.ps1; $pbix = [pbix]::new('', $true)"
+        }
+    },
+    {
+        "key": "ctrl+shift+l",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+            "text": "$pbix.pbiTools_Launch()"
+        }
+    },
+    {
+        "key": "ctrl+shift+b",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+            "text": "$pbix.pbiTools_Build()"
+        }
+    },
+    {
+        "key": "ctrl+shift+w",
+        "command": "workbench.action.terminal.sendSequence",
+        "when": "terminalFocus",
+        "args": {
+            "text": "$pbix.pbiTools_WatchMode()"
+        }
+    },
+    {
+        "key": "ctrl+alt+\\",
+        "when": "editorFocus",
+        "command": "workbench.action.splitEditorDown"
+    }
+    // ------------------------------------------------------------------------------------
+]

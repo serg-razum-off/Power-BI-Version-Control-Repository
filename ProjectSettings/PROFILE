@@ -1,0 +1,37 @@
+# PROFILE file in the project contains copy of $PROFILE
+
+# Setting my Aliases --> scriping aliases are duplicated in Classes to have Aliacses unfolded in other environments
+Set-Alias -Name 'touch' -Value New-Item -Scope Global
+Set-Alias -Name 'cat' -Value Get-Content -Scope Global
+Set-Alias -Name 'hist' -Value Get-History -Scope Global
+Set-Alias -Name 'cls-hist' -Value Clear-History -Scope Global
+Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
+# New-Item -p function: -n invk-pbi -va ''#???try impl
+
+# functions for customization
+##############################################################################
+##
+## From PowerShell Cookbook (O'Reilly) --> was taken as base and reworked: SR [2022-11-01]
+## by Lee Holmes (http://www.leeholmes.com/guide)
+##
+##############################################################################
+Set-StrictMode -Version 3
+function prompt {
+    $prevId = 0
+    $id = 1
+    $historyItem = Get-History -Count 1
+    if ($historyItem) {
+        $prevId = $historyItem.Id
+        $id = $historyItem.Id +1
+    }
+    Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White "$(Get-Location) >> " 
+    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "PS:$prevId --> "
+    # identifying running time of the last command:
+    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[⏳$((
+        (Get-History -Count 1).Duration 
+        ).TotalMilliseconds / 100 )] "
+    Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " || PS:$id >> "
+    Write-Host -NoNewline -BackgroundColor Black -ForegroundColor Black "->"
+    $host.UI.RawUI.WindowTitle = "$(Get-Location)"
+    "`b"
+}
