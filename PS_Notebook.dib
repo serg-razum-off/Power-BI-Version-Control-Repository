@@ -41,7 +41,8 @@ $commHeaderMessage = 'Minor changes'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> VS Code keybimdimgs were updated to operate with [PBIX] class objects; README.md was updated'
+'>> ProjectSettings folder was added
+>> $PROFILE > ProjectSettings/PROFILE; keybindings.json > ProjectSettings/keybindings'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"

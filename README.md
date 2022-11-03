@@ -24,53 +24,13 @@ PS Scripts, included into Project:
 * PowerShell-Scripts\Launch-PBIX-PBIT.ps1
 * PowerShell-Scripts\Watch-Mode.ps1
 
-To operate with these scripts properly, add this section to VS Code keyboard shoertcuts JSON:
-
-```// Place your key bindings in this file to override the defaultsauto[]
-[
-    // ------------------------------------------------------------------------------------
-    //SR [2022-07-28]: This section is for automation of Terminal pbi-tools commands
-    // ------------------------------------------------------------------------------------
-    {
-        "key": "ctrl+shift+r",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-            "text": ". ./PowerShell-Scripts/01_MainClass.ps1; $pbix = [pbix]::new('', $true)"
-        }
-    },
-    {
-        "key": "ctrl+shift+l",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-            "text": "$pbix.pbiTools_Launch()"
-        }
-    },
-    {
-        "key": "ctrl+shift+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-            "text": "$pbix.pbiTools_Build()"
-        }
-    },
-    {
-        "key": "ctrl+shift+w",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-            "text": "$pbix.pbiTools_WatchMode()"
-        }
-    },
-    {
-        "key": "ctrl+alt+\\",
-        "when": "editorFocus",
-        "command": "workbench.action.splitEditorDown"
-    }
-    // ------------------------------------------------------------------------------------
-]
+To operate with these scripts properly, visit ./ProjectSetings and import required code to $PROFILE and to keybindings.json
+To save modifications in $PROFILE or in keybindings.json use
 ```
+. $PROFILE
+save-settings
+``` 
+
 ## PS Class
 PS Class added to project under .\PowerShell-Scripts\PS_Class.ps1  <br>
 Run VS Code as Admin for successfull operations.

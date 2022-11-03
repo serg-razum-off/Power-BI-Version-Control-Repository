@@ -1,11 +1,14 @@
 # PROFILE file in the project contains copy of $PROFILE
 
 # Setting my Aliases --> scriping aliases are duplicated in Classes to have Aliacses unfolded in other environments
+Set-Alias -Name 'help' -Value Get-Help -Scope Global
 Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'cat' -Value Get-Content -Scope Global
+Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'hist' -Value Get-History -Scope Global
 Set-Alias -Name 'cls-hist' -Value Clear-History -Scope Global
 Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
+Set-Alias -Name 'grep' -Value Select-String -Scope Global
 # New-Item -p function: -n invk-pbi -va ''#???try impl
 
 # functions for customization
@@ -16,22 +19,32 @@ Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
 ##
 ##############################################################################
 Set-StrictMode -Version 3
+# ------------------------------------- FUNCTIONS -------------------------------------
+#  PROMPT
 function prompt {
     $prevId = 0
     $id = 1
     $historyItem = Get-History -Count 1
     if ($historyItem) {
         $prevId = $historyItem.Id
-        $id = $historyItem.Id +1
+        $id = $historyItem.Id + 1
     }
     Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White "$(Get-Location) >> " 
     Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "PS:$prevId --> "
     # identifying running time of the last command:
-    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[⏳$((
+    $ms = $((
         (Get-History -Count 1).Duration 
-        ).TotalMilliseconds / 100 )] "
-    Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " || PS:$id >> "
+        ).TotalMilliseconds / 1000 )
+    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[⏳$([math]::Round($ms,3))s] "
+    Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " |#| PS:$id >> "
     Write-Host -NoNewline -BackgroundColor Black -ForegroundColor Black "->"
     $host.UI.RawUI.WindowTitle = "$(Get-Location)"
     "`b"
+}
+
+#  SAVE SETTINGS
+function save-settings {
+    # Backs up settings from respective VS Code keybindings and from PS $PROFILE to files in ProjectSettings
+    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > .\ProjectSettings\keybindings
+    Get-Content $PROFILE > .\ProjectSettings\PROFILE    
 }
