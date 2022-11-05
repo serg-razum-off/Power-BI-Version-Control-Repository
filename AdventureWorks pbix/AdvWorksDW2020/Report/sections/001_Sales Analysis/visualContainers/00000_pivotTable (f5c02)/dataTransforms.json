@@ -39,8 +39,8 @@
         "Type": 2048
       },
       {
-        "Restatement": "Product Rank Dynamic",
-        "Name": "Sales.Product Rank ",
+        "Restatement": "Product Rank By Group",
+        "Name": "Sales.Product Rank Dynamic",
         "Type": 3
       }
     ]
@@ -136,8 +136,8 @@
       }
     },
     {
-      "displayName": "Product Rank Dynamic",
-      "queryName": "Sales.Product Rank ",
+      "displayName": "Product Rank By Group",
+      "queryName": "Sales.Product Rank Dynamic",
       "roles": {
         "Values": true
       },
@@ -154,8 +154,45 @@
               "Entity": "Sales"
             }
           },
-          "Property": "Product Rank Dynamic"
+          "Property": "Product Rank By Group"
         }
+      }
+    }
+  ],
+  "expansionStates": [
+    {
+      "roles": [
+        "Rows"
+      ],
+      "levels": [
+        {
+          "queryRefs": [
+            "Product.Category"
+          ],
+          "identityKeys": [
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Product"
+                  }
+                },
+                "Property": "Category"
+              }
+            }
+          ],
+          "isPinned": true
+        },
+        {
+          "queryRefs": [
+            "Product.Product"
+          ],
+          "isCollapsed": true,
+          "isPinned": true
+        }
+      ],
+      "root": {
+        "identityValues": null
       }
     }
   ]

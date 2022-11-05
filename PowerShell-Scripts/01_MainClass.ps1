@@ -10,7 +10,7 @@ class PBIX {
                 $this.inner_
                 $this.pbiTools_
                 $this.managementTool_
-                #REFACTOR: #⚠ : move methods from clusters to separate classes, to have dot notation for them. => $this.pbiTools.<methodName>
+                #REFACTOR: #⚠ : move methods from clusters to separate functions, to have dot notation for them. => $this.pbiTools.<methodName>
 
         .EXAMPLE
             $pbix = [pbix]::new()
