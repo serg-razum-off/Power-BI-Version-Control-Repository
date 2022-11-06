@@ -37,12 +37,12 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Minor changes'
+$commHeaderMessage = 'PBI file change:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> README.md updated
->> PROFILE udpated'
+'>> measure updates "Product Rank By Group": var name style updated to _varNameStyle 
+'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"

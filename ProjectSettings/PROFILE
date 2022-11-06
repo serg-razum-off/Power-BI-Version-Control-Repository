@@ -7,6 +7,7 @@ Set-Alias -Name 'grep' -Value Select-String -Scope Global
 Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
 Set-Alias -Name 'help' -Value Get-Help -Scope Global
 Set-Alias -Name 'hist' -Value Get-History -Scope Global
+Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 
 Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
@@ -45,6 +46,7 @@ function prompt {
 #  SAVE SETTINGS
 function save-settings {
     # Backs up settings from respective VS Code keybindings and from PS $PROFILE to files in ProjectSettings
+    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\settings.json' > .\ProjectSettings\setings
     Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > .\ProjectSettings\keybindings
     Get-Content $PROFILE > .\ProjectSettings\PROFILE    
 }

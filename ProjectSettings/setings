@@ -1,0 +1,133 @@
+{
+    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.iconTheme": "vscode-icons",
+    
+    "bookmarks.saveBookmarksInProject":true,    
+    
+    "better-comments.tags": [
+        {
+            "tag": "🚩",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "⚠",
+            "color": "#474747",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "yellow",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "📚",
+            "color": "#ffff00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "#3d5c5c",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "📝",
+            "color": "#ff9900",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "#3d5c5c",
+            "bold": false,
+            "italic": false
+        }
+    ],
+    "jupyter.askForKernelRestart": false,
+    "notebook.lineNumbers": "on",
+    "git.autofetch": true,
+    "files.exclude": {
+        "**/.git": false
+    },
+    "workbench.sideBar.location": "right",
+    "editor.wordWrap": "on",
+    "editor.cursorBlinking": "expand",
+    "powershell.buttons.showPanelMovementButtons": true,
+    "powershell.codeFormatting.autoCorrectAliases": true,
+    "powershell.codeFormatting.whitespaceBetweenParameters": true,
+
+    // "powershell.powerShellAdditionalExePaths": 
+    // {
+    //     "exePath": "C:\\Users\\Sergey\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe", //⚠: doesnt work
+    //     "versionName": "Downloaded PowerShell"
+    // },
+    
+    "powershell.notebooks.showToggleButton": true,
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "vsicons.dontShowNewVersionMessage": true,
+    "editor.stickyScroll.enabled": true,
+    "dotnet-interactive.notebookParserArgs": [
+        "{dotnet_path}",
+        "tool",
+        "run",
+        "dotnet-interactive",
+        "--",
+        "notebook-parser"
+    ],
+    "todo-tree.general.tags": [
+        "BUG",
+        "REFACTOR",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "[!]"
+    ],
+    "todo-tree.highlights.customHighlight": {
+        //type of icons in Todo-Tree: http://jonasbn.github.io/til/vscode/todo_tree_extension.html
+        "BUG": {
+            "icon": "bug"
+        },
+        "REFACTOR": {
+            "icon": "tools"
+        },
+        "FIXME": {
+            "icon": "flame"
+        },
+        "XXX": {
+            "icon": "$(close)"
+        },
+        "[!]": {
+            "icon": "flame"
+        }
+    },
+    
+    "terminal.integrated.fontSize": 14,
+
+    "python.condaPath": "C:\\Users\\Sergey\\miniconda3\\Scripts\\conda.exe",
+    "git.enableSmartCommit": true,
+    "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.0-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.110.3\\tools",
+    "powershell.powerShellDefaultVersion": "PowerShell (x64)",
+    "window.zoomLevel": -1
+}
