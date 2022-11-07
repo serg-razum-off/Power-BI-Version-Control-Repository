@@ -60,7 +60,7 @@
                 "Source": "s"
               }
             },
-            "Property": "SumSales"
+            "Property": "SalesAmount"
           },
           "Name": "Sales.SumSales"
         }
@@ -75,7 +75,7 @@
                   "Source": "s"
                 }
               },
-              "Property": "SumSales"
+              "Property": "SalesAmount"
             }
           }
         }

@@ -1,4 +1,8 @@
 # Power-BI-Version-Control-Repository
+``` 
+Ctrl+K, V or Ctrl+Shift+V --> to read this MD in VS Code 
+```
+
 This repository is a place to test VC approaches for Power BI
 * Each Repository is created for managing ONE couple of (.pbix -- . pbit)
     * in future improvements can be done to manage several .pbix-es with one Project
@@ -20,40 +24,13 @@ PS Scripts, included into Project:
 * PowerShell-Scripts\Launch-PBIX-PBIT.ps1
 * PowerShell-Scripts\Watch-Mode.ps1
 
-To operate with these scripts properly, add this section to VS Code keyboard shoertcuts JSON:
-
-```// Place your key bindings in this file to override the defaultsauto[]
-[
-    // ------------------------------------------------------------------------------------
-    //SR [2022-07-28]: This section is for automation of Terminal pbi-tools commands
-    // ------------------------------------------------------------------------------------
-    {
-        "key": "ctrl+shift+l",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-            "text": "./PowerShell-Scripts/pbi-tools-scripts/Launch-PBIX-PBIT.ps1"
-        }
-    },
-    {
-        "key": "ctrl+shift+b",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-            "text": "./PowerShell-Scripts/pbi-tools-scripts/Compile-Build.ps1"
-        }
-    },
-    {
-        "key": "ctrl+shift+w",
-        "command": "workbench.action.terminal.sendSequence",
-        "when": "terminalFocus",
-        "args": {
-            "text": "./PowerShell-Scripts/pbi-tools-scripts/Watch-Mode.ps1"
-        }
-    }
-    // ------------------------------------------------------------------------------------
-]
+To operate with these scripts properly, visit ./ProjectSetings and import required code to $PROFILE and to keybindings.json
+To save modifications in $PROFILE or in keybindings.json use
 ```
+. $PROFILE
+save-settings
+``` 
+
 ## PS Class
 PS Class added to project under .\PowerShell-Scripts\PS_Class.ps1  <br>
 Run VS Code as Admin for successfull operations.

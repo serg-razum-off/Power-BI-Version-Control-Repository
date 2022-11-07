@@ -16,6 +16,18 @@
 
 $pbx | Get-Member 
 
+#!pwsh
+
+$pbx.pbiTools_Launch()
+
+#!pwsh
+
+$pbx.pbiTools_WatchMode()
+
+#!pwsh
+
+$pbx.pbiTools_Build()
+
 #!markdown
 
 ## Committing Changes
@@ -25,11 +37,12 @@ $pbx | Get-Member
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Final preparations before Class Refactor'
+$commHeaderMessage = 'PBI file change:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> Class will be split into sub-Classes to imitate namespaces and create streams of development'
+'>> ProjectSettings folder was added
+>> $PROFILE > ProjectSettings/PROFILE; keybindings.json > ProjectSettings/keybindings'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
@@ -38,7 +51,7 @@ $commMsg
 
 #!pwsh
 
-$pbx.git_Commit($commMsg)
+$pbx.git_Commit($commMsg, $true)
 $pbx.git_SyncBranch()
 
 #!markdown
@@ -51,8 +64,8 @@ $pbx.git_ShowBranches()
 
 #!pwsh
 
-$pbx.git_SwitchBranch("SR_PS_PBI_Actions_Automation")
+$pbx.git_SwitchBranch("PS_updates_learning")
 
 #!pwsh
 
-$pbx.git_NewBranch("SR_PS_PBI_Actions_Automation")
+$pbx.git_NewBranch("PS_updates_learning")

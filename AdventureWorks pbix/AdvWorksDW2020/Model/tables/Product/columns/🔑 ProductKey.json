@@ -1,8 +1,8 @@
 {
-  "name": "ProductKey",
+  "name": "🔑 ProductKey",
   "dataType": "int64",
   "isHidden": true,
-  "sourceColumn": "ProductKey",
+  "sourceColumn": "🔑 ProductKey",
   "formatString": "0",
   "summarizeBy": "none",
   "annotations": [

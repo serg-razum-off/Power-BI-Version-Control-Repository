@@ -10,7 +10,7 @@ class PBIX {
                 $this.inner_
                 $this.pbiTools_
                 $this.managementTool_
-                #REFACTOR: #⚠ : move methods from clusters to separate classes, to have dot notation for them. => $this.pbiTools.<methodName>
+                #REFACTOR: #⚠ : move methods from clusters to separate functions, to have dot notation for them. => $this.pbiTools.<methodName>
 
         .EXAMPLE
             $pbix = [pbix]::new()
@@ -109,12 +109,15 @@ class PBIX {
         # Updating Tables in Manage Plan
         $this.managementPlan_UpdateManagementPlanTables();
         
-        # setting personal aliases
+        # 📝setting personal aliases:
+        #       Setting aliases with Class -- to have it run on every environm.  
+        #       Setting with $profile will require $profile modification on every env
         $this.inner_WriteVerbose( ">>> Setting personal Aliases..." )
         Set-Alias -Name touch -Value New-Item -Scope Global
         
         # wrapping the inner_Init up
-        $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )        
+        $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )
+        
     }
     #--------------- Pbi-tools addressing  ----------------
     #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
@@ -151,7 +154,7 @@ class PBIX {
 
         #SR: getting metadata dir
         $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
-        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
+        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbix")[0] #from last el /pbix name/ get name wo extension
 
         # $tmp = "$base_path\$md_dir" #* for debugging only
         
@@ -283,7 +286,7 @@ Specification" | Set-Content $path
                 [regex]::Match((Get-Content $path), $pattern) `
                     -replace ' ', '' `
                     -replace '`n', ''`
-                    -eq ` 
+                    -eq `
                 $required_qwr `
                     -replace ' ', '' `
                     -replace '`n', ''
@@ -339,19 +342,17 @@ Specification" | Set-Content $path
         git checkout -b $branchName
 
     }    
-    [void] git_Commit() { $this.git_Commit("") }
-    [void] git_Commit([string]$param) {
+    [void] git_Commit() { $this.git_Commit("", $true) }
+    [void] git_Commit([string]$param, [bool]$auto) {
         #   Show changes
-        $this.inner_WriteVerbose(">>> git_Commit on Branch |"+ ( git branch --show-current ) + "|" +" <<<")
+        $this.inner_WriteVerbose(">>> git_Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<")
 
-        $this.inner_WriteVerbose(">>> Files Changed or Created...")
-        $res = @(); $res += git diff --stat; $res += git status -s -u  
-        write-host ("-" * 50 + "`n") ;  
-        $res | ForEach-Object { Write-Host $_ }
-        write-host ("`n" + "-" * 50 ) ;  
         
-        if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
-        
+        if (!$auto) {
+            $this.inner_WriteVerbose(">>> Inspect files changed on VS Code Source Control Tab if needed...")
+            if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
+	
+        }        
         #   staging
         git add -A
         $this.inner_WriteVerbose(">>> Files Staged...")
@@ -372,12 +373,15 @@ Specification" | Set-Content $path
         git commit -a -m $commMessage
         $this.inner_WriteVerbose(">>> Committed successfully")
     }   
-    [void] git_SyncBranch() {
+    [void] git_SyncBranch() { $this.git_SyncBranch($true) }
+    [void] git_SyncBranch([bool]$auto) {
         #   Synching current brach
         $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
 
-        if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
-        $currBranch = git branch --show-current
+        if (!$auto) {
+            if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
+	
+        }        $currBranch = git branch --show-current
         
         git pull origin $currBranch
         git push origin $currBranch

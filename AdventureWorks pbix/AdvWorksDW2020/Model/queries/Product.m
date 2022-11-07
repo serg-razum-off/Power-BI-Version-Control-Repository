@@ -24,6 +24,7 @@ let
             {"List Price", Currency.Type}, 
             {"Model", type text}, 
             {"Subcategory", type text}
-        })
+        }),
+    #"SR: Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"ProductKey", "🔑 ProductKey"}})
 in
-    #"Changed Type"
+    #"SR: Renamed Columns"

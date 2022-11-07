@@ -1,0 +1,10 @@
+IF (
+    ISINSCOPE ( 'Product'[Product] ),
+        VAR _SalesAmounCurrentProduct = [SALESAMOUNT]
+        VAR _ProductRank =
+            RANKX ( ALLSELECTED ( 'PRODUCT'[Product] ), [SALESAMOUNT],  )
+        VAR _Result =
+            IF ( NOT ISBLANK ( _SalesAmounCurrentProduct ), _ProductRank )
+        RETURN
+            _Result
+)

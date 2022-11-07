@@ -913,7 +913,7 @@
         "product.product_key": {
           "Binding": {
             "ConceptualEntity": "Product",
-            "ConceptualProperty": "ProductKey"
+            "ConceptualProperty": "🔑 ProductKey"
           },
           "State": "Generated",
           "Hidden": true,
