@@ -37,7 +37,7 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Minor changes'
+$commHeaderMessage = 'PBI file change:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
@@ -64,8 +64,8 @@ $pbx.git_ShowBranches()
 
 #!pwsh
 
-$pbx.git_SwitchBranch("SR_PS_PBI_Actions_Automation")
+$pbx.git_SwitchBranch("PS_updates_learning")
 
 #!pwsh
 
-$pbx.git_NewBranch("SR_PS_PBI_Actions_Automation")
+$pbx.git_NewBranch("PS_updates_learning")

@@ -30,7 +30,7 @@
           "queryRef": "Sales.SalesAmount"
         },
         {
-          "queryRef": "Sales.Product Rank "
+          "queryRef": "Sales.Product Rank Dynamic"
         }
       ]
     },
@@ -89,9 +89,9 @@
                 "Source": "s"
               }
             },
-            "Property": "Product Rank Dynamic"
+            "Property": "Product Rank By Group"
           },
-          "Name": "Sales.Product Rank "
+          "Name": "Sales.Product Rank Dynamic"
         }
       ],
       "OrderBy": [
@@ -104,12 +104,49 @@
                   "Source": "s"
                 }
               },
-              "Property": "Product Rank Dynamic"
+              "Property": "Product Rank By Group"
             }
           }
         }
       ]
     },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "Product.Category"
+            ],
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Product"
+                    }
+                  },
+                  "Property": "Category"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Product.Product"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {
+          "identityValues": null
+        }
+      }
+    ],
     "drillFilterOtherVisuals": true
   }
 }
