@@ -129,5 +129,6 @@
     "git.enableSmartCommit": true,
     "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.0-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.110.3\\tools",
     "powershell.powerShellDefaultVersion": "PowerShell (x64)",
-    "window.zoomLevel": -1
+    "window.zoomLevel": -1,
+    "git.mergeEditor": true
 }

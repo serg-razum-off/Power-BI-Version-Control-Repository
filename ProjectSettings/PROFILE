@@ -47,6 +47,7 @@ function prompt {
 function save-settings {
     # Backs up settings from respective VS Code keybindings and from PS $PROFILE to files in ProjectSettings
     Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\settings.json' > .\ProjectSettings\setings
+    Get-Content 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\.git\config' > .\ProjectSettings\git_settings
     Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > .\ProjectSettings\keybindings
     Get-Content $PROFILE > .\ProjectSettings\PROFILE    
 }
