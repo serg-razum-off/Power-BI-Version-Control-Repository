@@ -2,15 +2,16 @@
 
 # Setting my Aliases --> scriping aliases are duplicated in Classes to have Aliacses unfolded in other environments
 Set-Alias -Name 'cat' -Value Get-Content -Scope Global
-Set-Alias -Name 'cls-hist' -Value Clear-History -Scope Global
+Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'grep' -Value Select-String -Scope Global
+
+Set-Alias -Name 'hist' -Value Get-History -Scope Global
+Set-Alias -Name 'cls-hist' -Value Clear-History -Scope Global
 Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
 Set-Alias -Name 'help' -Value Get-Help -Scope Global
-Set-Alias -Name 'hist' -Value Get-History -Scope Global
-Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 
-Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
+Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 # New-Item -p function: -n invk-pbi -va ''#???try impl
 
 # functions for customization
@@ -31,14 +32,20 @@ function prompt {
         $prevId = $historyItem.Id
         $id = $historyItem.Id + 1
     }
-    Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White "$(Get-Location) >> " 
-    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "PS:$prevId --> "
+    $currBr = git branch --show-current
+    $compMain = git rev-list --left-right --count origin/main...origin/$currBr
+    Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black `
+        "▝▞ ±($($compMain[0]),$($compMain[2])) $(git branch --show-current) >>" 
+    Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White `
+        "$(Get-Location | Split-Path -Qualifier)" "$(Get-Location | Resolve-Path -Relative) >>" 
+    
+    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black " PS:$prevId -> "
     # identifying running time of the last command:
     $ms = $((
         (Get-History -Count 1).Duration 
         ).TotalMilliseconds / 1000 )
-    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[⏳$([math]::Round($ms,3))s] "
-    Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " |#| PS:$id >> "
+    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[⏳$([math]::Round($ms,3))s] >>"
+    Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " PS:$id >> "
     Write-Host -NoNewline -BackgroundColor Black -ForegroundColor Black "->"
     $host.UI.RawUI.WindowTitle = "$(Get-Location)"
     "`b"
@@ -46,8 +53,8 @@ function prompt {
 #  SAVE SETTINGS
 function save-settings {
     # Backs up settings from respective VS Code keybindings and from PS $PROFILE to files in ProjectSettings
-    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\settings.json' > .\ProjectSettings\setings
-    Get-Content 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\.git\config' > .\ProjectSettings\git_settings
-    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > .\ProjectSettings\keybindings
-    Get-Content $PROFILE > .\ProjectSettings\PROFILE    
+    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\settings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\setings'
+    Get-Content 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\.git\config' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\git_settings'
+    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\keybindings'
+    Get-Content $PROFILE > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\PROFILE'
 }
