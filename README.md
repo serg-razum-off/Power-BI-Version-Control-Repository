@@ -91,6 +91,10 @@ To operate these scripts properly, use Terminal --> 01_MainClass.ps1 object invo
     // ------------------------------------------------------------------------------------
 ]
 ```
+. $PROFILE
+save-settings
+``` 
+
 ## PS Class
 PS Class added to project under .\PowerShell-Scripts\PS_Class.ps1  <br>
 Run VS Code as Admin for successfull operations.
