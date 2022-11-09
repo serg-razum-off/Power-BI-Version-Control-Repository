@@ -37,12 +37,15 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'PBI file change:'
+$commHeaderMessage = 'Proj small updates:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> ProjectSettings folder was added
->> $PROFILE > ProjectSettings/PROFILE; keybindings.json > ProjectSettings/keybindings'
+'>> bookmarks saved to Proj .vscode/bookmarks.json
+>> script from Holmes imported:  PowerShell-Scripts\pws-helpers\Show-Object.ps1
+>> git aliases saved into ProjectSettings
+>> README.md updated
+'
 
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"

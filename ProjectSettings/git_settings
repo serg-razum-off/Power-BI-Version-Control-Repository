@@ -1,0 +1,58 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://github.com/serg-razum-off/Power-BI-Version-Control-Repository.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[branch "Primary-Report-Modification"]
+	remote = origin
+	merge = refs/heads/Primary-Report-Modification
+[branch "Management-Excel"]
+	remote = origin
+	merge = refs/heads/Management-Excel
+[user]
+	name = SR
+	email = sergiy.razumov@gmail.com
+[alias]
+		st = status
+		ch = diff --stat
+		br = branch
+		plus = add -A
+		minus = reset
+		minusH = reset --hard
+		hist = log --pretty=format:\">>>        |%h | %ad | [%an] | %s%d \" --graph --date=short
+		cho = checkout
+		cmm = commit -a -m
+		# amm = commit --amend -m
+		content = cat-file -p
+		type = cat-file -t
+		files = ls-tree -r master --name-only
+		pull = pull origin
+		pushm = push origin master
+		pushu = push origin -u
+		geturl = config --get remote.origin.url
+[branch "Management-Excel----DAX-measures"]
+	remote = origin
+	merge = refs/heads/Management-Excel----DAX-measures
+[branch "PS_Class_Git_Commands"]
+	remote = origin
+	merge = refs/heads/PS_Class_Git_Commands
+[branch "PS_CLASS_GIT_COMMANDS"]
+	remote = origin
+	merge = refs/heads/PS_CLASS_GIT_COMMANDS
+[branch "SR_PS_PBI_Actions_Automation"]
+	remote = origin
+	merge = refs/heads/SR_PS_PBI_Actions_Automation
+[branch "main_class_refactoring"]
+	remote = origin
+	merge = refs/heads/main_class_refactoring
+[branch "PS_updates_learning"]
+	remote = origin
+	merge = refs/heads/PS_updates_learning
