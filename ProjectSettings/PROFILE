@@ -14,6 +14,7 @@ Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 # New-Item -p function: -n invk-pbi -va ''#???try impl
 
+# ------------------------------------- FUNCTIONS -------------------------------------
 # functions for customization
 ##############################################################################
 ##
@@ -22,7 +23,6 @@ Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- path
 ##
 ##############################################################################
 Set-StrictMode -Version 3
-# ------------------------------------- FUNCTIONS -------------------------------------
 #  PROMPT
 function prompt {
     $prevId = 0
@@ -32,26 +32,26 @@ function prompt {
         $prevId = $historyItem.Id
         $id = $historyItem.Id + 1
     }
+    # SR: core solution from https://stackoverflow.com/questions/20433867/git-ahead-behind-info-between-master-and-branch
     $currBr = git branch --show-current
     $compMain = git rev-list --left-right --count origin/main...origin/$currBr
     Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black `
-        "▝▞ ±($($compMain[2], $($compMain[0]))) $(git branch --show-current) >>" 
+        "▝▞ ±($($compMain[2]);$($compMain[0]))➤ $(git branch --show-current) >>" 
     Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White `
         "$(Get-Location | Split-Path -Qualifier)" "$(Get-Location | Resolve-Path -Relative) >>" 
     
-    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black " PS:$prevId -> "
+    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black " PS:$prevId->"
     # identifying running time of the last command:
     $ms = $((
         (Get-History -Count 1).Duration 
         ).TotalMilliseconds / 1000 )
-    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[⏳$([math]::Round($ms,3))s] >>"
+    Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[⏳$([math]::Round($ms,3))s]>>"
     Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " PS:$id >> "
     Write-Host -NoNewline -BackgroundColor Black -ForegroundColor Black "->"
     $host.UI.RawUI.WindowTitle = "$(Get-Location)"
     "`b"
 }
 #  SAVE SETTINGS
-#
 function save-settings {
     # Backs up settings from respective VS Code keybindings and from PS $PROFILE to files in ProjectSettings
     Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\settings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\setings'

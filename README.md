@@ -3,6 +3,7 @@
 Ctrl+K, V or Ctrl+Shift+V --> to read this MD in VS Code 
 ```
 
+
 This repository is a place to test VC approaches for Power BI
 * Each Repository is created for managing ONE couple of (.pbix -- . pbit)
     * in future improvements can be done to manage several .pbix-es with one Project
