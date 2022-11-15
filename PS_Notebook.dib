@@ -37,14 +37,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Proj small updates:'
+$commHeaderMessage = 'Merge Conflicts Practice:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> bookmarks saved to Proj .vscode/bookmarks.json
->> script from Holmes imported:  PowerShell-Scripts\pws-helpers\Show-Object.ps1
->> git aliases saved into ProjectSettings
->> README.md updated
+'>> one more attempt to merge conflicts in VS Code, not in G-Kraken
 '
 
 

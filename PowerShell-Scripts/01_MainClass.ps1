@@ -1,5 +1,5 @@
 class PBIX {
-    <#
+<#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -76,12 +76,7 @@ class PBIX {
         }
         $this.inner_WriteVerbose("=== Starting PBIX Cls inner_Init ===")
         
-        # setting up required modules        
-        $this.inner_WriteVerbose(">>> Setting up Required Modules...")
-        @('ImportExcel') | ForEach-Object {
-            if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ }
-            else { $this.inner_WriteVerbose( "module '$_' is already installed..." ) }
-        }        
+                
         
         $this.inner_WriteVerbose( ">>> Setting up Properties... " )
         if ($jprop -ne "") {

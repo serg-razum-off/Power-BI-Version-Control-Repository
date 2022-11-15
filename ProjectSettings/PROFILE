@@ -14,11 +14,20 @@ Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 # New-Item -p function: -n invk-pbi -va ''#???try impl
 
+#having last output at hand
+$PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut"
+
+# -------------------------- SETTING UP REQUIRED MODULES ------------------------------        
+$modulesList = @('ImportExcel', 'PowerShellCookbook')
+$modulesList | ForEach-Object {
+    if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ -AllowClobber}
+}
+
 # ------------------------------------- FUNCTIONS -------------------------------------
 # functions for customization
 ##############################################################################
 ##
-## From PowerShell Cookbook (O'Reilly) --> was taken as base and reworked: SR [2022-11-01]
+## From PowerShell Cookbook (O'Reilly) --> was taken as base and severely reworked: SR [2022-11-01]
 ## by Lee Holmes (http://www.leeholmes.com/guide)
 ##
 ##############################################################################
