@@ -12,15 +12,25 @@ Set-Alias -Name 'help' -Value Get-Help -Scope Global
 
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
-# New-Item -p function: -n invk-pbi -va ''#???try impl
+Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCookbook Module installed
+Set-Alias -Name 'help-gal' -Value Get-Alias -Scope Global # just gal -- get cmdlet for alias; gal -Definition -- <cmdlet Name> get all aliases for cmdlet
+
+Set-Alias -Name 'dnh' -Value .Net-Help -Scope Global # this file
+Set-Alias -Name 'np' -Value Start-Notepad -Scope Global # this file
+
+
+#-------------------------- fun --------------------------
+Set-Alias -Name 'tk3' -Value Start-tekken3 -Scope Global # this file 
+Set-Alias -Name 'mk3' -Value Start-MK3 -Scope Global # this file
 
 #having last output at hand
-$PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut"
+$PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #call it, of course $lstOut
 
-# -------------------------- SETTING UP REQUIRED MODULES ------------------------------        
+# -------------------------- SETTING UP REQUIRED MODULES ------------------------------
+# trused modules are here. Yes to [A]ll  on install request       
 $modulesList = @('ImportExcel', 'PowerShellCookbook')
 $modulesList | ForEach-Object {
-    if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ -AllowClobber}
+    if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ -AllowClobber }
 }
 
 # ------------------------------------- FUNCTIONS -------------------------------------
@@ -67,4 +77,31 @@ function save-settings {
     Get-Content 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\.git\config' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\git_settings'
     Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\keybindings'
     Get-Content $PROFILE > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\PROFILE'
+}
+function .Net-Help {
+    # dnh
+    # $PWSCmdletName -- name of PowerShell cmd-let for which you want to get .Net help
+    ### When the Get-Member cmdlet doesn’t provide the information you need, the Microsoft documentation for a type is a great alternative. [Holmes, 128]
+    param(
+        [Parameter(Mandatory = $false)] [string] $PWSCmdletName
+    )
+    if ($PWSCmdletName -eq "") {
+        Start-Process "https://learn.microsoft.com/en-us/dotnet/"
+        exit
+    }
+    $PWSCmdletName = [scriptblock]::Create($PWSCmdletName).Invoke()[0].GetType().toString()
+    Start-Process "https://learn.microsoft.com/en-us/search/?terms=$PWSCmdletName&scope=.NET"
+}
+
+function Start-Notepad {
+    Start-Process notepad++
+}
+
+# --------------------------
+## functions for fun
+function Start-tekken3 {
+    Start-Process "https://www.retrogames.cc/psx-games/tekken-3.html"
+}
+function Start-MK3 {
+    Start-Process "https://www.retrogames.cc/psx-games/mortal-kombat-3.html"
 }
