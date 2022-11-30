@@ -9,12 +9,12 @@
 					"label": "Aliases"
 				},
 				{
-					"line": 30,
+					"line": 31,
 					"column": 13,
 					"label": "modulesInit"
 				},
 				{
-					"line": 35,
+					"line": 36,
 					"column": 4,
 					"label": "Functions"
 				}
