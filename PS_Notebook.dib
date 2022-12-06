@@ -10,7 +10,8 @@
 
 #!pwsh
 
-. ./PowerShell-Scripts/01_MainClass.ps1; $pbx = [pbix]::new('', $true)
+. ./PowerShell-Scripts/01_MainClass.ps1; 
+$pbx = [pbix]::new('', $true)
 
 #!pwsh
 
@@ -41,7 +42,7 @@ $commHeaderMessage = 'Minor changes:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> $PROFILE
+'>> added funtions and commands from reading Holmes. Some functions integrated that shipped with Holmes PWS module
 '
 
 

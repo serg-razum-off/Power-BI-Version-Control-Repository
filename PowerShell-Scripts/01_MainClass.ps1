@@ -1,5 +1,5 @@
 class PBIX {
-<#
+    <#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -282,7 +282,7 @@ Specification" | Set-Content $path
                     -replace ' ', '' `
                     -replace '`n', ''`
                     -eq `
-                $required_qwr `
+                    $required_qwr `
                     -replace ' ', '' `
                     -replace '`n', ''
             ) {
