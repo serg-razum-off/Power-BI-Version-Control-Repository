@@ -15,7 +15,7 @@ Set-Alias -Name 'help' -Value Get-Help -Scope Global
 Set-Alias -Name 'h-gal' -Value Get-Alias -Scope Global # just gal -- get cmdlet for alias; gal -Definition -- <cmdlet Name> get all aliases for cmdlet
 
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
-Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global
+Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
 Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCookbook Module installed  ⭐⭐⭐⭐⭐
 
@@ -24,10 +24,11 @@ Set-Alias -Name 'np' -Value Start-Notepad -Scope Global # fn in this file       
 Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                  
 Set-Alias -Name 'book' -Value Start-book -Scope Global # fn in this file                                ⭐⭐⭐
 Set-Alias -Name 'start-M' -Value Start-FromStartMenu -Scope Global # Alias for function below           ⭐⭐⭐⭐
-Set-Alias -Name 'c-env' -Value Show-Env -Scope Global # Alias for function below                        ⭐
+Set-Alias -Name 'cnde' -Value Show-Env -Scope Global # Alias for function below                         ⭐
 Set-Alias -Name 'vrb' -Value Get-Verbs -Scope Global # Alias for function below                         ⭐
 Set-Alias -Name 'gt' -Value Start-GoogleTranslate -Scope Global # Alias for function below              ⭐
 Set-Alias -Name 'pwSof' -Value Search-StackOverflow -Scope Global # Alias for function from Holmes  mdl ⭐⭐⭐
+Set-Alias -Name 'pwSofLast' -Value Get-LastSOFTopics -Scope Global # fn in this file                    ⭐
 
 #-------------------------- fun --------------------------
 Set-Alias -Name 'tk3' -Value Start-tekken3 -Scope Global # fn in this file 
@@ -89,9 +90,9 @@ function prompt {
 function save-settings {
     # Backs up settings from respective VS Code keybindings and from PS $PROFILE to files in ProjectSettings
     # ⭐⭐⭐⭐
-    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\settings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\setings'
-    Get-Content 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\.git\config' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\git_settings'
-    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\keybindings'
+    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\settings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\vs_userSetings'
+    Get-Content 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\.git\config' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\git_config'
+    Get-Content 'C:\Users\Sergey\AppData\Roaming\Code\User\keybindings.json' > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\vs_keybindings'
     Get-Content $PROFILE > 'D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\PROFILE'
 }
 function Show-Env {
