@@ -7,12 +7,24 @@ Set-Alias -Name 'cat' -Value Get-Content -Scope Global
 Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'grep' -Value Select-String -Scope Global
 Set-Alias -Name 'grep-r' -Value Search-StringRecurse -Scope Global # fn in this file                    ⭐⭐⭐⭐
+function ll { Get-ChildItem -File $args } # only files whereas ls gets files and folders
+#TODO: figure out why & PROFILE does not reload profile when called from script: function rlp {& $PROFILE}
+function ed { $Error[0] | Format-List -force } #Last Error description
+function lse { try { 0..($Error.Count - 1) | ForEach-Object { "[$($_)]--> [$($Error[$_])]" } } catch { "No Errs yet... bad worker"; $error.clear() } } # list Errs in th session  ⭐⭐⭐
+function lsed ([int]$ErrIdx) { if ($null -ne $ErrIdx) { $Error[$ErrIdx] | Get-Error; break } Get-Error } # displays details about requested Err
+function shtd ($conf = $false) {
+    # clenas all opened and shuts the PC down ⭐⭐⭐⭐
+    if ($conf) 
+    {	(get-process | Where-Object { $_.mainwindowtitle -ne "" -and $_.processname -ne "powershell" } ) | stop-process; stop-computer -computername localhost -Force }  
+}
 
 Set-Alias -Name 'hist' -Value Get-History -Scope Global
 Set-Alias -Name 'cls-hist' -Value Clear-History -Scope Global
 Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
 Set-Alias -Name 'help' -Value Get-Help -Scope Global
 Set-Alias -Name 'h-gal' -Value Get-Alias -Scope Global # just gal -- get cmdlet for alias; gal -Definition -- <cmdlet Name> get all aliases for cmdlet
+function Get-ModuleList ([string] $Name) { Get-Module -n $Name -ListAvailable }
+Set-Alias -Name 'gemo' -Value Get-ModuleList -Scope Global # fn above ## --> gmo is a standard alias for this Get-Module
 
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
@@ -39,10 +51,11 @@ Set-Alias -Name 'yt' -Value Start-YT -Scope Global # fn in this file
 $PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #call it, of course $lstOut
 
 # -------------------------- SETTING UP REQUIRED MODULES ------------------------------
-# requiref modules are here. Yes to [A]ll  on install request  
+# requiref modules are here. Yes to [A]ll  on install request 
+# more on Pester https://pester.dev/docs/introduction/installation 
 # ⭐⭐⭐⭐⭐     
-$modulesList = @('ImportExcel', 'PowerShellCookbook')
-$modulesList | ForEach-Object {
+$modulesListToInstall = @('ImportExcel', 'PowerShellCookbook', 'Pester')
+$modulesListToInstall | ForEach-Object {
     if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ -AllowClobber }
 }
 
@@ -54,7 +67,7 @@ $modulesList | ForEach-Object {
 ## by Lee Holmes (http://www.leeholmes.com/guide)
 ##
 ##############################################################################
-Set-StrictMode -Version 3
+Set-StrictMode -Version Latest # for all scrips from PWS Cookbook use Strict Mode -VErsion 3
 
 #  PROMPT
 function prompt {
@@ -137,7 +150,7 @@ function Get-CommandForContext($context) {
     Where-Object { $_.ScriptBlock.Attributes |
         Where-Object { $_.Description -eq "Context=$context" } }
 }
-function Get-Verbs {    get-verb | clip && np   } # lists correct verbs in NotePad++. NP is fn in this file
+function Get-Verbs { get-verb | clip && np } # lists correct verbs in NotePad++. NP is fn in this file
 
 
 # --------------------------
@@ -147,8 +160,8 @@ function Start-MK3 { Start-Process "https://www.retrogames.cc/psx-games/mortal-k
 function Start-YT { Start-Process "https://youtube.com" }
 function Get-LastSOFTopics ([string]$topic, [string]$numberOfAnswers) {
     $url = "https://api.stackexchange.com/2.0/questions/unanswered" +
-            "?order=desc&sort=activity&tagged=$($topic)&pagesize=$($numberOfAnswers)&site=stackoverflow"
-            $result = Invoke-RestMethod $url
-            $result.Items | ForEach-Object { $_.Title; $_.Link; "" }
-        }
-function Start-GoogleTranslate ([string] $ToTranslate) {    Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($ToTranslate)&op=translate"   }        
+    "?order=desc&sort=activity&tagged=$($topic)&pagesize=$($numberOfAnswers)&site=stackoverflow"
+    $result = Invoke-RestMethod $url
+    $result.Items | ForEach-Object { $_.Title; $_.Link; "" }
+}
+function Start-GoogleTranslate ([string] $ToTranslate) { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($ToTranslate)&op=translate" }        

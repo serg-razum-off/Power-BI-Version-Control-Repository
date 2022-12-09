@@ -42,7 +42,8 @@ $commHeaderMessage = 'Minor changes:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> added funtions and commands from reading Holmes. Some functions integrated that shipped with Holmes PWS module
+'>> New functionality added to $PROFILE 
+* Errs Handeling; Quick Shut down the PC
 '
 
 
