@@ -22,6 +22,7 @@
 	email = sergiy.razumov@gmail.com
 [alias]
 		st = status
+		sts = status -s -u
 		ch = diff --stat
 		br = branch
 		plus = add -A

@@ -42,7 +42,7 @@ $commHeaderMessage = 'Minor changes:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> New functionality added to $PROFILE 
+'>> New functionality added to $PROFILE:
 * Errs Handeling; Quick Shut down the PC
 '
 

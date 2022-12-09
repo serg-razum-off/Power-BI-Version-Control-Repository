@@ -1,12 +1,16 @@
 # PROFILE file in the project contains copy of $PROFILE
 
+Set-StrictMode -Version Latest # for all scrips from PWS Cookbook use Strict Mode -VErsion 3
+
 # ⭐⭐⭐⭐⭐ ==> importance of functions
 
 # Setting my Aliases --> scriping aliases are duplicated in Classes to have Aliacses unfolded in other environments
 Set-Alias -Name 'cat' -Value Get-Content -Scope Global
 Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'grep' -Value Select-String -Scope Global
-Set-Alias -Name 'grep-r' -Value Search-StringRecurse -Scope Global # fn in this file                    ⭐⭐⭐⭐
+function cw { Write-Host $args }
+function grepr { Get-ChildItem -rec | grep @args } # from Holmes    ⭐⭐⭐⭐⭐
+
 function ll { Get-ChildItem -File $args } # only files whereas ls gets files and folders
 #TODO: figure out why & PROFILE does not reload profile when called from script: function rlp {& $PROFILE}
 function ed { $Error[0] | Format-List -force } #Last Error description
@@ -19,33 +23,32 @@ function shtd ($conf = $false) {
 }
 
 Set-Alias -Name 'hist' -Value Get-History -Scope Global
-Set-Alias -Name 'cls-hist' -Value Clear-History -Scope Global
+Set-Alias -Name 'chist' -Value Clear-History -Scope Global
 Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
 Set-Alias -Name 'help' -Value Get-Help -Scope Global
 Set-Alias -Name 'h-gal' -Value Get-Alias -Scope Global # just gal -- get cmdlet for alias; gal -Definition -- <cmdlet Name> get all aliases for cmdlet
-function Get-ModuleList ([string] $Name) { Get-Module -n $Name -ListAvailable }
-Set-Alias -Name 'gemo' -Value Get-ModuleList -Scope Global # fn above ## --> gmo is a standard alias for this Get-Module
-
+function gemo ([string] $Name) { Get-Module -n $Name -ListAvailable } #  --> gmo is a standard alias for this Get-Module
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
 Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCookbook Module installed  ⭐⭐⭐⭐⭐
 
 #------------------------- other -------------------------
-Set-Alias -Name 'np' -Value Start-Notepad -Scope Global # fn in this file                               ⭐⭐⭐
+function np { Start-Process notepad++ } # ⭐⭐⭐ example: Get-Help grep | clip && np
 Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                  
 Set-Alias -Name 'book' -Value Start-book -Scope Global # fn in this file                                ⭐⭐⭐
-Set-Alias -Name 'start-M' -Value Start-FromStartMenu -Scope Global # Alias for function below           ⭐⭐⭐⭐
+function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   #                     ⭐⭐⭐ requires PowerShellCookbook Module installed 
 Set-Alias -Name 'cnde' -Value Show-Env -Scope Global # Alias for function below                         ⭐
 Set-Alias -Name 'vrb' -Value Get-Verbs -Scope Global # Alias for function below                         ⭐
-Set-Alias -Name 'gt' -Value Start-GoogleTranslate -Scope Global # Alias for function below              ⭐
+function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
+function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
 Set-Alias -Name 'pwSof' -Value Search-StackOverflow -Scope Global # Alias for function from Holmes  mdl ⭐⭐⭐
 Set-Alias -Name 'pwSofLast' -Value Get-LastSOFTopics -Scope Global # fn in this file                    ⭐
 
 #-------------------------- fun --------------------------
 Set-Alias -Name 'tk3' -Value Start-tekken3 -Scope Global # fn in this file 
 Set-Alias -Name 'mk3' -Value Start-MK3 -Scope Global # fn in this file
-Set-Alias -Name 'yt' -Value Start-YT -Scope Global # fn in this file
+function yt { $lnk = iif ($args.Length -eq 0) "https://www.youtube.com/" "https://www.youtube.com/results?search_query=$($args -join ' ')"; Start-Process $lnk }
 
 #having last output at hand
 $PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #call it, of course $lstOut
@@ -60,17 +63,23 @@ $modulesListToInstall | ForEach-Object {
 }
 
 # ------------------------------------- FUNCTIONS -------------------------------------
-# functions for customization
-##############################################################################
-##
-## From PowerShell Cookbook (O'Reilly) --> was taken as base and severely reworked: SR [2022-11-01]
-## by Lee Holmes (http://www.leeholmes.com/guide)
-##
-##############################################################################
-Set-StrictMode -Version Latest # for all scrips from PWS Cookbook use Strict Mode -VErsion 3
+# functions-helpers
+Function IIf($If, $IfTrue, $IfFalse) {
+    # inline IF
+    # src: https://stackoverflow.com/questions/25682507/powershell-inline-if-iif
+    If ($If) {If ($IfTrue -is "ScriptBlock") {&$IfTrue} Else {$IfTrue}}
+    Else {If ($IfFalse -is "ScriptBlock") {&$IfFalse} Else {$IfFalse}}
+}
+
 
 #  PROMPT
 function prompt {
+    ##############################################################################
+    ##
+    ## From PowerShell Cookbook (O'Reilly) --> was taken as base and severely reworked: SR [2022-11-01]
+    ## by Lee Holmes (http://www.leeholmes.com/guide)
+    ##
+    ##############################################################################
     # ⭐⭐⭐⭐
     $prevId = 0
     $id = 1
@@ -79,20 +88,24 @@ function prompt {
         $prevId = $historyItem.Id
         $id = $historyItem.Id + 1
     }
-    # SR: core solution from https://stackoverflow.com/questions/20433867/git-ahead-behind-info-between-master-and-branch
+    # SR: core solution for comm diff is from https://stackoverflow.com/questions/20433867/git-ahead-behind-info-between-master-and-branch
     $currBr = git branch --show-current
     $compMain = git rev-list --left-right --count origin/main...origin/$currBr
 
     Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black `
         "[$(git branch --show-current)]±($($compMain[2]);$($compMain[0]))>>" 
     Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White `
-        "$(Get-Location | Split-Path -Qualifier)" "$(Get-Location | Resolve-Path -Relative) >>" 
-    
+        "$(Get-Location | Split-Path -Qualifier)" "$(Get-Location | Resolve-Path -Relative) >>"     
     Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black " PS:$prevId->"
     # identifying running time of the last command:
-    $ms = $((
-        (Get-History -Count 1).Duration 
-        ).TotalMilliseconds / 1000 )
+    if ($historyItem) {
+        $ms = $((
+	        (Get-History -Count 1).Duration 
+            ).TotalMilliseconds / 1000 )
+    }
+    else {
+        $ms = 0
+    }
     Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[$([math]::Round($ms,3))s]>>"
     Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " PS:$id >> "
     Write-Host -NoNewline -BackgroundColor Black -ForegroundColor Black "->"
@@ -112,7 +125,6 @@ function Show-Env {
     # Show / hide Conda Env ⭐
     ((conda info -e) | Where-Object { $_ -match '\*' }) 
 } 
-function Search-StringRecurse { Get-ChildItem -rec | grep @args } # from Holmes ⭐⭐⭐⭐⭐
 
 # --------------------------
 # other
@@ -131,8 +143,6 @@ function Get-NetHelp ([string] $PWSCmdletName) {
     Start-Process "https://learn.microsoft.com/en-us/search/?terms=$PWSCmdletName&scope=.NET"
 }
 
-function Start-Notepad { Start-Process notepad++ } # ⭐⭐⭐ example: Get-Help grep | clip && np
-function Start-FromStartMenu ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   # ⭐⭐⭐ requires PowerShellCookbook Module installed 
 
 function Start-Book ([string] $book) {   
     # ⭐⭐⭐ 4 practice -- starts a script that opens a book. Just to skip explorers and mousclicks. 
@@ -157,11 +167,9 @@ function Get-Verbs { get-verb | clip && np } # lists correct verbs in NotePad++.
 ## functions for fun
 function Start-tekken3 { Start-Process "https://www.retrogames.cc/psx-games/tekken-3.html" }
 function Start-MK3 { Start-Process "https://www.retrogames.cc/psx-games/mortal-kombat-3.html" }
-function Start-YT { Start-Process "https://youtube.com" }
 function Get-LastSOFTopics ([string]$topic, [string]$numberOfAnswers) {
     $url = "https://api.stackexchange.com/2.0/questions/unanswered" +
     "?order=desc&sort=activity&tagged=$($topic)&pagesize=$($numberOfAnswers)&site=stackoverflow"
     $result = Invoke-RestMethod $url
     $result.Items | ForEach-Object { $_.Title; $_.Link; "" }
 }
-function Start-GoogleTranslate ([string] $ToTranslate) { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($ToTranslate)&op=translate" }        
