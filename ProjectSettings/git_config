@@ -23,7 +23,7 @@
 [alias]
 		st = status
 		sts = status -s -u
-		ch = diff --stat
+		df = diff --stat
 		br = branch
 		plus = add -A
 		minus = reset
@@ -31,7 +31,7 @@
 		hist = log --pretty=format:\">>>        |%h | %ad | [%an] | %s%d \" --graph --date=short
 		cho = checkout
 		cmm = commit -a -m
-		# amm = commit --amend -m
+		# amm = commit --amend -m	## SR: Use only manually if sure what it does
 		content = cat-file -p
 		type = cat-file -t
 		files = ls-tree -r master --name-only

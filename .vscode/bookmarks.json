@@ -4,19 +4,14 @@
 			"path": "../../../../C:/Users/Sergey/Documents/PowerShell/Microsoft.VSCode_profile.ps1",
 			"bookmarks": [
 				{
-					"line": 59,
-					"column": 1,
-					"label": ""
+					"line": 5,
+					"column": 5,
+					"label": "Aliases"
 				},
 				{
-					"line": 53,
-					"column": 1,
-					"label": ""
-				},
-				{
-					"line": 4,
-					"column": 1,
-					"label": ""
+					"line": 83,
+					"column": 40,
+					"label": "Functions"
 				}
 			]
 		},
