@@ -21,6 +21,12 @@
         "when": "terminalFocus",
         "command": "workbench.action.toggleMaximizedPanel"
     },
+    // Show Extension Terminal (PowerShell extension install required)
+    {
+        "key": "ctrl+shift+t",
+        "when": "terminalFocus",
+        "command": "PowerShell.ShowSessionConsole"
+    },
     // ------------------------------------------------------------------------------------
     //SR [2022-07-28]: This section is for automation of Terminal pbi-tools commands
     // ------------------------------------------------------------------------------------
@@ -60,6 +66,7 @@
         "key": "ctrl+alt+\\",
         "when": "editorFocus",
         "command": "workbench.action.splitEditorDown"
-    }
+    },
+    
     // ------------------------------------------------------------------------------------
 ]

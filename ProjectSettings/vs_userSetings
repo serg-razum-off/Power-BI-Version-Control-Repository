@@ -3,7 +3,77 @@
     "workbench.iconTheme": "vscode-icons",
     
     "bookmarks.saveBookmarksInProject":true,    
+
+    "powershell.buttons.showPanelMovementButtons": true,
+    "powershell.codeFormatting.autoCorrectAliases": true,
+    "powershell.codeFormatting.whitespaceBetweenParameters": true,
+    "powershell.notebooks.showToggleButton": true,
+    "powershell.powerShellDefaultVersion": "PowerShell (x64)",
+
+    "jupyter.askForKernelRestart": false,
+    "notebook.lineNumbers": "on",
+    "git.autofetch": true,
+    "files.exclude": {
+        "**/.git": false
+    },
     
+    "workbench.sideBar.location": "right",
+    "editor.wordWrap": "on",
+    "editor.cursorBlinking": "expand",
+    
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "vsicons.dontShowNewVersionMessage": true,
+    "editor.stickyScroll.enabled": true,
+    "dotnet-interactive.notebookParserArgs": [
+        "{dotnet_path}",
+        "tool",
+        "run",
+        "dotnet-interactive",
+        "--",
+        "notebook-parser"
+    ],
+    
+    "terminal.integrated.fontSize": 14,
+
+    "python.condaPath": "C:\\Users\\Sergey\\miniconda3\\Scripts\\conda.exe",
+    "git.enableSmartCommit": true,
+    "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.1-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.111.5\\tools",
+    "git.mergeEditor": true,
+    "window.zoomLevel": -1,
+    "security.workspace.trust.untrustedFiles": "open",
+
+    "todo-tree.general.tags": [
+        "BUG",
+        "REFACTOR",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "[!]"
+    ],
+    "todo-tree.highlights.customHighlight": {
+        //type of icons in Todo-Tree: http://jonasbn.github.io/til/vscode/todo_tree_extension.html
+        "BUG": {
+            "icon": "bug"
+        },
+        "REFACTOR": {
+            "icon": "tools"
+        },
+        "FIXME": {
+            "icon": "flame"
+        },
+        "XXX": {
+            "icon": "$(close)"
+        },
+        "[!]": {
+            "icon": "flame"
+        }
+    },
+
     "better-comments.tags": [
         {
             "tag": "🚩",
@@ -60,69 +130,4 @@
             "italic": false
         }
     ],
-    "jupyter.askForKernelRestart": false,
-    "notebook.lineNumbers": "on",
-    "git.autofetch": true,
-    "files.exclude": {
-        "**/.git": false
-    },
-    "workbench.sideBar.location": "right",
-    "editor.wordWrap": "on",
-    "editor.cursorBlinking": "expand",
-    "powershell.buttons.showPanelMovementButtons": true,
-    "powershell.codeFormatting.autoCorrectAliases": true,
-    "powershell.codeFormatting.whitespaceBetweenParameters": true,
-    
-    "powershell.notebooks.showToggleButton": true,
-    "notebook.cellToolbarLocation": {
-        "default": "right",
-        "jupyter-notebook": "left"
-    },
-    "vsicons.dontShowNewVersionMessage": true,
-    "editor.stickyScroll.enabled": true,
-    "dotnet-interactive.notebookParserArgs": [
-        "{dotnet_path}",
-        "tool",
-        "run",
-        "dotnet-interactive",
-        "--",
-        "notebook-parser"
-    ],
-    "todo-tree.general.tags": [
-        "BUG",
-        "REFACTOR",
-        "FIXME",
-        "TODO",
-        "XXX",
-        "[ ]",
-        "[x]",
-        "[!]"
-    ],
-    "todo-tree.highlights.customHighlight": {
-        //type of icons in Todo-Tree: http://jonasbn.github.io/til/vscode/todo_tree_extension.html
-        "BUG": {
-            "icon": "bug"
-        },
-        "REFACTOR": {
-            "icon": "tools"
-        },
-        "FIXME": {
-            "icon": "flame"
-        },
-        "XXX": {
-            "icon": "$(close)"
-        },
-        "[!]": {
-            "icon": "flame"
-        }
-    },
-    
-    "terminal.integrated.fontSize": 14,
-
-    "python.condaPath": "C:\\Users\\Sergey\\miniconda3\\Scripts\\conda.exe",
-    "git.enableSmartCommit": true,
-    "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.1-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.111.5\\tools",
-    "powershell.powerShellDefaultVersion": "PowerShell (x64)",
-    "git.mergeEditor": true,
-    "window.zoomLevel": -1
 }
