@@ -40,7 +40,7 @@
 
     "python.condaPath": "C:\\Users\\Sergey\\miniconda3\\Scripts\\conda.exe",
     "git.enableSmartCommit": true,
-    "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.1-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.111.5\\tools",
+    "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.1-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.112.4\\tools",
     "git.mergeEditor": true,
     "window.zoomLevel": -1,
     "security.workspace.trust.untrustedFiles": "open",

@@ -1,5 +1,6 @@
 # PROFILE file in the project contains copy of $PROFILE
 
+$ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest # for all scrips from PWS Cookbook use Strict Mode -VErsion 3
 
 
@@ -21,6 +22,10 @@ function lse { try { 0..($Error.Count - 1) | ForEach-Object { "[$($_)]--> [$($Er
 
 # ⭐⭐⭐ displays details about requested Err ⬇⬇
 function lsed ([int]$ErrIdx) { if ($null -ne $ErrIdx) { $Error[$ErrIdx] | Get-Error; break } Get-Error } 
+
+# ⭐⭐⭐⭐ shows loaded .Net namespaces. If part of ns name is not provided, it lists all
+function  lsens ([string]$search) { [System.AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.Location -like "*$($search)*" } }
+
 
 # ⭐⭐⭐ closes all opened apps and shuts the PC down ⬇⬇
 function shtd {     
@@ -57,7 +62,7 @@ Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCoo
 #------------------------- other -------------------------
 # ⭐⭐⭐ example: Get-Help grep | clip && np ⬇⬇
 function np { Start-Process notepad++ } 
-Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                  
+Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file  
 Set-Alias -Name 'book' -Value Start-book -Scope Global # fn in this file                                ⭐⭐⭐
 function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   #                     ⭐⭐⭐ requires PowerShellCookbook Module installed 
 Set-Alias -Name 'vrb' -Value Get-Verbs -Scope Global # Alias for function below                         ⭐
@@ -110,7 +115,7 @@ function prompt {
         $prevId = $historyItem.Id
         $id = $historyItem.Id + 1
     }
-    ###################################### GIT #####################################
+    #------------------------------- GIT --------------------------------------#
     
     # SR: core solution for cmm diff based on 
     #   https://stackoverflow.com/questions/20433867/git-ahead-behind-info-between-master-and-branch
@@ -132,15 +137,15 @@ function prompt {
             "[$(git branch --show-current)]±($($currBrAhead);$($mainBrAhead))>>"
     }
     else {
-        Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black "[not a git]>>"
+        Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black "[not-a-GIT]>>"
     }
     
-    ###################################### LOCA #####################################
+    #---------------------------- LOCA --------------------------------#
     $pathStart = Get-Location | Split-Path -Qualifier
     $pathEnd = Get-Location | Resolve-Path -Relative
     $pathEndCombined = (( grep -Inp $pathEnd -Patt '(-| |\\|_).' -A | ForEach-Object { $_.matches.value } ) -join '').trim()
     
-    ################################## EXEC Time #####################################
+    #--------------------------- EXEC Time -----------------------------#
     Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White `
         "$($pathStart)" "..$($pathEndCombined) >>"     
     Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black " PS:$prevId->"
