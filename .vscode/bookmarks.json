@@ -1,21 +1,6 @@
 {
 	"files": [
 		{
-			"path": "../../../../C:/Users/Sergey/Documents/PowerShell/Microsoft.VSCode_profile.ps1",
-			"bookmarks": [
-				{
-					"line": 6,
-					"column": 5,
-					"label": "Aliases"
-				},
-				{
-					"line": 92,
-					"column": 40,
-					"label": "Functions"
-				}
-			]
-		},
-		{
 			"path": "PowerShell-Scripts/01_MainClass.ps1",
 			"bookmarks": [
 				{

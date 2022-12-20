@@ -1,15 +1,34 @@
 # PROFILE file in the project contains copy of $PROFILE
 
-$ErrorActionPreference = "Stop"
+# ======================================= SETTINGS ========================================
 Set-StrictMode -Version Latest # for all scrips from PWS Cookbook use Strict Mode -VErsion 3
+$ErrorActionPreference = "Stop"
 
 
 # Setting my Aliases --> scriping aliases are duplicated in Classes to have Aliacses unfolded in other environments
 # ⭐⭐⭐⭐⭐ ==> importance of functions
 
+# ===================================== COMMON HELPERS =====================================
+# functions-helpers
+Function IIf($If, $IfTrue, $IfFalse) {
+    # inline IF
+    # src: https://stackoverflow.com/questions/25682507/powershell-inline-if-iif
+    If ($If) { If ($IfTrue -is "ScriptBlock") { &$IfTrue } Else { $IfTrue } }
+    Else { If ($IfFalse -is "ScriptBlock") { &$IfFalse } Else { $IfFalse } }
+}
+# ===================================== COMMON HELPERS: end =====================================
+
+
+
+# ================== File System Helpers ============================
 Set-Alias -Name 'cat' -Value Get-Content -Scope Global
 Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'grep' -Value Select-String -Scope Global
+Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
+Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
+Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
+Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCookbook Module installed  ⭐⭐⭐⭐⭐
+
 function cw { Write-Host $args }
 function grepr { Get-ChildItem -rec | grep @args } # from Holmes    ⭐⭐⭐⭐⭐
 
@@ -23,10 +42,6 @@ function lse { try { 0..($Error.Count - 1) | ForEach-Object { "[$($_)]--> [$($Er
 # ⭐⭐⭐ displays details about requested Err ⬇⬇
 function lsed ([int]$ErrIdx) { if ($null -ne $ErrIdx) { $Error[$ErrIdx] | Get-Error; break } Get-Error } 
 
-# ⭐⭐⭐⭐ shows loaded .Net namespaces. If part of ns name is not provided, it lists all
-function  lsens ([string]$search) { [System.AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.Location -like "*$($search)*" } }
-
-
 # ⭐⭐⭐ closes all opened apps and shuts the PC down ⬇⬇
 function shtd {     
     param(
@@ -34,42 +49,55 @@ function shtd {
     )
     if ($TypeOf -eq 'Hard') 
     {	(get-process | Where-Object { $_.mainwindowtitle -ne "" -and $_.processname -ne "powershell" } ) | stop-process; stop-computer -computername localhost -Force }
-    
+        
     Restart-Computer     
-      
+        
 }
 
-Set-Alias -Name 'hist' -Value Get-History -Scope Global
-Set-Alias -Name 'chist' -Value Clear-History -Scope Global
-Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
+# ================== File System Helpers: end ============================
+    
+# =================== GET HELP helpers ===========================
 Set-Alias -Name 'help' -Value Get-Help -Scope Global
 Set-Alias -Name 'h-gal' -Value Get-Alias -Scope Global # just gal -- get cmdlet for alias; gal -Definition -- <cmdlet Name> get all aliases for cmdlet
-
+Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
+Set-Alias -Name 'chist' -Value Clear-History -Scope Global
+Set-Alias -Name 'hist' -Value Get-History -Scope Global
 #  --> gmo is a standard alias for this Get-Module
+Set-Alias -Name 'vrb' -Value Get-Verbs -Scope Global # Alias for function below                        
+# ⭐⭐⭐
+Set-Alias -Name 'pwSof' -Value Search-StackOverflow -Scope Global # Alias for function from Holmes  mdl; param -- seartch str related to PowerShell
+function pwSofLast ([string]$topic, [string]$numberOfAnswers) {
+    # searches for last topics in SOF for any domain. Specify domain / topic with [str] param
+    $url = "https://api.stackexchange.com/2.0/questions/unanswered" +
+    "?order=desc&sort=activity&tagged=$($topic)&pagesize=$($numberOfAnswers)&site=stackoverflow"
+    $result = Invoke-RestMethod $url
+    $result.Items | ForEach-Object { $_.Title; $_.Link; "" }
+}
 function gemo ([string] $Name) { Get-Module -n $Name -ListAvailable } 
 
-function genvr (# gets paths from evn: (env: in powershell)
+# gets paths from evn: (env: in powershell)
+function genvr (
     [string] $serach) { ((Get-ChildItem env:) | Select-Object name, value | Where-Object { $_ -like "*$($serach)*" }) } # genv is occupied =(
+
+# conda env
 function genvc {
-    # conda env
+    
         ((conda info -e) | Where-Object { $_ -match '\*' }) 
 } 
-Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
-Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
-Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
-Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCookbook Module installed  ⭐⭐⭐⭐⭐
+    
+#gets all paths valid for modules
+function genvm { $env:PSModulepath -split ';' }
+    
+# =================== GET HELP helpers: end ========================
 
-#------------------------- other -------------------------
-# ⭐⭐⭐ example: Get-Help grep | clip && np ⬇⬇
+#------------------------- Starters helpers -------------------------
+# ⭐⭐⭐ np --> launches notepadd++
 function np { Start-Process notepad++ } 
-Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file  
+Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                  
 Set-Alias -Name 'book' -Value Start-book -Scope Global # fn in this file                                ⭐⭐⭐
 function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   #                     ⭐⭐⭐ requires PowerShellCookbook Module installed 
-Set-Alias -Name 'vrb' -Value Get-Verbs -Scope Global # Alias for function below                         ⭐
 function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
 function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
-Set-Alias -Name 'pwSof' -Value Search-StackOverflow -Scope Global # Alias for function from Holmes  mdl ⭐⭐⭐
-Set-Alias -Name 'pwSofLast' -Value Get-LastSOFTopics -Scope Global # fn in this file                    ⭐
 
 
 #-------------------------- fun --------------------------
@@ -89,15 +117,6 @@ $modulesListToInstall | ForEach-Object {
     if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ -AllowClobber }
 }
 
-# ------------------------------------- FUNCTIONS -------------------------------------
-# functions-helpers
-Function IIf($If, $IfTrue, $IfFalse) {
-    # inline IF
-    # src: https://stackoverflow.com/questions/25682507/powershell-inline-if-iif
-    If ($If) { If ($IfTrue -is "ScriptBlock") { &$IfTrue } Else { $IfTrue } }
-    Else { If ($IfFalse -is "ScriptBlock") { &$IfFalse } Else { $IfFalse } }
-}
-
 
 #  PROMPT
 function prompt {
@@ -115,7 +134,7 @@ function prompt {
         $prevId = $historyItem.Id
         $id = $historyItem.Id + 1
     }
-    #------------------------------- GIT --------------------------------------#
+    ###################################### GIT #####################################
     
     # SR: core solution for cmm diff based on 
     #   https://stackoverflow.com/questions/20433867/git-ahead-behind-info-between-master-and-branch
@@ -137,15 +156,15 @@ function prompt {
             "[$(git branch --show-current)]±($($currBrAhead);$($mainBrAhead))>>"
     }
     else {
-        Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black "[not-a-GIT]>>"
+        Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black "[not a GIT]>>"
     }
     
-    #---------------------------- LOCA --------------------------------#
+    ###################################### LOCA #####################################
     $pathStart = Get-Location | Split-Path -Qualifier
     $pathEnd = Get-Location | Resolve-Path -Relative
     $pathEndCombined = (( grep -Inp $pathEnd -Patt '(-| |\\|_).' -A | ForEach-Object { $_.matches.value } ) -join '').trim()
     
-    #--------------------------- EXEC Time -----------------------------#
+    ################################## EXEC Time #####################################
     Write-Host -NoNewline -BackgroundColor DarkBlue -ForegroundColor White `
         "$($pathStart)" "..$($pathEndCombined) >>"     
     Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black " PS:$prevId->"
@@ -215,9 +234,4 @@ function Get-Verbs { get-verb | clip && np } # lists correct verbs in NotePad++.
 ## functions for fun
 function Start-tekken3 { Start-Process "https://www.retrogames.cc/psx-games/tekken-3.html" }
 function Start-MK3 { Start-Process "https://www.retrogames.cc/psx-games/mortal-kombat-3.html" }
-function Get-LastSOFTopics ([string]$topic, [string]$numberOfAnswers) {
-    $url = "https://api.stackexchange.com/2.0/questions/unanswered" +
-    "?order=desc&sort=activity&tagged=$($topic)&pagesize=$($numberOfAnswers)&site=stackoverflow"
-    $result = Invoke-RestMethod $url
-    $result.Items | ForEach-Object { $_.Title; $_.Link; "" }
-}
+
