@@ -28,12 +28,14 @@ Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
 Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCookbook Module installed  ⭐⭐⭐⭐⭐
+Set-Alias -Name 'grid' -Value Out-GridView -Scope Global 
+
 
 function cw { Write-Host $args }
 function grepr { Get-ChildItem -rec | grep @args } # from Holmes    ⭐⭐⭐⭐⭐
 
 # show only files (whereas ls gets files and folders)
-function ll { Get-ChildItem -File $args } 
+function ll { Get-ChildItem -File @args } 
 #TODO: figure out why 'PS> & PROFILE' or 'PS> . PROFILE' do not reload profile when called from script: function rlp {& $PROFILE}
 
 # ⭐⭐⭐ list Errs in th session ⬇⬇
@@ -45,9 +47,9 @@ function lsed ([int]$ErrIdx) { if ($null -ne $ErrIdx) { $Error[$ErrIdx] | Get-Er
 # ⭐⭐⭐ closes all opened apps and shuts the PC down ⬇⬇
 function shtd {     
     param(
-        [parameter (Mandatory = $true)]         [ ValidateSet('Soft', 'Hard')]            [string] $TypeOf 
+        [parameter (Mandatory = $true)]         [ ValidateSet('RestartPC', 'ShutDownPC')]            [string] $TypeOf 
     )
-    if ($TypeOf -eq 'Hard') 
+    if ($TypeOf -eq 'ShutDownPC') 
     {	(get-process | Where-Object { $_.mainwindowtitle -ne "" -and $_.processname -ne "powershell" } ) | stop-process; stop-computer -computername localhost -Force }
         
     Restart-Computer     
@@ -57,7 +59,7 @@ function shtd {
 # ================== File System Helpers: end ============================
     
 # =================== GET HELP helpers ===========================
-Set-Alias -Name 'help' -Value Get-Help -Scope Global
+Set-Alias -Name 'help' -Value Get-Help -Scope Global 
 Set-Alias -Name 'h-gal' -Value Get-Alias -Scope Global # just gal -- get cmdlet for alias; gal -Definition -- <cmdlet Name> get all aliases for cmdlet
 Set-Alias -Name 'inv-hist' -Value Invoke-History -Scope Global
 Set-Alias -Name 'chist' -Value Clear-History -Scope Global
@@ -73,6 +75,7 @@ function pwSofLast ([string]$topic, [string]$numberOfAnswers) {
     $result = Invoke-RestMethod $url
     $result.Items | ForEach-Object { $_.Title; $_.Link; "" }
 }
+# searches for installed module
 function gemo ([string] $Name) { Get-Module -n $Name -ListAvailable } 
 
 # gets paths from evn: (env: in powershell)
@@ -94,8 +97,9 @@ function genvm { $env:PSModulepath -split ';' }
 # ⭐⭐⭐ np --> launches notepadd++
 function np { Start-Process notepad++ } 
 Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                  
-Set-Alias -Name 'book' -Value Start-book -Scope Global # fn in this file                                ⭐⭐⭐
+Set-Alias -Name 'book' -Value Start-book -Scope Global # fn in this file                                
 function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   #                     ⭐⭐⭐ requires PowerShellCookbook Module installed 
+Set-Alias -Name getm -Value Get-StartApps
 function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
 function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
 
@@ -127,13 +131,18 @@ function prompt {
     ##
     ##############################################################################
     # ⭐⭐⭐⭐
-    $prevId = 0
-    $id = 1
     $historyItem = Get-History -Count 1
-    if ($historyItem) {
+    
+    if ($null -ne $historyItem) {
         $prevId = $historyItem.Id
         $id = $historyItem.Id + 1
-    }
+        
+    }	
+    else {
+        $prevId = 0
+        $id = 1
+        
+    }    
     ###################################### GIT #####################################
     
     # SR: core solution for cmm diff based on 
@@ -156,7 +165,7 @@ function prompt {
             "[$(git branch --show-current)]±($($currBrAhead);$($mainBrAhead))>>"
     }
     else {
-        Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black "[not a GIT]>>"
+        Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black "[~not a GIT~]>>"
     }
     
     ###################################### LOCA #####################################
@@ -178,10 +187,8 @@ function prompt {
         $ms = 0
     }
     Write-Host -NoNewLine -BackgroundColor Yellow -ForegroundColor Black "[$([math]::Round($ms,3))s]>>"
-    Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " PS:$id >> "
-    Write-Host -NoNewline -BackgroundColor Black -ForegroundColor Black "->"
-    $host.UI.RawUI.WindowTitle = "$(Get-Location)"
-    "`b"
+    Write-Host -NoNewLine -BackgroundColor DarkRed -ForegroundColor White " PS:$id >"
+    break # to stop terminal line from do some automatic scripting
 }
 #  SAVE SETTINGS
 function save-settings {

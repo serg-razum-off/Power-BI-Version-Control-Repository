@@ -209,11 +209,11 @@ class PBIX {
     }
     [void] pbiTools_WatchMode() {
         #SR: Turning ON the watch mode
-        $PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId
-
-        if ($null -eq $PrId) {
-            Write-Output "`n"
-            throw ">>> pbiTools_Launch .pbix first, attach Watch Mode only after that..."
+        try {
+            $PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId
+        }
+        catch {
+            throw ">>> use method pbiTools_Launch to start .pbix first, attach Watch Mode only after that..."
         }
 
         $this.inner_WriteVerbose(">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab")
