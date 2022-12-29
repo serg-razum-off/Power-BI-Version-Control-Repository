@@ -67,6 +67,11 @@
         "when": "editorFocus",
         "command": "workbench.action.splitEditorDown"
     },
+    {
+        "key": "f8",
+        "command": "workbench.action.terminal.runSelectedText",
+        "when": "view.terminal.visible",
+    },
     
     // ------------------------------------------------------------------------------------
 ]

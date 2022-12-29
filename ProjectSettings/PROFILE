@@ -90,8 +90,31 @@ function genvc {
     
 #gets all paths valid for modules
 function genvm { $env:PSModulepath -split ';' }
-    
 # =================== GET HELP helpers: end ========================
+
+
+# =================== DATA PROCESS helpers: start ========================
+# returns DataTable
+# converts content of csv file into a System.Data.DataTable; $csv is object[] that should be derived by 
+#       $csv = Get-Content '.\Wheat Data-All Years.csv' -Force
+#       ConvertTo-Csv, etc
+function csv2dt ($scv) {
+    # =========== DataTable ============
+    $columns = ($csv | Select-Object -First 1).split(',')
+    $data = $csv | Select-Object -Skip 1	
+    $sampleData = $data[0] -split ','
+
+    $dt = New-Object System.Data.DataTable
+    # $dt.Columns.AddRange($columns) # --> this adds all columns in one bulk but all datatypes are [stting]
+
+    $columns | ForEach-Object -Begin { $i = 0 } -Process { if ($sampleData[$i] -match "[0-9]+.?[0-9]?") { [void]$dt.Columns.Add($_, [double]) } else { [void]$dt.Columns.Add($_, [string]) } $i++ }
+    # $dt.Columns | ft
+    $data | ForEach-Object { [void]$dt.Rows.Add($_.split(',')) }
+
+    return , $dt; # explanation: https://stackoverflow.com/questions/35491390/powershell-function-will-not-return-datatable 
+    
+}
+# =================== DATA PROCESS helpers: end ========================
 
 #------------------------- Starters helpers -------------------------
 # ⭐⭐⭐ np --> launches notepadd++

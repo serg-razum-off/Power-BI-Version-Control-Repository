@@ -42,12 +42,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Minor changes:'
+$commHeaderMessage = 'DataTable Elabourated:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> $PROFILE --> important bug fixed in ll
->> 01_MainClass.ps1 --> bug fixed in [pbix]::pbiTools_WatchMode
+'>> $PROFILE --> csv2dt() -- function added to convert csv to DataTable.
 '
 
 
