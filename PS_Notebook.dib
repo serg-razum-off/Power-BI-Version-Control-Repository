@@ -42,11 +42,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'DataTable Elabourated:'
+$commHeaderMessage = 'Minor Change:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> $PROFILE --> csv2dt() -- function added to convert csv to DataTable.
+'>> $PROFILE --> main branch name identification added.
 '
 
 

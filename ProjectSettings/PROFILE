@@ -94,12 +94,12 @@ function genvm { $env:PSModulepath -split ';' }
 
 
 # =================== DATA PROCESS helpers: start ========================
-# returns DataTable
-# converts content of csv file into a System.Data.DataTable; $csv is object[] that should be derived by 
-#       $csv = Get-Content '.\Wheat Data-All Years.csv' -Force
-#       ConvertTo-Csv, etc
 function csv2dt ($scv) {
-    # =========== DataTable ============
+    # returns DataTable
+    # converts content of csv file into a System.Data.DataTable; $csv is object[] that should be derived by 
+    #       $csv = Get-Content '.\Wheat Data-All Years.csv' -Force
+    #       ConvertTo-Csv, etc
+    # --------------- DataTable ---------------
     $columns = ($csv | Select-Object -First 1).split(',')
     $data = $csv | Select-Object -Skip 1	
     $sampleData = $data[0] -split ','
@@ -111,7 +111,7 @@ function csv2dt ($scv) {
     # $dt.Columns | ft
     $data | ForEach-Object { [void]$dt.Rows.Add($_.split(',')) }
 
-    return , $dt; # explanation: https://stackoverflow.com/questions/35491390/powershell-function-will-not-return-datatable 
+    return , $dt; # explanation of return synx: https://stackoverflow.com/questions/35491390/powershell-function-will-not-return-datatable 
     
 }
 # =================== DATA PROCESS helpers: end ========================
@@ -141,7 +141,7 @@ $PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #call it, of cou
 # ⭐⭐⭐⭐⭐     
 $modulesListToInstall = @('ImportExcel', 'PowerShellCookbook', 'Pester')
 $modulesListToInstall | ForEach-Object {
-    if (-not (Get-Module $_ -ListAvailable)) { Install-Module -Name $_ -AllowClobber }
+    if (    -not (Get-Module $_ -ListAvailable)   ) {   Install-Module -Name $_ -AllowClobber   }
 }
 
 
@@ -174,7 +174,8 @@ function prompt {
     $isGitDir = git rev-parse --is-inside-work-tree 2>$null
     if ($null -ne $isGitDir) {
         $currBr = git branch --show-current
-        $compMain = git rev-list --left-right --count origin/main...origin/$currBr
+        $mainBrName = ((grep .\.git\config -Pattern 'merge')[0]).ToString().split("/")[2]
+        $compMain = git rev-list --left-right --count origin/$mainBrName...origin/$currBr
 
         $mainBrAhead = iif (    $compMain[1] -eq [byte][char]9  ) $compMain[0] $compMain[0]+$compMain[1]
         try {
