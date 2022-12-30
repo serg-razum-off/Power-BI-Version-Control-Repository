@@ -141,7 +141,7 @@ $PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #call it, of cou
 # ⭐⭐⭐⭐⭐     
 $modulesListToInstall = @('ImportExcel', 'PowerShellCookbook', 'Pester')
 $modulesListToInstall | ForEach-Object {
-    if (    -not (Get-Module $_ -ListAvailable)   ) {   Install-Module -Name $_ -AllowClobber   }
+    if (    -not (Get-Module $_ -ListAvailable)   ) { Install-Module -Name $_ -AllowClobber }
 }
 
 
@@ -174,7 +174,8 @@ function prompt {
     $isGitDir = git rev-parse --is-inside-work-tree 2>$null
     if ($null -ne $isGitDir) {
         $currBr = git branch --show-current
-        $mainBrName = ((grep .\.git\config -Pattern 'merge')[0]).ToString().split("/")[2]
+        1..3 | % {}
+        $mainBrName = ([regex]::match((git symbolic-ref refs/remotes/origin/HEAD), "/m\w+").value).Substring(1)
         $compMain = git rev-list --left-right --count origin/$mainBrName...origin/$currBr
 
         $mainBrAhead = iif (    $compMain[1] -eq [byte][char]9  ) $compMain[0] $compMain[0]+$compMain[1]

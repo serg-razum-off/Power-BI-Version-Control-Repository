@@ -46,7 +46,7 @@ $commHeaderMessage = 'Minor Change:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> $PROFILE --> main branch name identification added.
+'>> $PROFILE --> main branch name identification added (2).
 '
 
 
