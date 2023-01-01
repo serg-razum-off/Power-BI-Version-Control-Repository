@@ -42,11 +42,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Minor Change:'
+$commHeaderMessage = 'First C# Class added:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> $PROFILE --> main branch name identification added (2).
+'>> .\PowerShell-Scripts\C# Classes\ReportSection.cs.
 '
 
 
