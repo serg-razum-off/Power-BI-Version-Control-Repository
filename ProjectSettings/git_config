@@ -39,6 +39,7 @@
 		pushm = push origin master
 		pushu = push origin -u
 		geturl = config --get remote.origin.url
+		getmain = symbolic-ref refs/remotes/origin/HEAD
 [branch "Management-Excel----DAX-measures"]
 	remote = origin
 	merge = refs/heads/Management-Excel----DAX-measures
