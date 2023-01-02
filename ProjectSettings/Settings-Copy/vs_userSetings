@@ -36,7 +36,7 @@
         "notebook-parser"
     ],
     
-    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontSize": 17,
 
     "python.condaPath": "C:\\Users\\Sergey\\miniconda3\\Scripts\\conda.exe",
     "git.enableSmartCommit": true,
@@ -130,4 +130,5 @@
             "italic": false
         }
     ],
+    "editor.fontSize": 18,
 }

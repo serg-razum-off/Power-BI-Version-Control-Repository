@@ -2,11 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace PowerBI
+namespace PBI
 {
     public class ReportSection
     {
+        // ========= Props ==========
         string sectionGuid = Guid.NewGuid().ToString().Split('-')[0];
+        public string displayName { get; set; }
+        public int displayOption { get; set; }
+        public int height { get; set; }
+        public string name { get; set; }
+        public int ordinal { get; set; }
+        public int width { get; set; }
+        
+        // ========= Ctors ==========
         public ReportSection()
         {
             displayName = "ReportPage" + sectionGuid;
@@ -26,11 +35,5 @@ namespace PowerBI
             width = 1280;
         }
 
-        public string displayName { get; set; }
-        public int displayOption { get; set; }
-        public int height { get; set; }
-        public string name { get; set; }
-        public int ordinal { get; set; }
-        public int width { get; set; }
     }
 }

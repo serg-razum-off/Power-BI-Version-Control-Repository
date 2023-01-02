@@ -1,0 +1,5 @@
+{
+    "projectRoot": "D:/Projects/PBI Tools/Power-BI-Version-Control-repository/",
+    "powerShellScripts" : "D:/Projects/PBI Tools/Power-BI-Version-Control-repository/PowerShell-Scripts/01_MainClass_Wrapper.ps1",
+    "pbiSchemaIdentificator": "pbix" 
+}

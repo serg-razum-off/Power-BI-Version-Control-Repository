@@ -1,5 +1,7 @@
+$global:ProjectSettingsPath = "D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\!ProjectSettings.json"
+
 class PBIX {
-    <#
+<#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -31,7 +33,9 @@ class PBIX {
     [int]$firstLine_Y;     
     [int]$secondLine_Y
 
-    [bool]$verbose = $false  # Set to $true for detailed output in $this.Methods()
+    [bool]$verbose = $false ; # Set to $true for detailed output in $this.Methods()
+
+    $functions; 
     
     #============== #CONSTRUCTORS ===========================
     #def
@@ -57,7 +61,9 @@ class PBIX {
     }
     
     #==================== #METHODS ===========================
-    #--------------------- Helpers -------------------------
+    #📚     README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
+
+    #--------------------- tech Helpers -------------------------
     hidden [void] inner_WriteVerbose([string]$message) {
         # Printing Verbose messages
         if ($this.verbose) { 
@@ -94,7 +100,7 @@ class PBIX {
         
         $this.inner_WriteVerbose( ">>> Updating Data from Management Excle file..." )
         # setting properties
-        $this.projectRoot = (Get-ChildItem -Path ../.gitignore -r).DirectoryName
+        $this.projectRoot = (Get-Content $global:ProjectSettingsPath | ConvertFrom-Json).projectRoot
         $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
             -WorksheetName "Planned Objects" `
             -StartRow 3
@@ -105,10 +111,7 @@ class PBIX {
         $this.managementPlan_UpdateManagementPlanTables();
         
         # 📝setting personal aliases:
-        #       Setting aliases with Class -- to have it run on every environm.  
-        #       Setting with $profile will require $profile modification on every env
-        $this.inner_WriteVerbose( ">>> Setting personal Aliases..." )
-        Set-Alias -Name touch -Value New-Item -Scope Global
+        #       all personal aliases were moved to $PROFILE
         
         # wrapping the inner_Init up
         $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )
@@ -297,7 +300,6 @@ Specification" | Set-Content $path
     } # } UpdateManagementPlanTables
 
     #---------------- Git Automating --------------------
-    #📚     README: all Git Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
     [void] git_ShowBranches() { 
         Write-Host ">>> Branches: "; Write-Host("-" * 50)
         $branches = git branch
