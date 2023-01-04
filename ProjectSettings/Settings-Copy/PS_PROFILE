@@ -55,6 +55,9 @@ function shtd {
     Restart-Computer     
         
 }
+function home { Set-Location $HOME }
+function homel { Set-Location $HOME\links }
+function back { Set-Location - }
 
 # ================== File System Helpers: end ============================
     
@@ -120,11 +123,21 @@ function csv2dt ($scv) {
 # ⭐⭐⭐ np --> launches notepadd++
 function np { Start-Process notepad++ } 
 Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                  
-Set-Alias -Name 'book' -Value Start-book -Scope Global # fn in this file                                
+function book ([string] $book) {   
+    # ⭐⭐⭐ 4 practice -- starts a script that opens a book. Just to skip explorers and mousclicks. 
+    if ($book -eq "") 
+    { Get-ChildItem "$home\Desktop\PS Launcher\" } 
+    else { 
+        $nm = ( Get-ChildItem "$home\Desktop\PS Launcher\"  | Select-Object Name | Where-Object Name -like "*$book*").Name; 
+        &  "$home\Desktop\PS Launcher\$nm" 
+    }
+    # Write-Host "book = $book; nm = $nm"   
+}                                
 function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   #                     ⭐⭐⭐ requires PowerShellCookbook Module installed 
 Set-Alias -Name getm -Value Get-StartApps
 function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
 function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
+function gpt { Start-Process "https://chat.openai.com/chat" }
 
 
 #-------------------------- fun --------------------------
@@ -243,16 +256,6 @@ function Get-NetHelp ([string] $PWSCmdletName) {
 }
 
 
-function Start-Book ([string] $book) {   
-    # ⭐⭐⭐ 4 practice -- starts a script that opens a book. Just to skip explorers and mousclicks. 
-    if ($book -eq "") 
-    { Get-ChildItem "$home\Desktop\PS Launcher\" } 
-    else { 
-        $nm = ( Get-ChildItem "$home\Desktop\PS Launcher\"  | Select-Object Name | Where-Object Name -like "*$book*").Name; 
-        &  "$home\Desktop\PS Launcher\$nm" 
-    }
-    # Write-Host "book = $book; nm = $nm"   
-}
 function Get-CommandForContext($context) {
     # [System.ComponentModel.Description("Context=Website")] --> tags other functions for this Fn could categorize them Holmes [328]
     Get-Command -CommandType Function |
