@@ -82,8 +82,7 @@ function pwSofLast ([string]$topic, [string]$numberOfAnswers) {
 function gemo ([string] $Name) { Get-Module -n $Name -ListAvailable } 
 
 # gets paths from evn: (env: in powershell)
-function genvr (
-    [string] $serach) { ((Get-ChildItem env:) | Select-Object name, value | Where-Object { $_ -like "*$($serach)*" }) } # genv is occupied =(
+function genvr ([string] $serach) { ((Get-ChildItem env:) | Select-Object name, value | Where-Object { $_ -like "*$($serach)*" }) } # genv is occupied =(
 
 # conda env
 function genvc {
@@ -138,6 +137,7 @@ Set-Alias -Name getm -Value Get-StartApps
 function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
 function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
 function gpt { Start-Process "https://chat.openai.com/chat" }
+function sonic { Start-Process "https://app.writesonic.com/template/40f20642-8341-45ad-9009-8b19ae3fbe92/chatsonic/a08332cd-5a45-4497-b1d7-07536b38a983" }
 
 
 #-------------------------- fun --------------------------

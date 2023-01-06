@@ -1,12 +1,12 @@
-$global:ProjectSettingsPath = "D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\!ProjectSettings.json"
+$script:ProjectSettingsPath = "D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\!ProjectSettings.json"
 
 class PBIX {
-<#
+    <#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
             PowerShell Class to handle interactions with pbi-tools --> JSON splitted .pbx 
-            One Proj for one pbi file --> number of changes is high. Several pbixes in one proj will mess up VC
+            currently one Proj for one pbi file --> number of changes is high. Several pbixes in one proj will mess up VC
 
             Methods are clustered into categories:  
                 $this.inner_
@@ -16,11 +16,15 @@ class PBIX {
 
         .EXAMPLE
             $pbix = [pbix]::new()
-            $pbix = [pbix]::new(10, 175, 325, $false)
+            $pbix = [pbix]::new($true)
+
+        .Notes
+            basic ProjectSettings are stored in ./projectSettings/ProjectSettings.json
     #>
     
     #============ #PROPERTIES ================================
-    #for searches cat's and ls's
+
+    [pscustomobject]$projectSettings 
     [string]$projectRoot
     # for import tables and measures specification
     [array]$managementPlan
@@ -40,24 +44,11 @@ class PBIX {
     #============== #CONSTRUCTORS ===========================
     #def
     PBIX() {
-        $this.inner_Init("", $this.verbose)
+        $this.inner_Init( $this.verbose)
     }
     #verbose
-    PBIX($configString, $verbose) { 
-        # $configString -- all 3 Y params: "{'filtersLine_Y':$filtersLine_Y, 'firstLine_Y':$firstLine_Y, 'secondLine_Y':$secondLine_Y}",
-        $this.inner_Init("", $verbose)
-    }
-    #param-d
-    PBIX(
-        [int]$filtersLine_Y, 
-        [int]$firstLine_Y, 
-        [int]$secondLine_Y,
-        [bool]$verbose = $null 
-    ) {         
-        $this.inner_Init(
-            "{'filtersLine_Y':$filtersLine_Y, 'firstLine_Y':$firstLine_Y, 'secondLine_Y':$secondLine_Y}",
-            $verbose
-        )
+    PBIX( $verbose) { 
+        $this.inner_Init( $verbose)
     }
     
     #==================== #METHODS ===========================
@@ -72,41 +63,30 @@ class PBIX {
             $VerbosePreference = 'SilentlyContinue' 
         }           
     }
-    hidden [void] inner_Init([string]$jprop, [bool]$Verbose) {
-        <#
-            .DESCRIPTION
-                Method for init required values of the Obj. Use $Verbose to set it desired output.
-        #>
+    hidden [void] inner_Init([bool]$Verbose) {
         if ($Verbose) {
             $this.verbose = $true
         }
         $this.inner_WriteVerbose("=== Starting PBIX Cls inner_Init ===")
         
-                
-        
         $this.inner_WriteVerbose( ">>> Setting up Properties... " )
-        if ($jprop -ne "") {
-            $junpacked = $jprop | ConvertFrom-Json
             
-            $this.filtersLine_Y = $junpacked.filtersLine_Y
-            $this.firstLine_Y = $junpacked.firstLine_Y
-            $this.secondLine_Y = $junpacked.secondLine_Y            
-        }
-        else {
-            $this.filtersLine_Y = 10
-            $this.firstLine_Y = 150
-            $this.secondLine_Y = 300
-        }
         
         $this.inner_WriteVerbose( ">>> Updating Data from Management Excle file..." )
         # setting properties
-        $this.projectRoot = (Get-Content $global:ProjectSettingsPath | ConvertFrom-Json).projectRoot
+        
+        $this.projectSettings = Get-Content $script:ProjectSettingsPath | ConvertFrom-Json
+        $this.filtersLine_Y = $this.projectSettings.filtersLine_Y
+        $this.firstLine_Y = $this.projectSettings.firstLine_Y
+        $this.secondLine_Y = $this.projectSettings.secondLine_Y            
+
+        $this.projectRoot = $this.projectSettings.projectRoot
         $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
             -WorksheetName "Planned Objects" `
             -StartRow 3
         
-        $this.pbix = (Get-ChildItem -Path ../*.pbix -Recurse)
-        $this.pbit = (Get-ChildItem -Path ../*.pbit -Recurse)
+        $this.pbix = (Get-ChildItem -path $this.projectRoot -filter *.pbix -rec)
+        $this.pbit = (Get-ChildItem -path $this.projectRoot -filter *.pbit -rec)
         # Updating Tables in Manage Plan
         $this.managementPlan_UpdateManagementPlanTables();
         

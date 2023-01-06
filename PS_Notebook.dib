@@ -15,7 +15,7 @@
 #!pwsh
 
 . ./PowerShell-Scripts/01_MainClass.ps1; 
-$pbx = [pbix]::new('', $true)
+$pbx = [pbix]::new($true)
 
 #!pwsh
 
@@ -42,11 +42,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'First C# Class added:'
+$commHeaderMessage = 'Refactoring: init simplified:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> .\PowerShell-Scripts\C# Classes\ReportSection.cs.
+'>> init properties that were passed via ctor, moved to ProjectSettings.json
 '
 
 
