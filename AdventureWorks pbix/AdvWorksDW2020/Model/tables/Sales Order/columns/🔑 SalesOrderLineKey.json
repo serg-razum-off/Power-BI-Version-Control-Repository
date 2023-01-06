@@ -1,8 +1,8 @@
 {
-  "name": "SalesOrderLineKey",
+  "name": "🔑 SalesOrderLineKey",
   "dataType": "int64",
   "isHidden": true,
-  "sourceColumn": "SalesOrderLineKey",
+  "sourceColumn": "🔑 SalesOrderLineKey",
   "formatString": "0",
   "summarizeBy": "none",
   "annotations": [

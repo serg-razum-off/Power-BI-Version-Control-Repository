@@ -1,10 +1,10 @@
 {
-  "name": "SalesOrderLineKey",
+  "name": "🔑 OrderDateKey",
   "dataType": "int64",
   "isHidden": true,
-  "sourceColumn": "SalesOrderLineKey",
+  "sourceColumn": "🔑 OrderDateKey",
   "formatString": "0",
-  "summarizeBy": "none",
+  "summarizeBy": "sum",
   "annotations": [
     {
       "name": "SummarizationSetBy",

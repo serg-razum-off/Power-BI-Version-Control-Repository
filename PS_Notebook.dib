@@ -42,11 +42,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Refactoring: init simplified:'
+$commHeaderMessage = 'Report modification -- keys 🔑 added:'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> init properties that were passed via ctor, moved to ProjectSettings.json
+'>> pict of keys added to all columns that contain keys
 '
 
 

@@ -1,5 +1,5 @@
 {
-  "name": "1744cc32-0277-43b6-ad73-b09bdc2e1e12",
+  "name": "0d92d2aa-f461-48a6-b6c5-438a98a91073",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -14,14 +14,14 @@
       {
         "name": "c4007daa-09a5-455d-ac3b-d8338a0e4468",
         "fromTable": "Sales",
-        "fromColumn": "SalesTerritoryKey",
+        "fromColumn": "🔑 SalesTerritoryKey",
         "toTable": "Sales Territory",
-        "toColumn": "SalesTerritoryKey"
+        "toColumn": "🔑 SalesTerritoryKey"
       },
       {
         "name": "fe440ad4-cbfb-4a8c-9b24-4d02f59a009f",
         "fromTable": "Sales",
-        "fromColumn": "ProductKey",
+        "fromColumn": "🔑 ProductKey",
         "toTable": "Product",
         "toColumn": "🔑 ProductKey"
       },
@@ -29,47 +29,47 @@
         "name": "ddc90e12-74d0-451e-87b6-3bc8d773bf07",
         "fromCardinality": "one",
         "fromTable": "Sales",
-        "fromColumn": "SalesOrderLineKey",
+        "fromColumn": "🔑 SalesOrderLineKey",
         "toTable": "Sales Order",
-        "toColumn": "SalesOrderLineKey",
+        "toColumn": "🔑 SalesOrderLineKey",
         "crossFilteringBehavior": "bothDirections"
       },
       {
         "name": "3921d624-3ba4-40ca-b78d-61fe4ebc7659",
         "fromTable": "Sales",
-        "fromColumn": "CustomerKey",
+        "fromColumn": "🔑 CustomerKey",
         "toTable": "Customer",
-        "toColumn": "CustomerKey"
+        "toColumn": "🔑 CustomerKey"
       },
       {
         "name": "ad03fb2c-8d99-47eb-bdab-0e52920c9d3f",
         "fromTable": "Sales",
-        "fromColumn": "OrderDateKey",
+        "fromColumn": "🔑 OrderDateKey",
         "toTable": "Date",
-        "toColumn": "DateKey"
+        "toColumn": "🔑 DateKey"
       },
       {
         "name": "a390c257-6a75-4c82-aab5-270f564d26b0",
         "fromTable": "Sales",
-        "fromColumn": "DueDateKey",
+        "fromColumn": "🔑 DueDateKey",
         "toTable": "Date",
-        "toColumn": "DateKey",
+        "toColumn": "🔑 DateKey",
         "isActive": false
       },
       {
         "name": "fcf11ed1-afec-495f-8897-4461f7a9d501",
         "fromTable": "Sales",
-        "fromColumn": "ShipDateKey",
+        "fromColumn": "🔑 ShipDateKey",
         "toTable": "Date",
-        "toColumn": "DateKey",
+        "toColumn": "🔑 DateKey",
         "isActive": false
       },
       {
         "name": "f72f8f53-10b5-4d0a-82ea-19e584697a64",
         "fromTable": "Sales",
-        "fromColumn": "ResellerKey",
+        "fromColumn": "🔑 ResellerKey",
         "toTable": "Reseller",
-        "toColumn": "ResellerKey"
+        "toColumn": "🔑 ResellerKey"
       }
     ],
     "expressions": [
@@ -109,7 +109,7 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.110.1085.0 (22.10)"
+        "value": "2.112.603.0 (22.12)"
       },
       {
         "name": "PBI_QueryOrder",

@@ -1,8 +1,8 @@
 {
-  "name": "SalesTerritoryKey",
+  "name": "🔑 ShipDateKey",
   "dataType": "int64",
   "isHidden": true,
-  "sourceColumn": "SalesTerritoryKey",
+  "sourceColumn": "🔑 ShipDateKey",
   "formatString": "0",
   "summarizeBy": "none",
   "annotations": [

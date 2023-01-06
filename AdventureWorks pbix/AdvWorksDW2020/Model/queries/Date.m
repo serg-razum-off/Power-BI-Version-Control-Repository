@@ -11,6 +11,7 @@ let
             {"MonthKey", Int64.Type}, 
             {"Full Date", type text}
         }),
-    #"Extracted Date" = Table.TransformColumns(#"Changed Type",{{"Date", DateTime.Date, type date}})
+    #"Extracted Date" = Table.TransformColumns(#"Changed Type",{{"Date", DateTime.Date, type date}}),
+    #"🔑 Renamed Columns" = Table.RenameColumns(#"Extracted Date",{{"DateKey", "🔑 DateKey"}})
 in
-    #"Extracted Date"
+    #"🔑 Renamed Columns"

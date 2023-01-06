@@ -20,6 +20,7 @@ let
                 { "Total Product Cost", Currency.Type },
                 { "Sales Amount", Currency.Type },
                 { "Unit Price Discount Pct", type number } }
-        )
+        ),
+    #"🔑 Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"SalesOrderLineKey", "🔑 SalesOrderLineKey"}, {"ResellerKey", "🔑 ResellerKey"}, {"CustomerKey", "🔑 CustomerKey"}, {"ProductKey", "🔑 ProductKey"}, {"OrderDateKey", "🔑 OrderDateKey"}, {"DueDateKey", "🔑 DueDateKey"}, {"ShipDateKey", "🔑 ShipDateKey"}, {"SalesTerritoryKey", "🔑 SalesTerritoryKey"}})
 in
-    #"Changed Type"
+    #"🔑 Renamed Columns"

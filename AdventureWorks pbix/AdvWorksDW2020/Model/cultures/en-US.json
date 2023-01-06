@@ -77,7 +77,7 @@
         "customer.customer_key": {
           "Binding": {
             "ConceptualEntity": "Customer",
-            "ConceptualProperty": "CustomerKey"
+            "ConceptualProperty": "🔑 CustomerKey"
           },
           "State": "Generated",
           "Hidden": true,
@@ -356,7 +356,7 @@
         "date.date_key": {
           "Binding": {
             "ConceptualEntity": "Date",
-            "ConceptualProperty": "DateKey"
+            "ConceptualProperty": "🔑 DateKey"
           },
           "State": "Generated",
           "Hidden": true,
@@ -742,7 +742,7 @@
         "sales_territory.sales_territory_key": {
           "Binding": {
             "ConceptualEntity": "Sales Territory",
-            "ConceptualProperty": "SalesTerritoryKey"
+            "ConceptualProperty": "🔑 SalesTerritoryKey"
           },
           "State": "Generated",
           "Hidden": true,
@@ -1451,7 +1451,7 @@
         "sales_order.sales_order_line_key": {
           "Binding": {
             "ConceptualEntity": "Sales Order",
-            "ConceptualProperty": "SalesOrderLineKey"
+            "ConceptualProperty": "🔑 SalesOrderLineKey"
           },
           "State": "Generated",
           "Hidden": true,

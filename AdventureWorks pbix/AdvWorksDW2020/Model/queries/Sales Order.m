@@ -15,6 +15,7 @@ let
                 { "Sales Order Line", type text },
                 { "Channel", type text }
             }
-        )
+        ),
+    #"🔑 Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"SalesOrderLineKey", "🔑 SalesOrderLineKey"}})
 in
-    #"Changed Type"
+    #"🔑 Renamed Columns"

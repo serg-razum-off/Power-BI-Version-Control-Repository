@@ -20,6 +20,7 @@ let
                 { "State-Province", type text },
                 { "Country-Region", type text },
                 { "Postal Code", type text } }
-        )
+        ),
+    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"ResellerKey", "🔑 ResellerKey"}})
 in
-    #"Changed Type"
+    #"Renamed Columns"

@@ -23,6 +23,7 @@ let
                 { "Country", type text },
                 { "Group", type text }
             }
-        )
+        ),
+    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"SalesTerritoryKey", "🔑 SalesTerritoryKey"}})
 in
-    #"Changed Type"
+    #"Renamed Columns"

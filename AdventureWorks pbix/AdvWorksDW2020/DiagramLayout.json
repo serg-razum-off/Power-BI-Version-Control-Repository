@@ -106,10 +106,11 @@
         }
       ],
       "name": "All tables",
-      "zoomValue": 67,
+      "zoomValue": 75.118347397420365,
       "pinKeyFieldsToTop": false,
       "showExtraHeaderInfo": false,
-      "hideKeyFieldsWhenCollapsed": false
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
     }
   ],
   "selectedDiagram": "All tables",
