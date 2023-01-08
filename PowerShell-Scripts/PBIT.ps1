@@ -61,10 +61,10 @@ class PBIX {
     [void] SetVerbose([bool]$verbose) {
         $this.verbose = $verbose                
         if ($this.verbose) {
-            Set-Variable -Name VerbosePreference -Value "Continue" -Scope Global
+            $global:VerbosePreference = "Continue" 
         }
         else {
-            Set-Variable -Name VerbosePreference -Value "SilentlyContinue" -Scope Global 
+            $global:VerbosePreference = "SilentlyContinue" 
         }
     }
    
