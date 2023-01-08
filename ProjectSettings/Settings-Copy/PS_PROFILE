@@ -1,5 +1,7 @@
 # PROFILE file in the project contains copy of $PROFILE
 
+#TODO: figure out why 'PS> & PROFILE' or 'PS> . PROFILE' do not reload profile when called from script: function rlp {& $PROFILE}
+
 # ======================================= SETTINGS ========================================
 Set-StrictMode -Version Latest # for all scrips from PWS Cookbook use Strict Mode -VErsion 3
 $ErrorActionPreference = "Stop"
@@ -34,9 +36,9 @@ Set-Alias -Name 'grid' -Value Out-GridView -Scope Global
 function cw { Write-Host $args }
 function grepr { Get-ChildItem -rec | grep @args } # from Holmes    ⭐⭐⭐⭐⭐
 
-# show only files (whereas ls gets files and folders)
-function ll { Get-ChildItem -File @args } 
-#TODO: figure out why 'PS> & PROFILE' or 'PS> . PROFILE' do not reload profile when called from script: function rlp {& $PROFILE}
+# show only files
+function lsf { Get-ChildItem -File @args } 
+function lsd { Get-ChildItem -Directory @args } 
 
 # ⭐⭐⭐ list Errs in th session ⬇⬇
 function lse { try { 0..($Error.Count - 1) | ForEach-Object { "[$($_)]--> [$($Error[$_])]" } } catch { "No Errs yet... bad worker"; $error.clear() } }   
@@ -55,6 +57,14 @@ function shtd {
     Restart-Computer     
         
 }
+function rename ([string]$partNameFrom, [string]$partNameTo) { 
+    # renames files in the folder Example: {Class_API.ps1, Class_AZUR.ps1, Class_GIT.ps1} --> {API.ps1, AZUR.ps1, GIT.ps1}
+    ll -path .\PowerShell-Scripts\ -filter $partNameFrom | ForEach-Object { 
+        Rename-Item -path $_ -NewName (
+            (split-path $_ -Leaf) -replace $partNameFrom, $partNameTo
+        ) 
+    } 
+}
 function home { Set-Location $HOME }
 function homel { Set-Location $HOME\links }
 function back { Set-Location - }
@@ -64,7 +74,7 @@ function back { Set-Location - }
 # =================== GET HELP helpers ===========================
 Set-Alias -Name 'help' -Value Get-Help -Scope Global 
 Set-Alias -Name 'h-gal' -Value Get-Alias -Scope Global # just gal -- get cmdlet for alias; gal -Definition -- <cmdlet Name> get all aliases for cmdlet
-Set-Alias -Name 'invh' -Value Invoke-History -Scope Global
+Set-Alias -Name 'ihist' -Value Invoke-History -Scope Global
 Set-Alias -Name 'chist' -Value Clear-History -Scope Global
 Set-Alias -Name 'hist' -Value Get-History -Scope Global
 #  --> gmo is a standard alias for this Get-Module
@@ -269,4 +279,6 @@ function Get-Verbs { get-verb | clip && np } # lists correct verbs in NotePad++.
 ## functions for fun
 function Start-tekken3 { Start-Process "https://www.retrogames.cc/psx-games/tekken-3.html" }
 function Start-MK3 { Start-Process "https://www.retrogames.cc/psx-games/mortal-kombat-3.html" }
+# function hdtv { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }
+function hdtv { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }
 

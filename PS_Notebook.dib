@@ -14,8 +14,10 @@
 
 #!pwsh
 
-. ./PowerShell-Scripts/01_MainClass.ps1; 
+. ./PowerShell-Scripts/pbit.ps1; 
+. ./PowerShell-Scripts/git.ps1; 
 $pbx = [pbix]::new($true)
+$git = [git]::new($true)
 
 #!pwsh
 
@@ -42,11 +44,12 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Report modification -- keys 🔑 added:'
+$commHeaderMessage = 'Structure of the PWS management Classes added; Main Class refactored'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> pict of keys added to all columns that contain keys
+'>> ./PowerShell-Scripts/ --> contains class per kind of activity. (PBIT.ps1, GIT.ps1, API.ps1...)
+>> 01_Main_Class.ps1 refactored to PBIT.ps1, GIT.ps1
 '
 
 
@@ -56,8 +59,8 @@ $commMsg
 
 #!pwsh
 
-$pbx.git_Commit($commMsg, $true)
-$pbx.git_SyncBranch()
+$git.Commit($commMsg, $true)
+$git.SyncBranch()
 
 #!markdown
 

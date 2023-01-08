@@ -10,9 +10,9 @@ class PBIX {
 
             Methods are clustered into categories:  
                 $this.inner_
-                $this.pbiTools_
+                $this.pbiTPathools_
                 $this.managementTool_
-                #REFACTOR: #⚠ : move methods from clusters to separate functions, to have dot notation for them. => $this.pbiTools.<methodName>
+                #REFACTOR: #⚠ : move methods from clusters to separate functions, to have dot notation for them. => $this.pbiTPathools.<methodName>
 
         .EXAMPLE
             $pbix = [pbix]::new()
@@ -29,95 +29,110 @@ class PBIX {
     # for import tables and measures specification
     [array]$managementPlan
     # address of pbix. $null if not yet compiled or extracted
-    [string]$pbix
-    [string]$pbit
+    [string]$pbixPath
+    [string]$pbitPath
 
     #TODO: For lining up visuals 
     [int]$filtersLine_Y;     
     [int]$firstLine_Y;     
     [int]$secondLine_Y
 
-    [bool]$verbose = $false ; # Set to $true for detailed output in $this.Methods()
-
-    $functions; 
+    [bool]$verbose = $false ; # set to $true when initing the Class, if needed
     
-    #============== #CONSTRUCTORS ===========================
+   #============== #CONSTRUCTORS ===========================
     #def
     PBIX() {
-        $this.inner_Init( $this.verbose)
+        $this.inner_Init()
     }
-    #verbose
-    PBIX( $verbose) { 
-        $this.inner_Init( $verbose)
+    # for named parameters
+    PBIX([hashtable]$params) { 
+        $this.verbose = $params['_verbose']
+        $this.set_verbose($params['_verbose'])
+        $this.inner_Init()
+    }
+    # for bool _verbose
+    PBIX([bool]$_verbose) { 
+        $this.SetVerbose($_verbose)
+        $this.inner_Init()
     }
     
-    #==================== #METHODS ===========================
-    #📚     README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
-
-    #--------------------- tech Helpers -------------------------
-    hidden [void] inner_WriteVerbose([string]$message) {
-        # Printing Verbose messages
-        if ($this.verbose) { 
-            $VerbosePreference = "Continue" 
-            Write-Verbose( "$message" )
-            $VerbosePreference = 'SilentlyContinue' 
-        }           
-    }
-    hidden [void] inner_Init([bool]$Verbose) {
-        if ($Verbose) {
-            $this.verbose = $true
+    # Setter method for the $verbose property
+    #   SR[2023-01-08] this method didn't want to work with Set_Verbose ([bool]$_verbose) signature
+    [void] SetVerbose([bool]$verbose) {
+        $this.verbose = $verbose                
+        if ($this.verbose) {
+            Set-Variable -Name VerbosePreference -Value "Continue" -Scope Global
         }
-        $this.inner_WriteVerbose("=== Starting PBIX Cls inner_Init ===")
+        else {
+            Set-Variable -Name VerbosePreference -Value "SilentlyContinue" -Scope Global 
+        }
+    }
+   
+    #==================== #METHODS ===========================
+    #📚 README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
+    #📝all setting of personal aliases were moved to $PROFILE
+    
+    #--------------------- tech Helpers -------------------------
+    # hidden [void] inner_WriteVerbose([string]$message) {
+    #     # Printing Verbose messages
+    #     if ($this.verbose) { 
+    #         $VerbosePreference = "Continue" 
+    #         Write-Verbose( "$message" )
+    #         $VerbosePreference = 'SilentlyContinue' 
+    #     }           
+    # }
+    
+    hidden [void] inner_Init() {
+        # writing, depending on $VerbosePreference settings 
+        Write-Verbose ( "=== Starting PBIX Cls inner_Init ===" )
+        Write-Verbose ( ">>> Setting up PBIT Properties... " )
+        Write-Verbose ( ">>> Updating Data from Management Excle file..." )
         
-        $this.inner_WriteVerbose( ">>> Setting up Properties... " )
-            
-        
-        $this.inner_WriteVerbose( ">>> Updating Data from Management Excle file..." )
-        # setting properties
-        
+        # getting setting properties        
         $this.projectSettings = Get-Content $script:ProjectSettingsPath | ConvertFrom-Json
         $this.filtersLine_Y = $this.projectSettings.filtersLine_Y
         $this.firstLine_Y = $this.projectSettings.firstLine_Y
         $this.secondLine_Y = $this.projectSettings.secondLine_Y            
-
         $this.projectRoot = $this.projectSettings.projectRoot
+
+        #getting Management Plan
         $this.managementPlan = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
             -WorksheetName "Planned Objects" `
             -StartRow 3
         
-        $this.pbix = (Get-ChildItem -path $this.projectRoot -filter *.pbix -rec)
-        $this.pbit = (Get-ChildItem -path $this.projectRoot -filter *.pbit -rec)
+        # getting paths to pbi files
+        $this.pbixPath = (Get-ChildItem -path $this.projectRoot -filter *.pbix -rec)
+        $this.pbitPath = (Get-ChildItem -path $this.projectRoot -filter *.pbit -rec)
+        
         # Updating Tables in Manage Plan
         $this.managementPlan_UpdateManagementPlanTables();
-        
-        # 📝setting personal aliases:
-        #       all personal aliases were moved to $PROFILE
-        
+                
         # wrapping the inner_Init up
-        $this.inner_WriteVerbose( "=== PBIX Cls inner_Init Completed ===" )
+        Write-Verbose ( "=== PBIX Cls inner_Init Completed ===" )
         
     }
     #--------------- Pbi-tools addressing  ----------------
     #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
+
     [void] pbiTools_Extract() {
         <#
             .DESCRIPTION
                 Extracts PBI-JSON structured Metadata from .pbix file
         #> 
         #SR: getting pbix        
-        $pbix_O = (Get-Item $this.pbix)
-        $base_path = $pbix_O.DirectoryName #SR: for some reason $this.pbix contains only FullPath, not the Obj itself
- 
-        #SR: getting metadata dir
-        $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
-        $md_dir = ($md_dir[$md_dir.Count - 1] -split ".pbit")[0] #from last el /pbix name/ get name wo extension
+        $base_path = Split-Path $this.pbixPath -Parent
+        $fileName = Split-Path $this.pbixPath -Leaf
+         
+        #SR: getting metadata folder -- it should be called as pbix file, but witout extension .pbix
+        $md_dir = ($fileName -split ".pbix")[0] 
 
-        # check if Dir exists
+        check if Dir exists
         if ( -not (Test-Path "$base_path\$md_dir")  ) {
             New-Item -ItemType Directory -Path "$base_path\$md_dir"
         }
 
-        pbi-tools extract -pbixPath $this.pbix -extractFolder "$base_path\$md_dir" 
+        # pbi-tools extract pbixPath $this.pbixPath -extractFolder "$base_path\$md_dir" 
+        cw "$base_path\$md_dir" ## for debugging. When real extract is needed, uncomment upper line.
     }
     
     [void] pbiTools_Build() {
@@ -127,8 +142,8 @@ class PBIX {
         #>    
 
         #SR: getting pbix location -- PBIT will be compiled to that folder,         
-        $pbix_O = (Get-Item $this.pbix)
-        $base_path = $pbix_O.DirectoryName #SR: $this.pbix contains only FullPath, not the Obj itself
+        $pbix_O = (Get-Item $this.pbixPath)
+        $base_path = $pbix_O.DirectoryName #SR: $this.pbixPath contains only FullPath, not the Obj itself
 
         #SR: getting metadata dir
         $md_dir = ($pbix_O.FullName -split "\\" ) #get Arr of folder path
@@ -150,15 +165,15 @@ class PBIX {
             throw
         }
         else {
-            $this.inner_WriteVerbose(">>> PBIT: Compiled successfully: `n"); $this.inner_WriteVerbose( $("-" * 50)   )
-            $this.inner_WriteVerbose("$res `n"); $this.inner_WriteVerbose( $("-" * 50) )
+            Write-Verbose (">>> PBIT: Compiled successfully: `n"); Write-Verbose ( $("-" * 50)   )
+            Write-Verbose ("$res `n"); Write-Verbose ( $("-" * 50) )
         }
         
         #SR: launching
-        $this.inner_WriteVerbose(">>> PBIT: Launched... `n"); $this.inner_WriteVerbose( $("-" * 50)   )
-        pbi-tools.exe launch-pbi $this.pbit
+        Write-Verbose (">>> PBIT: Launched... `n"); Write-Verbose ( $("-" * 50)   )
+        pbi-tools.exe launch-pbi $this.pbitPath
     }
-    [void] pbiTools_Launch() { $this.pbiTools_Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
+    [void] pbiTools_Launch() { $this.pbiTPathools_Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
     [void] pbiTools_Launch($pbixType) {
         <#
             .DESCRIPTION
@@ -169,10 +184,10 @@ class PBIX {
         $trgFile = $null
 
         if ($pbixType -eq "" -or $pbixType -eq "pbix") {
-            $trgFile = $this.pbix
+            $trgFile = $this.pbixPath
         }
         elseif ($pbixType -eq "PBIT") {
-            $trgFile = $this.pbit
+            $trgFile = $this.pbitPath
         }
         else {
             Write-Output ">> Wrong type of the Power BI file entered..."
@@ -188,7 +203,7 @@ class PBIX {
         
         pbi-tools.exe launch-pbi $trgFile
 
-        $this.inner_WriteVerbose( ">>> File '$fileName' was launched..." )
+        Write-Verbose ( ">>> File '$fileName' was launched..." )
     }
     [void] pbiTools_WatchMode() {
         #SR: Turning ON the watch mode
@@ -199,8 +214,8 @@ class PBIX {
             throw ">>> use method pbiTools_Launch to start .pbix first, attach Watch Mode only after that..."
         }
 
-        $this.inner_WriteVerbose(">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab")
-        $this.inner_WriteVerbose("--> Ctrt + C to Quit Watch Mode")
+        Write-Verbose (">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab")
+        Write-Verbose ("--> Ctrt + C to Quit Watch Mode")
         
         pbi-tools.exe extract -pid $PrId -watch
     }
@@ -277,131 +292,5 @@ Specification" | Set-Content $path
                 -replace $pattern, ($required_qwr + $endingComma) `
             | Set-Content $path
         }        
-    } # } UpdateManagementPlanTables
-
-    #---------------- Git Automating --------------------
-    [void] git_ShowBranches() { 
-        Write-Host ">>> Branches: "; Write-Host("-" * 50)
-        $branches = git branch
-        $branches | ForEach-Object { Write-Host $_ }        
-        Write-Host("-" * 50)
-    }
-    [void] git_SwitchBranch() { $this.git_SwitchBranch("") }
-    [void] git_SwitchBranch([string]$param) {
-        #   Switching Branch
-        $this.inner_WriteVerbose(">>> git_SwitchBranch <<<")
-        
-        $this.git_ShowBranches()        
-        if ($param -eq "") {
-            git checkout (Read-Host -Prompt ">>> Enter branch name: ")
-            break
-        }
-        git checkout $param        
-        $this.git_ShowBranches()
-    }
-    [void] git_NewBranch() { $this.git_NewBranch("") }
-    [void] git_NewBranch([string]$param) {
-        $this.inner_WriteVerbose(">>> git_NewBranch <<<")
-        if (
-            (Read-Host -Prompt ">>> You are branching from: | $(git branch --show-current) |. 'Q' to Cancel, [Y] to continue") `
-                -in @("Q", "N", "end")
-        ) { break }
-
-        if ($param -eq "") {
-            #       ask for BrName
-            $branchName = Read-Host -Prompt "Input name of new branch... ( 'Q' to cancel ) --> "
-            if ($branchName -eq "Q") { break }
-        }
-        else {
-            $branchName = $param
-        }
-
-        git checkout -b $branchName
-
-    }    
-    [void] git_Commit() { $this.git_Commit("", $true) }
-    [void] git_Commit([string]$param, [bool]$auto) {
-        #   Show changes
-        $this.inner_WriteVerbose(">>> git_Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<")
-
-        
-        if (!$auto) {
-            $this.inner_WriteVerbose(">>> Inspect files changed on VS Code Source Control Tab if needed...")
-            if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
-	
-        }        
-        #   staging
-        git add -A
-        $this.inner_WriteVerbose(">>> Files Staged...")
-
-        #   Committing
-        $commMessage = ""
-        if ($param -eq "") {
-            Write-Host "Insert Commit Message ('Q' to cancel, [Enter] to open new line, 'end' to finish input) --> "
-            while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
-            $commMessage = $commMessage.Trim()
-	        
-            if ($commMessage -eq "Q") { break }
-        }
-        else {
-            $commMessage = $param
-        }
-        
-        git commit -a -m $commMessage
-        $this.inner_WriteVerbose(">>> Committed successfully")
-    }   
-    [void] git_SyncBranch() { $this.git_SyncBranch($true) }
-    [void] git_SyncBranch([bool]$auto) {
-        #   Synching current brach
-        $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
-
-        if (!$auto) {
-            if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
-	
-        }        $currBranch = git branch --show-current
-        
-        git pull origin $currBranch
-        git push origin $currBranch
-    }
-    [void] git_MergeToMain([string]$param) {
-        #   Merge of current branch to Master --> can be done by priviliged users only
-        $this.inner_WriteVerbose(">>> git_SyncBranch <<<")
-
-        $currUser = git config user.email
-        $allowMergeMain = $false
-
-        $privilegedUsers = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
-            -WorksheetName "PrivelegedUsers" `
-            -StartRow 1
-
-        ( $privilegedUsers | Where-Object { $_.MergeMain -eq $true } ).User `
-        | ForEach-Object { 
-            if ($_ -eq $currUser) { $allowMergeMain = $true ; break } 
-        }
-
-        if (!$allowMergeMain) { Write-Host ">>> No Access to this Method..."; break }
-
-        $currBranch = git branch --show-current
-        $cbUpper = $currBranch.ToUpper()
-        if ((Read-Host -Prompt "Are you sure want to merge current branch >> $cbUpper << into main? [Y] / N") -eq "N") { break }
-        
-        git checkout main
-        git pull
-        git merge $currBranch
-        git push origin main
-        git checkout $currBranch
-    }    
-    [void] git_MergeFromMain() {
-        #	Merge from Master to current branch --> to FF other developers' changes
-        $this.inner_WriteVerbose(">>> git_MergeFromMain <<<")
-
-        $currBranch = git branch --show-current
-        $cbUpper = $currBranch.ToUpper()
-        if ((Read-Host -Prompt "Are you sure want to merge Main into >> $cbUpper << ? [Y] / N") -eq "N") { break }
-        
-        git checkout main
-        git pull
-        git checkout $currBranch
-        git merge main    
-    }
+    } # } UpdateManagementPlanTables   
 } 

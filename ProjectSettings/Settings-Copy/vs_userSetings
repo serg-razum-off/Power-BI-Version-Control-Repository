@@ -42,7 +42,6 @@
     "git.enableSmartCommit": true,
     "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.1-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.112.4\\tools",
     "git.mergeEditor": true,
-    "window.zoomLevel": -1,
     "security.workspace.trust.untrustedFiles": "open",
 
     "todo-tree.general.tags": [
@@ -132,4 +131,5 @@
     ],
     "editor.fontSize": 18,
     "CodeGPT.apiKey": "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",
+    "window.zoomLevel": -1,
 }
