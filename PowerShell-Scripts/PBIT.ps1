@@ -1,7 +1,7 @@
 $script:ProjectSettingsPath = "D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\!ProjectSettings.json"
 
 class PBIX {
-    <#
+<#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -64,9 +64,10 @@ class PBIX {
             } 
         }
         else {
-            $this.writeVerboseFunction = { 
+            $this.writeVerboseFunction = {
+                #if wriverbose -eq $false, use outer $verbosePreference 
                 param($message)
-                & $this.writeVerboseFunction $message
+                & Write-Verbose $message
             } 
         }
     }

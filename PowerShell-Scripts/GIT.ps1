@@ -40,6 +40,7 @@ class GIT {
         }
         else {
             $this.writeVerboseFunction = { 
+                #if wriverbose -eq $false, use outer $verbosePreference 
                 param($message)
                 Write-Verbose $message
             } 
@@ -86,19 +87,19 @@ class GIT {
     
     }    
     [void] Commit() { $this.Commit("", $true) }
-    [void] Commit([string]$commitMessage, [bool]$auto) {
+    [void] Commit([string]$commitMessage) {
         #   Show changes
-        Write-Verbose (">>> Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<")
+        & $this.writeVerboseFunction ">>> Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<"
     
         
-        if (!$auto) {
-            Write-Verbose (">>> Inspect files changed on VS Code Source Control Tab if needed...")
+        if (!$this.auto) {
+            & $this.writeVerboseFunction ">>> Inspect files changed on VS Code Source Control Tab if needed..."
             if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
     
         }        
         #   staging
         git add -A
-        Write-Verbose (">>> Files Staged...")
+        & $this.writeVerboseFunction ">>> Files Staged..."
     
         #   Committing
         $commMessage = ""
@@ -114,12 +115,12 @@ class GIT {
         }
         
         git commit -a -m $commMessage
-        Write-Verbose (">>> Committed successfully")
+        & $this.writeVerboseFunction ">>> Committed successfully"
     }   
     [void] SyncBranch() { $this.SyncBranch($true) }
     [void] SyncBranch([bool]$auto) {
         #   Synching current brach
-        Write-Verbose (">>> SyncBranch <<<")
+        & $this.writeVerboseFunction ">>> SyncBranch <<<"
     
         if (!$auto) {
             if ((Read-Host -Prompt "Sync with Remote? [Y] / N") -eq "N") { break }
@@ -131,7 +132,7 @@ class GIT {
     }
     [void] MergeToMain([string]$param) {
         #   Merge of current branch to Master --> can be done by priviliged users only
-        Write-Verbose (">>> SyncBranch <<<")
+        & $this.writeVerboseFunction ">>> SyncBranch <<<"
     
         $currUser = git config user.email
         $allowMergeMain = $false
@@ -159,7 +160,7 @@ class GIT {
     }    
     [void] MergeFromMain() {
         #	Merge from Master to current branch --> to FF other developers' changes
-        Write-Verbose (">>> MergeFromMain <<<")
+        & $this.writeVerboseFunction ">>> MergeFromMain <<<"
     
         $currBranch = git branch --show-current
         $cbUpper = $currBranch.ToUpper()

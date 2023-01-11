@@ -44,11 +44,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Structure of the PWS management Classes added; Main Class refactored'
+$commHeaderMessage = 'Main Class refactored: small bugfix'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> Small updates
+'>> bugfix
 '
 
 
