@@ -32,12 +32,15 @@ class PBIX {
     [string]$pbixPath
     [string]$pbitPath
 
-    #TODO: For lining up visuals 
-    [int]$filtersLine_Y;     
-    [int]$firstLine_Y;     
+    #TODO: For lining up visuals
+    #   ❓❓ This, probably, is going to land in one of the Classes for .pbix management
+
+    [int]$filtersLine_Y     
+    [int]$firstLine_Y     
     [int]$secondLine_Y
 
-    [bool]$verbose = $false ; # set to $true when initing the Class, if needed
+    [bool]$verbose = $false  # set to $true when initing the Class, if needed
+    [scriptblock] $writeVerboseFunction
     
    #============== #CONSTRUCTORS ===========================
     #def
@@ -46,25 +49,25 @@ class PBIX {
     }
     # for named parameters
     PBIX([hashtable]$params) { 
-        $this.verbose = $params['_verbose']
-        $this.set_verbose($params['_verbose'])
-        $this.inner_Init()
-    }
-    # for bool _verbose
-    PBIX([bool]$_verbose) { 
-        $this.SetVerbose($_verbose)
+        $this.verbose = $null -eq $params['_verbose'] ? $true : $params['_verbose']
+        $this.SetVerbose()
         $this.inner_Init()
     }
     
     # Setter method for the $verbose property
     #   SR[2023-01-08] this method didn't want to work with Set_Verbose ([bool]$_verbose) signature
-    [void] SetVerbose([bool]$verbose) {
-        $this.verbose = $verbose                
+    [void] SetVerbose() {
         if ($this.verbose) {
-            $global:VerbosePreference = "Continue" 
+            $this.writeVerboseFunction = { 
+                param($message)
+                Write-Host -ForegroundColor Yellow "VERBOSE:" $message
+            } 
         }
         else {
-            $global:VerbosePreference = "SilentlyContinue" 
+            $this.writeVerboseFunction = { 
+                param($message)
+                & $this.writeVerboseFunction $message
+            } 
         }
     }
    
@@ -77,16 +80,16 @@ class PBIX {
     #     # Printing Verbose messages
     #     if ($this.verbose) { 
     #         $VerbosePreference = "Continue" 
-    #         Write-Verbose( "$message" )
+    #         & $this.writeVerboseFunction("$message" )
     #         $VerbosePreference = 'SilentlyContinue' 
     #     }           
     # }
     
     hidden [void] inner_Init() {
         # writing, depending on $VerbosePreference settings 
-        Write-Verbose ( "=== Starting PBIX Cls inner_Init ===" )
-        Write-Verbose ( ">>> Setting up PBIT Properties... " )
-        Write-Verbose ( ">>> Updating Data from Management Excle file..." )
+        & $this.writeVerboseFunction  "=== Starting PBIX Cls inner_Init ===" 
+        & $this.writeVerboseFunction  ">>> Setting up PBIT Properties... " 
+        & $this.writeVerboseFunction  ">>> Updating Data from Management Excle file..." 
         
         # getting setting properties        
         $this.projectSettings = Get-Content $script:ProjectSettingsPath | ConvertFrom-Json
@@ -108,13 +111,13 @@ class PBIX {
         $this.managementPlan_UpdateManagementPlanTables();
                 
         # wrapping the inner_Init up
-        Write-Verbose ( "=== PBIX Cls inner_Init Completed ===" )
+        & $this.writeVerboseFunction  "=== PBIX Cls inner_Init Completed ===" 
         
     }
     #--------------- Pbi-tools addressing  ----------------
     #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
 
-    [void] pbiTools_Extract() {
+    [void] Extract() {
         <#
             .DESCRIPTION
                 Extracts PBI-JSON structured Metadata from .pbix file
@@ -135,7 +138,7 @@ class PBIX {
         cw "$base_path\$md_dir" ## for debugging. When real extract is needed, uncomment upper line.
     }
     
-    [void] pbiTools_Build() {
+    [void] Build() {
         <#
             .DESCRIPTION
                 Compile PBIT from pbi-tools JSON model, launch PBIT. If Compillation was successful, data will start refresh
@@ -165,20 +168,20 @@ class PBIX {
             throw
         }
         else {
-            Write-Verbose (">>> PBIT: Compiled successfully: `n"); Write-Verbose ( $("-" * 50)   )
-            Write-Verbose ("$res `n"); Write-Verbose ( $("-" * 50) )
+            &this.writeVerboseFunction (">>> PBIT: Compiled successfully: `n"); &this.writeVerboseFunction ( $("-" * 50)   )
+            &this.writeVerboseFunction ("$res `n"); &this.writeVerboseFunction ( $("-" * 50) )
         }
         
         #SR: launching
-        Write-Verbose (">>> PBIT: Launched... `n"); Write-Verbose ( $("-" * 50)   )
+        &this.writeVerboseFunction (">>> PBIT: Launched... `n"); &this.writeVerboseFunction ( $("-" * 50)   )
         pbi-tools.exe launch-pbi $this.pbitPath
     }
-    [void] pbiTools_Launch() { $this.pbiTPathools_Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
-    [void] pbiTools_Launch($pbixType) {
+    [void] Launch() { $this.Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
+    [void] Launch($pbixType) {
         <#
             .DESCRIPTION
                 Launches PBI file. Arg $pbixType = {"pbix" | "", "pbit"}
-                Example: $pbix.pbiTools_Launch("pbix") #$pbix --> object; "pbix" same as "" OR "pbit" --> type of the file that is to be launched
+                Example: $pbix.Launch("pbix") #$pbix --> object; "pbix" same as "" OR "pbit" --> type of the file that is to be launched
         #>
 
         $trgFile = $null
@@ -203,19 +206,19 @@ class PBIX {
         
         pbi-tools.exe launch-pbi $trgFile
 
-        Write-Verbose ( ">>> File '$fileName' was launched..." )
+        & $this.writeVerboseFunction  ">>> File '$fileName' was launched..." 
     }
-    [void] pbiTools_WatchMode() {
+    [void] WatchMode() {
         #SR: Turning ON the watch mode
         try {
             $PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId
         }
         catch {
-            throw ">>> use method pbiTools_Launch to start .pbix first, attach Watch Mode only after that..."
+            throw ">>> use method Launch to start .pbix first, attach Watch Mode only after that..."
         }
 
-        Write-Verbose (">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab")
-        Write-Verbose ("--> Ctrt + C to Quit Watch Mode")
+        & $this.writeVerboseFunction ">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab"
+        & $this.writeVerboseFunction "--> Ctrt + C to Quit Watch Mode"
         
         pbi-tools.exe extract -pid $PrId -watch
     }

@@ -16,8 +16,8 @@
 
 . ./PowerShell-Scripts/pbit.ps1; 
 . ./PowerShell-Scripts/git.ps1; 
-$pbx = [pbix]::new($true)
-$git = [git]::new($true)
+# $pbx = [pbix]::new($true)
+$git = [git]::new(@{_auto=$true; _verbose=$true})
 
 #!pwsh
 
@@ -48,8 +48,7 @@ $commHeaderMessage = 'Structure of the PWS management Classes added; Main Class 
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> ./PowerShell-Scripts/ --> contains class per kind of activity. (PBIT.ps1, GIT.ps1, API.ps1...)
->> 01_Main_Class.ps1 refactored to PBIT.ps1, GIT.ps1
+'>> Small updates
 '
 
 

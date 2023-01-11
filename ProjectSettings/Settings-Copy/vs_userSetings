@@ -1,26 +1,21 @@
 {
     "workbench.colorTheme": "Visual Studio Dark",
     "workbench.iconTheme": "vscode-icons",
-    
-    "bookmarks.saveBookmarksInProject":true,    
-
+    "bookmarks.saveBookmarksInProject": true,
     "powershell.buttons.showPanelMovementButtons": true,
     "powershell.codeFormatting.autoCorrectAliases": true,
     "powershell.codeFormatting.whitespaceBetweenParameters": true,
     "powershell.notebooks.showToggleButton": true,
     "powershell.powerShellDefaultVersion": "PowerShell (x64)",
-
     "jupyter.askForKernelRestart": false,
     "notebook.lineNumbers": "on",
     "git.autofetch": true,
     "files.exclude": {
         "**/.git": false
     },
-    
     "workbench.sideBar.location": "right",
     "editor.wordWrap": "on",
     "editor.cursorBlinking": "expand",
-    
     "notebook.cellToolbarLocation": {
         "default": "right",
         "jupyter-notebook": "left"
@@ -35,15 +30,12 @@
         "--",
         "notebook-parser"
     ],
-    
     "terminal.integrated.fontSize": 17,
-
     "python.condaPath": "C:\\Users\\Sergey\\miniconda3\\Scripts\\conda.exe",
     "git.enableSmartCommit": true,
     "powerquery.sdk.tools.location": "c:\\Users\\Sergey\\.vscode\\extensions\\powerquery.vscode-powerquery-sdk-0.2.1-win32-x64\\.nuget\\Microsoft.PowerQuery.SdkTools.2.112.4\\tools",
     "git.mergeEditor": true,
     "security.workspace.trust.untrustedFiles": "open",
-
     "todo-tree.general.tags": [
         "BUG",
         "REFACTOR",
@@ -72,38 +64,10 @@
             "icon": "flame"
         }
     },
-
     "better-comments.tags": [
         {
             "tag": "🚩",
             "color": "#FF2D00",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "?",
-            "color": "#3498DB",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "⚠",
-            "color": "#474747",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "yellow",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "todo",
-            "color": "#FF8C00",
             "strikethrough": false,
             "underline": false,
             "backgroundColor": "transparent",
@@ -127,9 +91,35 @@
             "backgroundColor": "#3d5c5c",
             "bold": false,
             "italic": false
+        },
+        {
+            "tag": "❓",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "❗",
+            "color": "#474747",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "yellow",
+            "bold": true,
+            "italic": false
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
         }
     ],
     "editor.fontSize": 18,
-    "CodeGPT.apiKey": "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",
     "window.zoomLevel": -1,
 }

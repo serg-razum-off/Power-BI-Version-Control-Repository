@@ -1,38 +1,50 @@
 class GIT {
-<#
+    <#
         SR [06-01-2023]: 
             This class contains methods for automating git CLI commands.
         params: 
             $auto --> is used in methods to escape user interactions during perfoming GIT actions
         example:
-            $git = [GIT]::new(@{auto= $true})
+            1. 
+                $obj = [git]::new($true, $false)
+            2. 
+                $params = @{_auto=$true; _verbodse=$false} | % {$_.values} #--> pass named parameters
+                $obj = [git]::new($params)
      #>
 
     # Property to control user interactions
     [bool] $auto
     [bool] $verbose
     [string] $main_branch_name = ( git symbolic-ref refs/remotes/origin/HEAD ).split('/')[-1]
+    [scriptblock] $writeVerboseFunction
 
-
-    # Constructor
+    # Constructors
     GIT() {
         $this.auto = $true
-        $this.SetVerbose($false)
+        $this.verbose = $false            
+        $this.SetVerbose()
     }
-    GIT([bool]$_verbose) {
-        $this.auto = $true
-        $this.SetVerbose($_verbose)
+    # for named parameters
+    GIT( [hashtable]$params) {
+        $this.auto = $null -eq $params['_auto'] ? $true : $params['_auto']
+        $this.verbose = $null -eq $params['_verbose'] ? $true : $params['_verbose']
+        $this.SetVerbose()
     }
 
-    [void] SetVerbose([bool]$verbose) {
-        $this.verbose = $verbose                
+    [void] SetVerbose() {
         if ($this.verbose) {
-            $global:VerbosePreference = "Continue" 
+            $this.writeVerboseFunction = { 
+                param($message)
+                Write-Host -ForegroundColor Yellow "VERBOSE:" $message
+            } 
         }
         else {
-            $global:VerbosePreference = "SilentlyContinue" 
+            $this.writeVerboseFunction = { 
+                param($message)
+                Write-Verbose $message
+            } 
         }
-        Write-Verbose ">>> GIT Class Inited <<<"
+        & $this.writeVerboseFunction ">>> GIT Class Inited <<<"
     }
     
     #---------------- Git Automating --------------------
@@ -45,7 +57,7 @@ class GIT {
     [void] SwitchBranch() { $this.SwitchBranch("") }
     [void] SwitchBranch([string]$branchName) {
         #   Switching Branch
-        Write-Verbose (">>> SwitchBranch <<<")
+        & $this.writeVerboseFunction ">>> SwitchBranch <<<"
         
         $this.ShowBranches()        
         if ($branchName -eq "") {
@@ -57,7 +69,7 @@ class GIT {
     }
     [void] NewBranch() { $this.NewBranch("") }
     [void] NewBranch([string]$branchName) {
-        Write-Verbose (">>> NewBranch <<<")
+        & $this.writeVerboseFunction ">>> NewBranch <<<"
         if (
             (Read-Host -Prompt ">>> You are branching from: | $(git branch --show-current) |. 'Q' to Cancel, [Y] to continue") `
                 -in @("Q", "N", "end")

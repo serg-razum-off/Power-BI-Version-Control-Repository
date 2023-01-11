@@ -1,15 +1,22 @@
-class MyClass
-{
-    MyClass($arg1, $arg2)
-    {
-        $this.MyMethod($arg1, $arg2)
-    }
+# ================= !!! ====================
+$h = @{ID="x1" ; DoStuff = $Null }
+$h.DoStuff = { $args[0] * $args[1] }
+# note that $h = @{ID="x1" ; DoStuff = {$args[0] * $args[1]} } works as well
 
-    MyMethod($arg1, $arg2)
-    {
-        Write-Host "Argument 1: $arg1"
-        Write-Host "Argument 2: $arg2"
-    }
+
+# Invoke your block : 
+& $h.DoStuff 6 7
+# ================= !!! ====================
+
+if ($true) {
+    <# Action to perform if the condition is true #>
 }
 
-$a = [MyClass]::new(1,2)
+$a = {
+    param($param)
+    Write-Output $param
+}
+
+&$a "Hello-world"
+
+# -----------------------------------

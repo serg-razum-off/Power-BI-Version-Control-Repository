@@ -1,41 +1,12 @@
 {
     "configurations": [
-        {
-            "name": "PowerShell: Class Debugging",
-            "type": "PowerShell",
-            "request": "launch",
-            "script": "${file}",
-            "args": [
-                "-Class",
-                "MyClass"
-            ],
-            "cwd": "${cwd}"
-        },
+
         {
             "name": "PowerShell Launch Current File",
             "type": "PowerShell",
             "request": "launch",
             "script": "${file}",
             "cwd": "${cwd}"
-        },
-        {
-            "name": "PowerShell Launch Script",
-            "type": "PowerShell",
-            "request": "launch",
-            "script": "enter path or command to execute e.g.: ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
-            "cwd": "${cwd}"
         }
     ]
-    //SR: src: 
-    //      https://docs.microsoft.com/en-us/powershell/scripting/dev-cross-plat/vscode/using-vscode?view=powershell-7.2#workspace-debugging 
-    // "version": "0.2.0",
-    // "configurations": [
-    //     // // Debug for PS Class
-    //     {
-    //         "name": "PowerShell Interactive Session",
-    //         "type": "PowerShell",
-    //         "request": "launch",
-    //         "cwd": ""
-    //     },
-    // ]
 }
