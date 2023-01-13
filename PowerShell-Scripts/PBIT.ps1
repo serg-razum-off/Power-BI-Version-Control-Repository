@@ -1,10 +1,11 @@
 $script:ProjectSettingsPath = "D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\!ProjectSettings.json"
 
-class PBIX {
-<#
+class PBIT {
+    <#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
+            ClassName PBIT == Power BI Tools
             PowerShell Class to handle interactions with pbi-tools --> JSON splitted .pbx 
             currently one Proj for one pbi file --> number of changes is high. Several pbixes in one proj will mess up VC
 
@@ -12,11 +13,10 @@ class PBIX {
                 $this.inner_
                 $this.pbiTPathools_
                 $this.managementTool_
-                #REFACTOR: #⚠ : move methods from clusters to separate functions, to have dot notation for them. => $this.pbiTPathools.<methodName>
 
         .EXAMPLE
-            $pbix = [pbix]::new()
-            $pbix = [pbix]::new($true)
+            $var_class = [pbit]::new()
+            $var_class = [pbit]::new($true)
 
         .Notes
             basic ProjectSettings are stored in ./projectSettings/ProjectSettings.json
@@ -42,13 +42,16 @@ class PBIX {
     [bool]$verbose = $false  # set to $true when initing the Class, if needed
     [scriptblock] $writeVerboseFunction
     
-   #============== #CONSTRUCTORS ===========================
+    #============== #CONSTRUCTORS ===========================
     #def
-    PBIX() {
+    PBIT() {
+        $this.verbose = $false
+        $this.SetVerbose()
         $this.inner_Init()
+
     }
     # for named parameters
-    PBIX([hashtable]$params) { 
+    PBIT([hashtable]$params) { 
         $this.verbose = $null -eq $params['_verbose'] ? $true : $params['_verbose']
         $this.SetVerbose()
         $this.inner_Init()
@@ -72,25 +75,11 @@ class PBIX {
         }
     }
    
-    #==================== #METHODS ===========================
-    #📚 README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
-    #📝all setting of personal aliases were moved to $PROFILE
-    
-    #--------------------- tech Helpers -------------------------
-    # hidden [void] inner_WriteVerbose([string]$message) {
-    #     # Printing Verbose messages
-    #     if ($this.verbose) { 
-    #         $VerbosePreference = "Continue" 
-    #         & $this.writeVerboseFunction("$message" )
-    #         $VerbosePreference = 'SilentlyContinue' 
-    #     }           
-    # }
-    
     hidden [void] inner_Init() {
         # writing, depending on $VerbosePreference settings 
-        & $this.writeVerboseFunction  "=== Starting PBIX Cls inner_Init ===" 
-        & $this.writeVerboseFunction  ">>> Setting up PBIT Properties... " 
-        & $this.writeVerboseFunction  ">>> Updating Data from Management Excle file..." 
+        & $this.writeVerboseFunction "=== Starting PBIX Cls inner_Init ===" 
+        & $this.writeVerboseFunction ">>> Setting up PBIT Properties... " 
+        & $this.writeVerboseFunction ">>> Updating Data from Management Excle file..." 
         
         # getting setting properties        
         $this.projectSettings = Get-Content $script:ProjectSettingsPath | ConvertFrom-Json
@@ -112,9 +101,12 @@ class PBIX {
         $this.managementPlan_UpdateManagementPlanTables();
                 
         # wrapping the inner_Init up
-        & $this.writeVerboseFunction  "=== PBIX Cls inner_Init Completed ===" 
+        & $this.writeVerboseFunction "=== PBIX Cls inner_Init Completed ===" 
         
     }
+    #==================== #METHODS ===========================
+    #📚 README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
+    #📝all setting of personal aliases were moved to $PROFILE 
     #--------------- Pbi-tools addressing  ----------------
     #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
 
@@ -207,7 +199,7 @@ class PBIX {
         
         pbi-tools.exe launch-pbi $trgFile
 
-        & $this.writeVerboseFunction  ">>> File '$fileName' was launched..." 
+        & $this.writeVerboseFunction ">>> File '$fileName' was launched..." 
     }
     [void] WatchMode() {
         #SR: Turning ON the watch mode

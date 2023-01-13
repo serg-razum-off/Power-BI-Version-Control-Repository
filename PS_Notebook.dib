@@ -44,11 +44,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Main Class refactored: small bugfix'
+$commHeaderMessage = 'Main Class refactored: small bugfix (2)'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> bugfix
+'>> wrapping up with refactoring
 '
 
 
@@ -58,7 +58,7 @@ $commMsg
 
 #!pwsh
 
-$git.Commit($commMsg, $true)
+$git.Commit($commMsg)
 $git.SyncBranch()
 
 #!markdown

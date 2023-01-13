@@ -1,3 +1,6 @@
+# 📝SR[2023-01-13]: at current moment I don't see necessity to have a wrapper for Classes to address them like $wr.pbit, $wr.git...
+# 📝    classes seem to be quite independent and self-sufficient
+
 # ================= !!! ====================
 $h = @{ID="x1" ; DoStuff = $Null }
 $h.DoStuff = { $args[0] * $args[1] }

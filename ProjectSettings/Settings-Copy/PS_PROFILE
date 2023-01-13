@@ -11,7 +11,7 @@ $PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #call it, of cou
 # Setting my Aliases --> scriping aliases are duplicated in Classes to have Aliacses unfolded in other environments
 # ⭐⭐⭐⭐⭐ ==> importance of functions
 
-#region functions-helpers
+#region Functions-helpers
 # ===================================== COMMON HELPERS =====================================
 Function IIf($If, $IfTrue, $IfFalse) {
     # inline IF
@@ -190,14 +190,14 @@ function sonic { Start-Process "https://app.writesonic.com/template/40f20642-834
 function jsonv {
     param(
         [Parameter(Mandatory = $false)]
-        [ValidateSet("tree", "tbl", "fld")]
-        [string]$TypeOfSite
+        [ValidateSet("tree", "tbl", "ext")]
+        [string]$TypeOfSite="tree"
     )
     switch ($TypeOfSite) {
         "tree" { Start-Process "https://jsonformatter.org/json-viewer" }
         "tbl" { Start-Process "https://jsongrid.com/json-formatter" }
-        "fld" { Start-Process "https://jsonhero.io/" }
-        Default { Start-Process "https://jsonformatter.org/json-viewer" }
+        "ext" { Start-Process "https://jsonhero.io/" }
+        Default {}
     }
 }
 #endregion
@@ -293,10 +293,3 @@ function prompt {
     break # to stop terminal line from do some automatic scripting
 }
 #endregion
-
-
-
-# --------------------------
-# other
-
-

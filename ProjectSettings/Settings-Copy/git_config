@@ -34,12 +34,12 @@
 		# amm = commit --amend -m	## SR: Use only manually if sure what it does
 		content = cat-file -p
 		type = cat-file -t
-		files = ls-tree -r master --name-only
 		pull = pull origin
-		pushm = push origin master
+		pushm = push origin main
 		pushu = push origin -u
 		geturl = config --get remote.origin.url
 		getmain = symbolic-ref refs/remotes/origin/HEAD
+		changes = diff --stat
 [branch "Management-Excel----DAX-measures"]
 	remote = origin
 	merge = refs/heads/Management-Excel----DAX-measures

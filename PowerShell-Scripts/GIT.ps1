@@ -55,6 +55,10 @@ class GIT {
         $branches | ForEach-Object { Write-Host $_ }        
         Write-Host("-" * 50)
     }
+    [void] ShowChanges() { 
+        Write-Host ">>> Files Changed: "; Write-Host("-" * 50)
+        (git changes) | ForEach-Object { Write-Host $_ }
+    }
     [void] SwitchBranch() { $this.SwitchBranch("") }
     [void] SwitchBranch([string]$branchName) {
         #   Switching Branch
@@ -86,36 +90,41 @@ class GIT {
         git checkout -b $branchName
     
     }    
-    [void] Commit() { $this.Commit("", $true) }
+    [void] Commit() { $this.Commit("") }
     [void] Commit([string]$commitMessage) {
-        #   Show changes
-        & $this.writeVerboseFunction ">>> Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<"
-    
-        
-        if (!$this.auto) {
-            & $this.writeVerboseFunction ">>> Inspect files changed on VS Code Source Control Tab if needed..."
-            if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
-    
-        }        
-        #   staging
-        git add -A
-        & $this.writeVerboseFunction ">>> Files Staged..."
-    
-        #   Committing
-        $commMessage = ""
-        if ($commitMessage -eq "") {
-            Write-Host "Insert Commit Message ('Q' to cancel, [Enter] to open new line, 'end' to finish input) --> "
-            while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
-            $commMessage = $commMessage.Trim()
-            
-            if ($commMessage -eq "Q") { break }
+        try {
+            #   Show changes
+            & $this.writeVerboseFunction ">>> Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<"
+     
+         
+            if (!$this.auto) {
+                & $this.writeVerboseFunction ">>> Inspect files changed on VS Code Source Control Tab if needed..."
+                if ((Read-Host -Prompt "Proceed Committing? [Y] / N ") -in @("N", "Q", "end")  ) { break }
+     
+            }        
+            #   staging
+            git add -A
+            & $this.writeVerboseFunction ">>> Files Staged..."
+     
+            #   Committing
+            $commMessage = ""
+            if ($commitMessage -eq "") {
+                Write-Host "Insert Commit Message ('Q' to cancel, [Enter] to open new line, 'end' to finish input) --> "
+                while (1) { $newline = read-host ; if ($newline -eq "end") { break }; $commMessage += "$newline `n"; }
+                $commMessage = $commMessage.Trim()
+             
+                if ($commMessage -eq "Q") { break }
+            }
+            else {
+                $commMessage = $commitMessage
+            }
+         
+            git commit -a -m $commMessage
+            & $this.writeVerboseFunction ">>> Committed successfully"
         }
-        else {
-            $commMessage = $commitMessage
+        catch {
+            Write-Error "An error occurred: $($_.Exception.Message)"
         }
-        
-        git commit -a -m $commMessage
-        & $this.writeVerboseFunction ">>> Committed successfully"
     }   
     [void] SyncBranch() { $this.SyncBranch($true) }
     [void] SyncBranch([bool]$auto) {
