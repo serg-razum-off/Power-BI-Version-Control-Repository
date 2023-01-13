@@ -191,7 +191,7 @@ function jsonv {
     param(
         [Parameter(Mandatory = $false)]
         [ValidateSet("tree", "tbl", "ext")]
-        [string]$TypeOfSite="tree"
+        [string]$TypeOfSite = "tree"
     )
     switch ($TypeOfSite) {
         "tree" { Start-Process "https://jsonformatter.org/json-viewer" }
@@ -251,17 +251,24 @@ function prompt {
     $isGitDir = git rev-parse --is-inside-work-tree 2>$null
     if ($null -ne $isGitDir) {
         $currBr = git branch --show-current
-        1..3 | ForEach-Object {}
         $mainBrName = ([regex]::match((git symbolic-ref refs/remotes/origin/HEAD), "/m\w+").value).Substring(1)
-        $compMain = git rev-list --left-right --count origin/$mainBrName...origin/$currBr
+        try {
+            $compMain = git rev-list --left-right --count origin/$mainBrName...origin/$currBr
+            $mainBrAhead = iif (    $compMain[1] -eq [byte][char]9  ) ( $compMain[0] ) ( $compMain[0] + $compMain[1] )
+            if ($compMain.Length -le 3) {
+                $currBrAhead = $compMain[2]            
+            }
+            else {
+                $currBrAhead = $compMain[2] + $compMain[3]
+            }
+        }
+        catch {
+            ## 1 identified: currBranch was created, but not yet pushed to ORIGIN
+            $mainBrAhead = '-'
+            $currBrAhead = '-'
+        }
 
-        $mainBrAhead = iif (    $compMain[1] -eq [byte][char]9  ) ( $compMain[0] ) ( $compMain[0] + $compMain[1] )
-        if ($compMain.Length -le 3) {
-            $currBrAhead = $compMain[2]            
-        }
-        else {
-            $currBrAhead = $compMain[2] + $compMain[3]
-        }
+        
         
         Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black `
             "[$(git branch --show-current)]±($($currBrAhead);$($mainBrAhead))>>"

@@ -25,6 +25,7 @@
 		sts = status -s -u
 		df = diff --stat
 		br = branch
+		brv = branch -vv
 		plus = add -A
 		minus = reset
 		minusH = reset --hard
@@ -58,3 +59,6 @@
 [branch "PS_updates_learning"]
 	remote = origin
 	merge = refs/heads/PS_updates_learning
+[branch "PBIT_Local_Automation"]
+	remote = origin
+	merge = refs/heads/PBIT_Local_Automation
