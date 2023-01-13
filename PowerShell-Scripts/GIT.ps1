@@ -49,15 +49,16 @@ class GIT {
     }
     
     #---------------- Git Automating --------------------
-    [void] ShowBranches() { 
-        Write-Host ">>> Branches: "; Write-Host("-" * 50)
-        $branches = git branch
-        $branches | ForEach-Object { Write-Host $_ }        
-        Write-Host("-" * 50)
-    }
-    [void] ShowChanges() { 
-        Write-Host ">>> Files Changed: "; Write-Host("-" * 50)
-        (git changes) | ForEach-Object { Write-Host $_ }
+    [void] ShowBranches() { $this.ShowBranches($false) } #def overload for no params call
+    [void] ShowBranches([bool]$detailed) { 
+        if ($detailed) {
+            git br -vv | ForEach-Object { cw ($_ -replace "\[or.*?\]", "") }
+        }
+        else {
+            Write-Host ">>> Branches: "; Write-Host("-" * 50)
+            git branch | ForEach-Object { Write-Host $_ }        
+            Write-Host("-" * 50)
+        }
     }
     [void] SwitchBranch() { $this.SwitchBranch("") }
     [void] SwitchBranch([string]$branchName) {
@@ -89,6 +90,10 @@ class GIT {
     
         git checkout -b $branchName
     
+    }
+    [void] ShowChanges() { 
+        Write-Host ">>> Files Changed: "; Write-Host("-" * 50)
+        (git changes) | ForEach-Object { Write-Host $_ }
     }    
     [void] Commit() { $this.Commit("") }
     [void] Commit([string]$commitMessage) {
