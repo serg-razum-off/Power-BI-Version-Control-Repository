@@ -6,13 +6,10 @@ class PBIT {
             sergiy.razumov@gmail.com
         .DESCRIPTION
             ClassName PBIT == Power BI Tools
-            PowerShell Class to handle interactions with pbi-tools --> JSON splitted .pbx 
-            currently one Proj for one pbi file --> number of changes is high. Several pbixes in one proj will mess up VC
-
-            Methods are clustered into categories:  
-                $this.inner_
-                $this.pbiTPathools_
-                $this.managementTool_
+            docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
+            PowerShell Class to handle automated interactions with pbi-tools, based on JSON schemas 
+            currently one Proj for one pbi file in the directory; later init Class by name can be added.
+            ❗ work with only one file at the moment 
 
         .EXAMPLE
             $var_class = [pbit]::new()
@@ -33,13 +30,12 @@ class PBIT {
     [string]$pbitPath
 
     #TODO: For lining up visuals
-    #   ❓❓ This, probably, is going to land in one of the Classes for .pbix management
-
+    #   ❓❓ Belowlocated props, are going to land in one of the .Net Classes for .pbix management
     [int]$filtersLine_Y     
     [int]$firstLine_Y     
     [int]$secondLine_Y
 
-    [bool]$verbose = $false  # set to $true when initing the Class, if needed
+    [bool]$verbose = $false  
     [scriptblock] $writeVerboseFunction
     
     #============== #CONSTRUCTORS ===========================
@@ -108,7 +104,6 @@ class PBIT {
     #📚 README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
     #📝all setting of personal aliases were moved to $PROFILE 
     #--------------- Pbi-tools addressing  ----------------
-    #   docs for pbi-tools: https://pbi.tools/ ; https://pbi.tools/tutorials/getting-started-cli.html 
 
     [void] Extract() {
         <#
@@ -169,7 +164,7 @@ class PBIT {
         &this.writeVerboseFunction (">>> PBIT: Launched... `n"); &this.writeVerboseFunction ( $("-" * 50)   )
         pbi-tools.exe launch-pbi $this.pbitPath
     }
-    [void] Launch() { $this.Launch("") } # method overload to solve omittable param. $pbixType=$null doesn't work
+    [void] Launch() { $this.Launch("") } # method overload to solve omittable param. 
     [void] Launch($pbixType) {
         <#
             .DESCRIPTION
