@@ -44,11 +44,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = '$PROFILE bugfix'
+$commHeaderMessage = 'PBIT --> Launch() updated'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> bug fixed in the prompt()
+'>> now works with several .pbix-es launched
 '
 
 

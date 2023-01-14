@@ -199,13 +199,18 @@ class PBIT {
     [void] WatchMode() {
         #SR: Turning ON the watch mode
         try {
-            $PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId
+            # $PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId #--> this will work only when 1 .pbx is launched
+            $thisPbxPathLeaf = splt $this.pbixPath -Leaf
+            $PrId = (
+                (pbi-tools.exe info | ConvertFrom-Json | Select-Object pbisessions ).pbisessions | 
+                    Where-Object { (splt $_.pbixPath -Leaf) -eq ( $thisPbxPathLeaf ) }
+            ).ProcessId 
         }
         catch {
             throw ">>> use method Launch to start .pbix first, attach Watch Mode only after that..."
         }
 
-        & $this.writeVerboseFunction ">>> Watch Mode is on. Save report in PBI and see changes in a VS Code Git Tab"
+        & $this.writeVerboseFunction ">>> Watch Mode is on {PrId=$PrId}. Save report in PBI and see changes in a VS Code Git Tab"
         & $this.writeVerboseFunction "--> Ctrt + C to Quit Watch Mode"
         
         pbi-tools.exe extract -pid $PrId -watch
