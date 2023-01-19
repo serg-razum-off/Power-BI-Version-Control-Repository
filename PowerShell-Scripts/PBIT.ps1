@@ -45,7 +45,6 @@ class PBIT {
         $this.verbose = $false
         $this.SetVerbose()
         $this.inner_Init()
-
     }
     # for named parameters
     PBIT([hashtable]$params) { 

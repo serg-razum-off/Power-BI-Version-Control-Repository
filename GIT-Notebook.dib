@@ -17,7 +17,7 @@
 . ./PowerShell-Scripts/pbit.ps1; 
 . ./PowerShell-Scripts/git.ps1; 
 # $pbx = [pbix]::new($true)
-$git = [git]::new(@{_auto=$true; _verbose=$true})
+$git = [git]::new()
 
 #!markdown
 

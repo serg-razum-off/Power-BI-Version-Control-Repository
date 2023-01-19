@@ -1,5 +1,5 @@
 class GIT {
-<#
+    <#
         SR [06-01-2023]: 
             This class contains methods for automating git CLI commands.
         params: 
@@ -21,11 +21,12 @@ class GIT {
     # Constructors
     GIT() {
         $this.auto = $true
-        $this.verbose = $false            
+        $this.verbose = $true
         $this.SetVerbose()
     }
     # for named parameters
     GIT( [hashtable]$params) {
+        
         $this.auto = $null -eq $params['_auto'] ? $true : $params['_auto']
         $this.verbose = $null -eq $params['_verbose'] ? $true : $params['_verbose']
         $this.SetVerbose()
@@ -100,7 +101,7 @@ class GIT {
         try {
             #   Show changes
             $currBr = git branch --show-current 
-            & $this.writeVerboseFunction ">>> Commit on Branch |" + $( $currBr ) + "|" + " <<<"
+            & $this.writeVerboseFunction (  ">>> Committing on Branch -- " + $( $currBr ) + " --" + " <<<"    )
      
          
             if (!$this.auto) {
