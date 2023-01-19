@@ -44,11 +44,11 @@ $pbx.pbiTools_Build()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'PBIT --> Launch() updated'
+$commHeaderMessage = 'Minor changes'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> now works with several .pbix-es launched
+'>> minor changes in $PROFILE
 '
 
 

@@ -179,7 +179,18 @@ function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item } 
 Set-Alias -Name getm -Value Get-StartApps
 function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
 function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
-function gpt { Start-Process "https://chat.openai.com/chat" }
+function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
+function li { Start-Process "https://www.linkedin.com/in/sergiy-razumov-33670b131/" }
+function gpt {
+    $param = $args -join ' '  
+    switch  ($param) {
+        { $param -match '(emp|maha)' } { Start-Process "https://chat.openai.com/chat/924e36d4-640e-4ca5-bc83-b5a8afb90400" }
+        { $param -match '(pws|powershell).arr' } {  Start-Process "https://chat.openai.com/chat/abb9188c-cbef-4070-b2b7-a7f2a4ff6bc6" }
+        { $param -match '(pws|powershell).ref' } {  Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7" }
+        Default { Start-Process "https://chat.openai.com/chat" }
+    }
+     
+}
 function sonic { Start-Process "https://app.writesonic.com/template/40f20642-8341-45ad-9009-8b19ae3fbe92/chatsonic/a08332cd-5a45-4497-b1d7-07536b38a983" }
 function jsonv {
     param(
