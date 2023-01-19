@@ -159,12 +159,12 @@ class PBIT {
             throw
         }
         else {
-            &this.writeVerboseFunction (">>> PBIT: Compiled successfully: `n"); &this.writeVerboseFunction ( $("-" * 50)   )
-            &this.writeVerboseFunction ("$res `n"); &this.writeVerboseFunction ( $("-" * 50) )
+            & $this.writeVerboseFunction (">>> PBIT: Compiled successfully: `n"); & $this.writeVerboseFunction ( $("-" * 50)   )
+            & $this.writeVerboseFunction ("$res `n"); & $this.writeVerboseFunction ( $("-" * 50) )
         }
         
         #SR: launching
-        &this.writeVerboseFunction (">>> PBIT: Launched... `n"); &this.writeVerboseFunction ( $("-" * 50)   )
+        & $this.writeVerboseFunction (">>> PBIT: Launched... `n"); & $this.writeVerboseFunction ( $("-" * 50)   )
         pbi-tools.exe launch-pbi $this.pbitPath
     }
     [void] Launch() { $this.Launch("pbix") } # method overload to solve omittable param. 

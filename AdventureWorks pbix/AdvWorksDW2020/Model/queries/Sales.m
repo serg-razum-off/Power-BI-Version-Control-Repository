@@ -1,5 +1,5 @@
 let
-    Source = Csv.Document( Web.Contents(HttpSource & "Sales.csv"), [ Delimiter = ",", Columns = 15, Encoding = 65001, QuoteStyle = QuoteStyle.None ] ),
+    Source = Csv.Document( Web.Contents(HttpSource & "Sales.csv"), [ Delimiter = ",", Columns = 16, Encoding = 65001, QuoteStyle = QuoteStyle.None ] ),
     #"Promoted Headers" = Table.PromoteHeaders( Source, [PromoteAllScalars = true] ),
     #"Changed Type" =
         Table.TransformColumnTypes(

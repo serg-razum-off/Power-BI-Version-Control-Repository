@@ -1,1 +1,1 @@
-"https://raw.githubusercontent.com/pbi-tools/adventureworksdw2020-pbix/main/data/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+"https://raw.githubusercontent.com/pbi-tools/adventureworksdw2020-pbix/main/data/" meta [IsParameterQuery=true, List={"https://raw.githubusercontent.com/pbi-tools/adventureworksdw2020-pbix/main/data/#(lf)", "C:\Users\Sergey\Links\prj_PBI_Tools\AdventureWorks pbix\Data\#(lf)"}, DefaultValue="https://raw.githubusercontent.com/pbi-tools/adventureworksdw2020-pbix/main/data/#(lf)", Type="Text", IsParameterQueryRequired=true]
