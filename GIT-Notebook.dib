@@ -19,22 +19,6 @@
 # $pbx = [pbix]::new($true)
 $git = [git]::new(@{_auto=$true; _verbose=$true})
 
-#!pwsh
-
-$pbx | Get-Member 
-
-#!pwsh
-
-$pbx.pbiTools_Launch()
-
-#!pwsh
-
-$pbx.pbiTools_WatchMode()
-
-#!pwsh
-
-$pbx.pbiTools_Build()
-
 #!markdown
 
 ## Committing Changes
@@ -48,7 +32,7 @@ $commHeaderMessage = 'Minor changes'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> minor changes in $PROFILE
+'>> minor changes in GIT.ps1 , $Profile
 '
 
 

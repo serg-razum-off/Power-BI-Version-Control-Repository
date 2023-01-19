@@ -63,9 +63,11 @@ function shtd {
     Restart-Computer     
         
 }
-function rename ([string]$partNameFrom, [string]$partNameTo) { 
+Set-Alias -Name rn -Value Rename-Item
+Set-Alias -Name rename -Value Rename-Item
+function renameblk ([string]$partNameFrom, [string]$partNameTo) { 
     # renames files in the folder Example: {Class_API.ps1, Class_AZUR.ps1, Class_GIT.ps1} --> {API.ps1, AZUR.ps1, GIT.ps1}
-    ll -path .\PowerShell-Scripts\ -filter $partNameFrom | ForEach-Object { 
+    lsf -path .\PowerShell-Scripts\ -filter $partNameFrom | ForEach-Object { 
         Rename-Item -path $_ -NewName (
             (split-path $_ -Leaf) -replace $partNameFrom, $partNameTo
         ) 
@@ -222,7 +224,7 @@ function hd { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }func
 
 
 # -------------------------- SETTING UP REQUIRED MODULES ------------------------------
-# requiref modules are here. Yes to [A]ll  on install request 
+# requiref modules are here. Yes to [A]lsf  on install request 
 # more on Pester https://pester.dev/docs/introduction/installation 
 # ⭐⭐⭐⭐⭐     
 $modulesListToInstall = @('ImportExcel', 'PowerShellCookbook', 'Pester')

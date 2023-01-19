@@ -1,5 +1,5 @@
 class GIT {
-    <#
+<#
         SR [06-01-2023]: 
             This class contains methods for automating git CLI commands.
         params: 
@@ -99,7 +99,8 @@ class GIT {
     [void] Commit([string]$commitMessage) {
         try {
             #   Show changes
-            & $this.writeVerboseFunction ">>> Commit on Branch |" + ( git branch --show-current ) + "|" + " <<<"
+            $currBr = git branch --show-current 
+            & $this.writeVerboseFunction ">>> Commit on Branch |" + $( $currBr ) + "|" + " <<<"
      
          
             if (!$this.auto) {
