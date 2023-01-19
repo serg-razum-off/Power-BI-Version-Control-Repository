@@ -184,11 +184,15 @@ function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')"
 function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
 function li { Start-Process "https://www.linkedin.com/in/sergiy-razumov-33670b131/" }
 function gpt {
+    <# chat gpt access  #>
     $param = $args -join ' '  
     switch  ($param) {
         { $param -match '(emp|maha)' } { Start-Process "https://chat.openai.com/chat/924e36d4-640e-4ca5-bc83-b5a8afb90400" }
+        { $param -match '(engl)' } { Start-Process "https://chat.openai.com/chat/fcefb111-8669-4323-9a34-c6f164c1569c" }
         { $param -match '(pws|powershell).arr' } {  Start-Process "https://chat.openai.com/chat/abb9188c-cbef-4070-b2b7-a7f2a4ff6bc6" }
         { $param -match '(pws|powershell).ref' } {  Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7" }
+        { $param -match '(pws|powershell).(swi|swt)' } {  Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7" }
+        { $param -match '(C#|convert|cnv|conv)?.*(json|jsn).*' } {  Start-Process "https://chat.openai.com/chat/d6573a78-724a-4a16-b625-979dd5a53f17" }
         Default { Start-Process "https://chat.openai.com/chat" }
     }
      
@@ -204,7 +208,7 @@ function jsonv {
         "tree" { Start-Process "https://jsonformatter.org/json-viewer" }
         "tbl" { Start-Process "https://jsongrid.com/json-formatter" }
         "ext" { Start-Process "https://jsonhero.io/" }
-        Default {}
+        Default {<# tree view is default #>}
     }
 }
 function dxg 
