@@ -1,7 +1,7 @@
 $script:ProjectSettingsPath = "D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\!ProjectSettings.json"
 
 class PBIT {
-    <#
+<#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -14,6 +14,7 @@ class PBIT {
         .EXAMPLE
             $var_class = [pbit]::new()
             $var_class = [pbit]::new($true)
+            #todo: make all overload-type-methods() call engine-methods() with meaningfull parameters (@{}, "defValue"...)
 
         .Notes
             basic ProjectSettings are stored in ./projectSettings/ProjectSettings.json
@@ -30,7 +31,7 @@ class PBIT {
     [string]$pbitPath
 
     #TODO: For lining up visuals
-    #   ❓❓ Belowlocated props, are going to land in one of the .Net Classes for .pbix management
+    #   ❓❓ Belowlocated props, are going to land in one of the .Net Classes for .pbix management. Default values for them already landed in Projects.json
     [int]$filtersLine_Y     
     [int]$firstLine_Y     
     [int]$secondLine_Y
@@ -52,10 +53,15 @@ class PBIT {
         $this.SetVerbose()
         $this.inner_Init()
     }
-    
-    # Setter method for the $verbose property
-    #   SR[2023-01-08] this method didn't want to work with Set_Verbose ([bool]$_verbose) signature
+     
+    #==================== #METHODS ===========================
+    #📚 README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
+    #📝all setting of personal aliases were moved to $PROFILE 
+
+    #region ---------------- ✨ Internal Methods ---------------------- 
     [void] SetVerbose() {
+        # Setter method for the $verbose property
+        #   SR[2023-01-08] this method didn't want to work with Set_Verbose ([bool]$_verbose) signature
         if ($this.verbose) {
             $this.writeVerboseFunction = { 
                 param($message)
@@ -69,8 +75,7 @@ class PBIT {
                 & Write-Verbose $message
             } 
         }
-    }
-   
+    }   
     hidden [void] inner_Init() {
         # writing, depending on $VerbosePreference settings 
         & $this.writeVerboseFunction "=== Starting PBIX Cls inner_Init ===" 
@@ -100,10 +105,9 @@ class PBIT {
         & $this.writeVerboseFunction "=== PBIX Cls inner_Init Completed ===" 
         
     }
-    #==================== #METHODS ===========================
-    #📚 README: all major Methods are equipped with empty callers -- when no param is passed, method is called from the outside as: $this.git_myMethod()
-    #📝all setting of personal aliases were moved to $PROFILE 
-    #--------------- Pbi-tools addressing  ----------------
+    #endregion
+    
+    #region ---------------- 🔧 Pbi-tools functionality  ---------------- 
 
     [void] Extract() {
         <#
@@ -164,7 +168,7 @@ class PBIT {
         &this.writeVerboseFunction (">>> PBIT: Launched... `n"); &this.writeVerboseFunction ( $("-" * 50)   )
         pbi-tools.exe launch-pbi $this.pbitPath
     }
-    [void] Launch() { $this.Launch("") } # method overload to solve omittable param. 
+    [void] Launch() { $this.Launch("pbix") } # method overload to solve omittable param. 
     [void] Launch($pbixType) {
         <#
             .DESCRIPTION
@@ -174,7 +178,7 @@ class PBIT {
 
         $trgFile = $null
 
-        if ($pbixType -eq "" -or $pbixType -eq "pbix") {
+        if ($pbixType -eq "pbix") {
             $trgFile = $this.pbixPath
         }
         elseif ($pbixType -eq "PBIT") {
@@ -203,7 +207,7 @@ class PBIT {
             $thisPbxPathLeaf = splt $this.pbixPath -Leaf
             $PrId = (
                 (pbi-tools.exe info | ConvertFrom-Json | Select-Object pbisessions ).pbisessions | 
-                    Where-Object { (splt $_.pbixPath -Leaf) -eq ( $thisPbxPathLeaf ) }
+                Where-Object { (splt $_.pbixPath -Leaf) -eq ( $thisPbxPathLeaf ) }
             ).ProcessId 
         }
         catch {
@@ -215,8 +219,9 @@ class PBIT {
         
         pbi-tools.exe extract -pid $PrId -watch
     }
+    #endregion 
 
-    #---------------- Managerment Plan --------------------
+    #region ---------------- 🛒 Managerment Plan ----------------------- 
     [void] managementPlan_UpdateManagementPlanTables() {    
         <#
             .DESCRIPTION
@@ -289,4 +294,12 @@ Specification" | Set-Content $path
             | Set-Content $path
         }        
     } # } UpdateManagementPlanTables   
+    #endregion
+
+    #region ---------------- 📊 Design Objects .pbix -------------------- 
+    [void] AddPage (){}
+    [void] AddVisualObject (){        <# prop validate {chart, slicer, filter} #>    }
+    [void] AddMeasure (){<# service Method; can be used solely or with integration with ImportMeasures Meth #>}
+    [void] AddQuery () {<# when a Qwr is added to Model, PowerBI can create table itself #> }
+    #endregion
 } 

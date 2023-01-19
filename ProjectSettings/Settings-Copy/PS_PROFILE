@@ -5,21 +5,14 @@
 # ======================================= SETTINGS ========================================
 Set-StrictMode -Version Latest # for all scrips from PWS Cookbook use Strict Mode -VErsion 3
 $ErrorActionPreference = "Stop"
-$PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #call it, of course $lstOut
+$PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #last result that was cw out;  $lstOut to see
 
 
-# Setting my Aliases --> scriping aliases are duplicated in Classes to have Aliacses unfolded in other environments
+# Setting my Aliases --> #❗ scriping aliases should be duplicated in Classes to have Aliacses unfolded in other environments
 # ⭐⭐⭐⭐⭐ ==> importance of functions
 
 #region Functions-helpers
 # ===================================== COMMON HELPERS =====================================
-Function IIf($If, $IfTrue, $IfFalse) {
-    # inline IF
-    # src: https://stackoverflow.com/questions/25682507/powershell-inline-if-iif
-    If ($If) { If ($IfTrue -is "ScriptBlock") { &$IfTrue } Else { $IfTrue } }
-    Else { If ($IfFalse -is "ScriptBlock") { &$IfFalse } Else { $IfFalse } }
-}
-#❗ #todo: #rewrite all IIF usage to ternary
 
 #  SAVE SETTINGS
 function save-settings {
@@ -40,9 +33,10 @@ Set-Alias -Name 'touch' -Value New-Item -Scope Global
 Set-Alias -Name 'grep' -Value Select-String -Scope Global
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
-Set-Alias -Name 'ifEx' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
+Set-Alias -Name 'testp' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
 Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCookbook Module installed  ⭐⭐⭐⭐⭐
 Set-Alias -Name 'grid' -Value Out-GridView -Scope Global 
+Set-Alias -Name 'splt' -Value Split-Path -Scope Global 
 
 
 function cw { Write-Host $args }
@@ -200,6 +194,10 @@ function jsonv {
         Default {}
     }
 }
+function dxg 
+#keep in mind structure of the DaxGuide site: /group/section. Groups are dt: datatypes; op: operators; st: statements; blank: functions
+{ Start-Process "https://dax.guide/$($args -join '/')" } 
+
 #endregion
 
 #region fun
@@ -208,7 +206,7 @@ function Start-tekken3 { Start-Process "https://www.retrogames.cc/psx-games/tekk
 
 function Start-MK3 { Start-Process "https://www.retrogames.cc/psx-games/mortal-kombat-3.html" }
 # function hdtv { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }
-function hd { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }function yt { $lnk = iif ($args.Length -eq 0) "https://www.youtube.com/" "https://www.youtube.com/results?search_query=$($args -join ' ')"; Start-Process $lnk }
+function hd { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }function yt { $lnk = $args.Length -eq 0 ? "https://www.youtube.com/" : "https://www.youtube.com/results?search_query=$($args -join ' ')"; Start-Process $lnk }
 #endregion
 
 
@@ -254,7 +252,7 @@ function prompt {
         $mainBrName = ([regex]::match((git symbolic-ref refs/remotes/origin/HEAD), "/m\w+").value).Substring(1)
         try {
             $compMain = git rev-list --left-right --count origin/$mainBrName...origin/$currBr
-            $mainBrAhead = iif (    $compMain[1] -eq [byte][char]9  ) ( $compMain[0] ) ( $compMain[0] + $compMain[1] )
+            $mainBrAhead = $compMain[1] -eq [byte][char]9  ? ( $compMain[0] ) : ( $compMain[0] + $compMain[1] )
             if ($compMain.Length -le 3) {
                 $currBrAhead = $compMain[2]            
             }
