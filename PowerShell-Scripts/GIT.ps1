@@ -145,6 +145,8 @@ class GIT {
         
         git pull origin $currBranch
         git push origin $currBranch
+        & $this.writeVerboseFunction ">>> SyncBranch: Successfull <<<"
+
     }
     [void] MergeToMain([string]$param) {
         #   Merge of current branch to Master --> can be done by priviliged users only

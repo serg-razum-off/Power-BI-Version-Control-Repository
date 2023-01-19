@@ -28,11 +28,11 @@ $git = [git]::new()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Minor changes'
+$commHeaderMessage = 'Minor changes to GIT '
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> minor changes in GIT.ps1 , $Profile
+'>> minor changes
 '
 
 
