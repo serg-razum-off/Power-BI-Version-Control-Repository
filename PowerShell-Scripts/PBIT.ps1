@@ -42,7 +42,7 @@ class PBIT {
     #============== #CONSTRUCTORS ===========================
     #def
     PBIT() {
-        $this.verbose = $false
+        $this.verbose = $true
         $this.SetVerbose()
         $this.inner_Init()
     }

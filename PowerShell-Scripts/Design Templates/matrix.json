@@ -1,0 +1,68 @@
+{
+	"name": "c0bb4ed98375260c571d",
+	"layouts": [
+		{
+			"id": 0,
+			"position": {
+				"x": 10,
+				"y": 0,
+				"width": 280,
+				"height": 280,
+				"z": 0
+			}
+		}
+	],
+	"singleVisual": {
+		"visualType": "tableEx",
+		"projections": {
+			"Values": [
+				{
+					"queryRef": "Sales.SalesAmount"
+				},
+				{
+					"queryRef": "Product.Category"
+				}
+			]
+		},
+		"prototypeQuery": {
+			"Version": 2,
+			"From": [
+				{
+					"Name": "s",
+					"Entity": "Sales",
+					"Type": 0
+				},
+				{
+					"Name": "p",
+					"Entity": "Product",
+					"Type": 0
+				}
+			],
+			"Select": [
+				{
+					"Measure": {
+						"Expression": {
+							"SourceRef": {
+								"Source": "s"
+							}
+						},
+						"Property": "SalesAmount"
+					},
+					"Name": "Sales.SalesAmount"
+				},
+				{
+					"Column": {
+						"Expression": {
+							"SourceRef": {
+								"Source": "p"
+							}
+						},
+						"Property": "Category"
+					},
+					"Name": "Product.Category"
+				}
+			]
+		},
+		"drillFilterOtherVisuals": true
+	}
+}

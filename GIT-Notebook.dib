@@ -16,8 +16,15 @@
 
 . ./PowerShell-Scripts/pbit.ps1; 
 . ./PowerShell-Scripts/git.ps1; 
-# $pbx = [pbix]::new($true)
+
 $git = [git]::new()
+$pbit = [pbit]::new()
+
+$classes = @{"git"=$git; "pbit"=$pbit}
+
+#!pwsh
+
+$classes.pbit.pbixPath
 
 #!markdown
 
@@ -28,11 +35,12 @@ $git = [git]::new()
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Minor changes to GIT '
+$commHeaderMessage = 'Classes collection implemented; Design Automation: '
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> minor changes
+'>> GIT-Notebook
+>> some minor changes to $PROFILE added
 '
 
 
@@ -42,8 +50,8 @@ $commMsg
 
 #!pwsh
 
-$git.Commit($commMsg)
-$git.SyncBranch()
+$classes.git.Commit($commMsg)
+$classes.git.SyncBranch()
 
 #!markdown
 
