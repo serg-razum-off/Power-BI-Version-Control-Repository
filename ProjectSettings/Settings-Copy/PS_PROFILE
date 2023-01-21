@@ -9,7 +9,7 @@ $PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #last result tha
 
 
 # Setting my Aliases --> #❗ scriping aliases should be duplicated in Classes to have Aliacses unfolded in other environments
-# ⭐⭐⭐⭐⭐ ==> importance of functions
+# ⭐⭐⭐⭐⭐ ==> importance of functions; most imptt are marked 5 Stars
 
 #region Functions-helpers
 # ===================================== COMMON HELPERS =====================================
@@ -30,6 +30,7 @@ function save-settings {
 # ================== File System Helpers ============================
 Set-Alias -Name 'cat' -Value Get-Content -Scope Global
 Set-Alias -Name 'touch' -Value New-Item -Scope Global
+function touchd { New-Item -Path ($args -Join '\') -Force }
 Set-Alias -Name 'grep' -Value Select-String -Scope Global
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
@@ -38,31 +39,36 @@ Set-Alias -Name 'prop' -Value Show-Object -Scope Global # requires PowerShellCoo
 Set-Alias -Name 'grid' -Value Out-GridView -Scope Global 
 Set-Alias -Name 'splt' -Value Split-Path -Scope Global 
 
-
 function cw { Write-Host $args }
-function grepr { Get-ChildItem -rec | grep @args } # from Holmes    ⭐⭐⭐⭐⭐
+function grepr { Get-ChildItem -rec | grep @args } # from Holmes --> this is a PWS ProjectSearch    ⭐⭐⭐⭐⭐
 
 # show only files
 function lsf { Get-ChildItem -File @args } 
 function lsd { Get-ChildItem -Directory @args } 
 
-# ⭐⭐⭐ list Errs in th session ⬇⬇
-function lse { try { 0..($Error.Count - 1) | ForEach-Object { "[$($_)]--> [$($Error[$_])]" } } catch { "No Errs yet... bad worker"; $error.clear() } }   
+function lse { 
+    # list Errs in th session 
+    try { 0..($Error.Count - 1) | ForEach-Object { "[$($_)]--> [$($Error[$_])]" } } catch { "No Errs yet... bad worker"; $error.clear() } 
+}   
 
-# ⭐⭐⭐ displays details about requested Err ⬇⬇
-function lsed ([int]$ErrIdx) { if ($null -ne $ErrIdx) { $Error[$ErrIdx] | Get-Error; break } Get-Error } 
+function lsed (
+    # displays details about requested Err    
+    [int]$ErrIdx) {
+    if ($null -ne $ErrIdx) { $Error[$ErrIdx] | Get-Error; break } Get-Error 
+} 
 function lsec { $error.clear() }
-# ⭐⭐⭐ closes all opened apps and shuts the PC down ⬇⬇
+
 function shtd {     
+    # closes all opened apps and shuts the PC down 
     param(
         [parameter (Mandatory = $true)]         [ ValidateSet('RestartPC', 'ShutDownPC')]            [string] $TypeOf 
     )
     if ($TypeOf -eq 'ShutDownPC') 
     {	(get-process | Where-Object { $_.mainwindowtitle -ne "" -and $_.processname -ne "powershell" } ) | stop-process; stop-computer -computername localhost -Force }
         
-    Restart-Computer     
-        
+    Restart-Computer             
 }
+
 Set-Alias -Name rn -Value Rename-Item
 Set-Alias -Name rename -Value Rename-Item
 function renameblk ([string]$partNameFrom, [string]$partNameTo) { 
@@ -186,13 +192,13 @@ function li { Start-Process "https://www.linkedin.com/in/sergiy-razumov-33670b13
 function gpt {
     <# chat gpt access  #>
     $param = $args -join ' '  
-    switch  ($param) {
+    switch ($param) {
         { $param -match '(emp|maha)' } { Start-Process "https://chat.openai.com/chat/924e36d4-640e-4ca5-bc83-b5a8afb90400" }
         { $param -match '(engl)' } { Start-Process "https://chat.openai.com/chat/fcefb111-8669-4323-9a34-c6f164c1569c" }
-        { $param -match '(pws|powershell).arr' } {  Start-Process "https://chat.openai.com/chat/abb9188c-cbef-4070-b2b7-a7f2a4ff6bc6" }
-        { $param -match '(pws|powershell).ref' } {  Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7" }
-        { $param -match '(pws|powershell).(swi|swt)' } {  Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7" }
-        { $param -match '(C#|convert|cnv|conv)?.*(json|jsn).*' } {  Start-Process "https://chat.openai.com/chat/d6573a78-724a-4a16-b625-979dd5a53f17" }
+        { $param -match '(pws|powershell).arr' } { Start-Process "https://chat.openai.com/chat/abb9188c-cbef-4070-b2b7-a7f2a4ff6bc6" }
+        { $param -match '(pws|powershell).ref' } { Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7" }
+        { $param -match '(pws|powershell).(swi|swt)' } { Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7" }
+        { $param -match '(C#|convert|cnv|conv)?.*(json|jsn)?.*' } { Start-Process "https://chat.openai.com/chat/6a1d1e1d-af62-41d8-bfb5-e91daedcfef5" }
         Default { Start-Process "https://chat.openai.com/chat" }
     }
      
@@ -208,7 +214,7 @@ function jsonv {
         "tree" { Start-Process "https://jsonformatter.org/json-viewer" }
         "tbl" { Start-Process "https://jsongrid.com/json-formatter" }
         "ext" { Start-Process "https://jsonhero.io/" }
-        Default {<# tree view is default #>}
+        Default { <# tree view is default #> }
     }
 }
 function dxg 
@@ -281,9 +287,7 @@ function prompt {
             ## 1 identified: currBranch was created, but not yet pushed to ORIGIN
             $mainBrAhead = '-'
             $currBrAhead = '-'
-        }
-
-        
+        }        
         
         Write-Host -NoNewline -BackgroundColor Green -ForegroundColor Black `
             "[$(git branch --show-current)]±($($currBrAhead);$($mainBrAhead))>>"
