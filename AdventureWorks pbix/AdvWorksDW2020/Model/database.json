@@ -1,5 +1,5 @@
 {
-  "name": "ef68a17f-f55f-40b6-877e-3bcbf879415c",
+  "name": "64a15682-1740-405f-9dd7-361a8ba88bfc",
   "compatibilityLevel": 1550,
   "model": {
     "culture": "en-US",
@@ -80,10 +80,6 @@
           {
             "name": "PBI_ResultType",
             "value": "Text"
-          },
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
           }
         ]
       },

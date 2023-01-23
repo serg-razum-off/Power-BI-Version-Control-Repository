@@ -10,21 +10,23 @@
 
 #!markdown
 
-## Init PBIX Class
+## Init GIT Class
 
 #!pwsh
 
-. ./PowerShell-Scripts/pbit.ps1; 
-. ./PowerShell-Scripts/git.ps1; 
+# identify ProjectRoot
+$projectRoot = ""
 
+ 1..10 |  % { $path=(('..\' * $_) + '\ProjectSettings\!ProjectSettings.json'); if (Test-Path $path ) { $projectRoot = (cat $path | ConvertFrom-Json ).projectRoot ; return  }  }  
+
+Write-Host $projectRoot;  
+
+#!pwsh
+
+. $projectRoot/PowerShell-Scripts/git.ps1; 
 $git = [git]::new()
-$pbit = [pbit]::new()
 
 $classes = @{"git"=$git; "pbit"=$pbit}
-
-#!pwsh
-
-$classes.pbit.pbixPath
 
 #!markdown
 

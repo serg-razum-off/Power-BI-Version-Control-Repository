@@ -1,7 +1,27 @@
-$script:ProjectSettingsPath = "D:\Projects\PBI Tools\Power-BI-Version-Control-repository\ProjectSettings\!ProjectSettings.json"
+# locating ProjectRoot
+
+$projectRoot = ""
+1..10 | ForEach-Object { $path = (('..\' * $_) + '\ProjectSettings\!ProjectSettings.json'); if (Test-Path $path ) { $projectRoot = (Get-Content $path | ConvertFrom-Json ).projectRoot ; return } }
+
+$script:ProjectSettingsPath = $projectRoot + "\ProjectSettings\!ProjectSettings.json"
+
+# --------------- Aliases, helpers ------------------
+Set-Alias -Name 'cat' -Value Get-Content -Scope Global
+Set-Alias -Name 'touch' -Value New-Item -Scope Global
+Set-Alias -Name 'grep' -Value Select-String -Scope Global
+Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
+Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
+Set-Alias -Name 'testp' -Value Test-Path -Scope Global # checks if exists -- paths, files, variables
+Set-Alias -Name 'splt' -Value Split-Path -Scope Global 
+Set-Alias -Name 'cw' -Value Write-Host -Scope Global 
+function cw { Write-Host $args }
+function lsf { Get-ChildItem -File @args } 
+function lsd { Get-ChildItem -Directory @args } 
+
+# --------------- Aliases, helpers end ------------------
 
 class PBIT {
-<#
+    <#
         .AUTHOR
             sergiy.razumov@gmail.com
         .DESCRIPTION
@@ -201,9 +221,10 @@ class PBIT {
     }
     [void] WatchMode() {
         #SR: Turning ON the watch mode
+        $thisPbxPathLeaf = splt $this.pbixPath -Leaf
+        $PrId = ""
         try {
             # $PrId = (pbi-tools.exe info | ConvertFrom-Json).pbiSessions.ProcessId #--> this will work only when 1 .pbx is launched
-            $thisPbxPathLeaf = splt $this.pbixPath -Leaf
             $PrId = (
                 (pbi-tools.exe info | ConvertFrom-Json | Select-Object pbisessions ).pbisessions | 
                 Where-Object { (splt $_.pbixPath -Leaf) -eq ( $thisPbxPathLeaf ) }
@@ -212,9 +233,12 @@ class PBIT {
         catch {
             throw ">>> use method Launch to start .pbix first, attach Watch Mode only after that..."
         }
+        if ($null -eq $PrId) {
+            throw ">>> use method Launch to start .pbix first, attach Watch Mode only after that..."
+        }
 
-        & $this.writeVerboseFunction ">>> Watch Mode is on {PrId=$PrId}. Save report in PBI and see changes in a VS Code Git Tab"
-        & $this.writeVerboseFunction "--> Ctrt + C to Quit Watch Mode"
+        & $this.writeVerboseFunction ">>> Watch Mode is on {PrId=$($PrId)}. Save report in PBI and see changes in a VS Code Git Tab"
+        & $this.writeVerboseFunction "--> Ctrt + C to Quit Watch Mode; in .dib files press stop button"
         
         pbi-tools.exe extract -pid $PrId -watch
     }
@@ -296,9 +320,9 @@ Specification" | Set-Content $path
     #endregion
 
     #region ---------------- 📊 Design Objects .pbix -------------------- 
-    [void] AddPage (){}
-    [void] AddVisualObject (){        <# prop validate {chart, slicer, filter} #>    }
-    [void] AddMeasure (){<# service Method; can be used solely or with integration with ImportMeasures Meth #>}
-    [void] AddQuery () {<# when a Qwr is added to Model, PowerBI can create table itself #> }
+    [void] AddPage () {}
+    [void] AddVisualObject () { <# prop validate {chart, slicer, filter} #> }
+    [void] AddMeasure () { <# service Method; can be used solely or with integration with ImportMeasures Meth #> }
+    [void] AddQuery () { <# when a Qwr is added to Model, PowerBI can create table itself #> }
     #endregion
 } 
