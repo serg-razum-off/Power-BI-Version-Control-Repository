@@ -34,7 +34,7 @@ $pbit.Launch()
 
 #!pwsh
 
-Start-Sleep -Seconds 7
+Start-Sleep -Seconds 9
 $pbit.WatchMode()
 
 #!markdown

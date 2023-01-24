@@ -1,0 +1,152 @@
+{
+  "projectionOrdering": {
+    "Values": [
+      0,
+      3,
+      1,
+      2
+    ]
+  },
+  "queryMetadata": {
+    "Select": [
+      {
+        "Restatement": "SalesAmount",
+        "Name": "Sales.SalesAmount",
+        "Type": 1
+      },
+      {
+        "Restatement": "Category",
+        "Name": "Product.Category",
+        "Type": 2048
+      },
+      {
+        "Restatement": "City",
+        "Name": "Customer.Geography.City",
+        "Type": 2048,
+        "DataCategory": 2
+      },
+      {
+        "Restatement": "SumSalesQuantity",
+        "Name": "Sales.SumSalesQuantity",
+        "Type": 3
+      }
+    ]
+  },
+  "visualElements": [
+    {
+      "DataRoles": [
+        {
+          "Name": "Values",
+          "Projection": 0,
+          "isActive": false
+        },
+        {
+          "Name": "Values",
+          "Projection": 3,
+          "isActive": false
+        },
+        {
+          "Name": "Values",
+          "Projection": 1,
+          "isActive": false
+        },
+        {
+          "Name": "Values",
+          "Projection": 2,
+          "isActive": false
+        }
+      ]
+    }
+  ],
+  "selects": [
+    {
+      "displayName": "SalesAmount",
+      "queryName": "Sales.SalesAmount",
+      "roles": {
+        "Values": true
+      },
+      "type": {
+        "category": null,
+        "underlyingType": 258
+      },
+      "expr": {
+        "Measure": {
+          "Expression": {
+            "SourceRef": {
+              "Entity": "Sales"
+            }
+          },
+          "Property": "SalesAmount"
+        }
+      }
+    },
+    {
+      "displayName": "Category",
+      "queryName": "Product.Category",
+      "roles": {
+        "Values": true
+      },
+      "type": {
+        "category": null,
+        "underlyingType": 1
+      },
+      "expr": {
+        "Column": {
+          "Expression": {
+            "SourceRef": {
+              "Entity": "Product"
+            }
+          },
+          "Property": "Category"
+        }
+      }
+    },
+    {
+      "displayName": "City",
+      "queryName": "Customer.Geography.City",
+      "roles": {
+        "Values": true
+      },
+      "type": {
+        "category": "City",
+        "underlyingType": 6620161
+      },
+      "expr": {
+        "HierarchyLevel": {
+          "Expression": {
+            "Hierarchy": {
+              "Expression": {
+                "SourceRef": {
+                  "Entity": "Customer"
+                }
+              },
+              "Hierarchy": "Geography"
+            }
+          },
+          "Level": "City"
+        }
+      }
+    },
+    {
+      "displayName": "SumSalesQuantity",
+      "queryName": "Sales.SumSalesQuantity",
+      "roles": {
+        "Values": true
+      },
+      "type": {
+        "category": null,
+        "underlyingType": 260
+      },
+      "expr": {
+        "Measure": {
+          "Expression": {
+            "SourceRef": {
+              "Entity": "Sales"
+            }
+          },
+          "Property": "SumSalesQuantity"
+        }
+      }
+    }
+  ]
+}

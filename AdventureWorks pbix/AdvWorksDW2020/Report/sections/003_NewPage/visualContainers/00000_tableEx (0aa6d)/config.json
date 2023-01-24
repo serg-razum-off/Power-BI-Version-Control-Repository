@@ -1,0 +1,106 @@
+{
+  "name": "0aa6dd8ab9eea4ad2313",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 9.7536945812807883,
+        "y": 0,
+        "z": 0,
+        "width": 464.6305418719212,
+        "height": 339.60591133004925
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "tableEx",
+    "projections": {
+      "Values": [
+        {
+          "queryRef": "Sales.SalesAmount"
+        },
+        {
+          "queryRef": "Sales.SumSalesQuantity"
+        },
+        {
+          "queryRef": "Product.Category"
+        },
+        {
+          "queryRef": "Customer.Geography.City"
+        }
+      ]
+    },
+    "prototypeQuery": {
+      "Version": 2,
+      "From": [
+        {
+          "Name": "s",
+          "Entity": "Sales",
+          "Type": 0
+        },
+        {
+          "Name": "p",
+          "Entity": "Product",
+          "Type": 0
+        },
+        {
+          "Name": "c",
+          "Entity": "Customer",
+          "Type": 0
+        }
+      ],
+      "Select": [
+        {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "s"
+              }
+            },
+            "Property": "SalesAmount"
+          },
+          "Name": "Sales.SalesAmount"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "p"
+              }
+            },
+            "Property": "Category"
+          },
+          "Name": "Product.Category"
+        },
+        {
+          "HierarchyLevel": {
+            "Expression": {
+              "Hierarchy": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "c"
+                  }
+                },
+                "Hierarchy": "Geography"
+              }
+            },
+            "Level": "City"
+          },
+          "Name": "Customer.Geography.City"
+        },
+        {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "s"
+              }
+            },
+            "Property": "SumSalesQuantity"
+          },
+          "Name": "Sales.SumSalesQuantity"
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
