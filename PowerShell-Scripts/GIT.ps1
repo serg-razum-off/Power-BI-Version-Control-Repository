@@ -150,31 +150,12 @@ class GIT {
     }
     [void] MergeToMain() {
         #   Merge of current branch to Master --> can be done by priviliged users only
-        & $this.writeVerboseFunction ">>> SyncBranch <<<"
-    
-        $currUser = git config user.email
-        $allowMergeMain = $false
-    
-        $privilegedUsers = Import-Excel (Get-ChildItem -Path $this.projectRoot *plan.xlsx* -r) `
-            -WorksheetName "PrivelegedUsers" `
-            -StartRow 1
-    
-        ( $privilegedUsers | Where-Object { $_.MergeMain -eq $true } ).User `
-        | ForEach-Object { 
-            if ($_ -eq $currUser) { $allowMergeMain = $true ; break } 
-        }
-    
-        if (-not $allowMergeMain) { Write-Host ">>> No Access to this Method..."; break }
-    
         $currBranch = git branch --show-current
-        $cbUpper = $currBranch.ToUpper()
-        if ((Read-Host -Prompt "Are you sure want to merge current branch >> $cbUpper << into main? [Y] / N") -eq "N") { break }
-        
-        git checkout main
-        git pull
-        git merge $currBranch
-        git push origin main
-        git checkout $currBranch
+        & $this.writeVerboseFunction ">>> SyncBranch {$currBranch --> main} <<<"
+    
+        <#  --------------- some logic for checking if current user is a provoliged one ---------------  #>
+    
+        git merge main $currBranch
     }    
     [void] MergeFromMain() {
         #	Merge from Master to current branch --> to FF other developers' changes
@@ -184,9 +165,7 @@ class GIT {
         $cbUpper = $currBranch.ToUpper()
         if ((Read-Host -Prompt "Are you sure want to merge Main into >> $cbUpper << ? [Y] / N") -eq "N") { break }
         
-        git checkout main
-        git pull
-        git checkout $currBranch
-        git merge main    
+        git merge main   
+        & this.writeVerboseFunction ">>> Branch merged to Main <<<"
     }
 }
