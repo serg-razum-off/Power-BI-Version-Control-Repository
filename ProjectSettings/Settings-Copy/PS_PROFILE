@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["Out-Default:OutVariable"] = "lstOut" #last result that was cw out;  $lstOut to see
 
 
-# Setting my Aliases --> #❗ scriping aliases should be duplicated in Classes to have Aliacses unfolded in other environments
+# Setting my Aliases --> #❗ scriping aliases should be duplicated in Classes to have Aliacses activated in other environments
 # ⭐⭐⭐⭐⭐ ==> importance of functions; most imptt are marked 5 Stars
 
 #region Functions-helpers
@@ -40,7 +40,7 @@ Set-Alias -Name 'grid' -Value Out-GridView -Scope Global
 Set-Alias -Name 'splt' -Value Split-Path -Scope Global 
 
 function cw { Write-Host $args }
-function grepr { Get-ChildItem -rec | grep @args } # from Holmes --> this is a PWS ProjectSearch    ⭐⭐⭐⭐⭐
+function grepr { Get-ChildItem -rec | grep @args } # from Holmes -->in  this implement it becomes a PWS ProjectSearch    ⭐⭐⭐⭐⭐
 
 # show only files
 function lsf { Get-ChildItem -File @args } 
@@ -81,7 +81,7 @@ function renameblk ([string]$partNameFrom, [string]$partNameTo) {
 }
 function home { Set-Location $HOME }
 function homel { Set-Location $HOME\links }
-function back { Set-Location - }
+function back { Set-Location - } # cd - )))
 # ================== File System Helpers: end ============================
 #endregion
 
@@ -186,7 +186,6 @@ function book ([string] $book) {
 function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   #                     ⭐⭐⭐ requires PowerShellCookbook Module installed 
 Set-Alias -Name getm -Value Get-StartApps
 function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
-function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
 function gs { Start-Process "https://www.google.com/search?q=$($args -join ' ')" }
 function li { Start-Process "https://www.linkedin.com/in/sergiy-razumov-33670b131/" }
 function gpt {

@@ -37,14 +37,13 @@ $classes = @{"git"=$git; "pbit"=$pbit}
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Classes collection implemented; Design Automation: '
+$commHeaderMessage = 'Some Minor changes: '
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
-'>> GIT-Notebook
->> some minor changes to $PROFILE added
 '
-
+>> $PROFILE
+'
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
 
