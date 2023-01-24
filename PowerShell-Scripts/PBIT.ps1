@@ -50,7 +50,7 @@ class PBIT {
     [string]$pbixPath
     [string]$pbitPath
 
-    #TODO: For lining up visuals
+    #TODO: For lining up visuals (??)
     #   ❓❓ Belowlocated props, are going to land in one of the .Net Classes for .pbix management. Default values for them already landed in Projects.json
     [int]$filtersLine_Y     
     [int]$firstLine_Y     
