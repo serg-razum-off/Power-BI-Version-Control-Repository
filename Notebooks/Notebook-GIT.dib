@@ -37,12 +37,12 @@ $classes = @{"git"=$git; "pbit"=$pbit}
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Some Minor changes: '
+$commHeaderMessage = 'Identifuing changes for PagesModification: <1>'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
 '
->> $PROFILE
+>> Minor Changes
 '
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
@@ -60,12 +60,20 @@ $classes.git.SyncBranch()
 
 #!pwsh
 
-$pbx.git_ShowBranches()
+$classes.git.ShowBranches()
+
+#!pwsh
+
+$pbx.git_NewBranch("PS_updates_learning")
 
 #!pwsh
 
 $pbx.git_SwitchBranch("PS_updates_learning")
 
+#!markdown
+
+## Merging to Main
+
 #!pwsh
 
-$pbx.git_NewBranch("PS_updates_learning")
+$   $classes.git.MergeToMain()

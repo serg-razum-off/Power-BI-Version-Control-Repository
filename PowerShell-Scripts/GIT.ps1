@@ -1,5 +1,5 @@
 class GIT {
-    <#
+<#
         SR [06-01-2023]: 
             This class contains methods for automating git CLI commands.
         params: 
@@ -148,7 +148,7 @@ class GIT {
         & $this.writeVerboseFunction ">>> SyncBranch: Successfull <<<"
 
     }
-    [void] MergeToMain([string]$param) {
+    [void] MergeToMain() {
         #   Merge of current branch to Master --> can be done by priviliged users only
         & $this.writeVerboseFunction ">>> SyncBranch <<<"
     
@@ -164,7 +164,7 @@ class GIT {
             if ($_ -eq $currUser) { $allowMergeMain = $true ; break } 
         }
     
-        if (!$allowMergeMain) { Write-Host ">>> No Access to this Method..."; break }
+        if (-not $allowMergeMain) { Write-Host ">>> No Access to this Method..."; break }
     
         $currBranch = git branch --show-current
         $cbUpper = $currBranch.ToUpper()
