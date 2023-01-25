@@ -1,0 +1,118 @@
+{
+  "name": "d4baef72024b4a731690",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 9.7536945812807883,
+        "y": 380.39408866995075,
+        "z": 2,
+        "width": 683.64532019704438,
+        "height": 339.60591133004925
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "columnChart",
+    "projections": {
+      "Y": [
+        {
+          "queryRef": "Sales.SalesAmount"
+        }
+      ],
+      "Category": [
+        {
+          "queryRef": "Product.Category",
+          "active": true
+        }
+      ],
+      "Rows": [
+        {
+          "queryRef": "Product.Color"
+        }
+      ]
+    },
+    "prototypeQuery": {
+      "Version": 2,
+      "From": [
+        {
+          "Name": "s",
+          "Entity": "Sales",
+          "Type": 0
+        },
+        {
+          "Name": "p",
+          "Entity": "Product",
+          "Type": 0
+        }
+      ],
+      "Select": [
+        {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "s"
+              }
+            },
+            "Property": "SalesAmount"
+          },
+          "Name": "Sales.SalesAmount"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "p"
+              }
+            },
+            "Property": "Category"
+          },
+          "Name": "Product.Category"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "p"
+              }
+            },
+            "Property": "Color"
+          },
+          "Name": "Product.Color"
+        }
+      ],
+      "OrderBy": [
+        {
+          "Direction": 2,
+          "Expression": {
+            "Measure": {
+              "Expression": {
+                "SourceRef": {
+                  "Source": "s"
+                }
+              },
+              "Property": "SalesAmount"
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "hasDefaultSort": true,
+    "objects": {
+      "smallMultiplesLayout": [
+        {
+          "properties": {
+            "columnCount": {
+              "expr": {
+                "Literal": {
+                  "Value": "5L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

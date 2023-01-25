@@ -42,7 +42,7 @@ $commHeaderMessage = 'Identifuing changes for BarChart'
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
 '
->> Simple Barchart Added; json files copied to [Design Templates/00000_columnChart (9caec)]
+>> Small Mulriples Barchart Added; json files copied to [Design Templates/00000_columnChart (9caec)]
 '
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"
