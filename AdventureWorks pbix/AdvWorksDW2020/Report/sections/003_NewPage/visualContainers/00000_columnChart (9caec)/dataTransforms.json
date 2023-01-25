@@ -1,0 +1,142 @@
+{
+  "objects": {
+    "smallMultiplesLayout": [
+      {
+        "properties": {
+          "columnCount": {
+            "expr": {
+              "Literal": {
+                "Value": "3L"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "projectionOrdering": {
+    "Y": [
+      0
+    ],
+    "Category": [
+      1
+    ],
+    "Series": [],
+    "Rows": [
+      2
+    ]
+  },
+  "projectionActiveItems": {
+    "Category": [
+      {
+        "queryRef": "Product.Category",
+        "suppressConcat": false
+      }
+    ]
+  },
+  "queryMetadata": {
+    "Select": [
+      {
+        "Restatement": "SalesAmount",
+        "Name": "Sales.SalesAmount",
+        "Type": 1
+      },
+      {
+        "Restatement": "Category",
+        "Name": "Product.Category",
+        "Type": 2048
+      },
+      {
+        "Restatement": "Color",
+        "Name": "Product.Color",
+        "Type": 2048
+      }
+    ]
+  },
+  "visualElements": [
+    {
+      "DataRoles": [
+        {
+          "Name": "Y",
+          "Projection": 0,
+          "isActive": false
+        },
+        {
+          "Name": "Category",
+          "Projection": 1,
+          "isActive": true
+        },
+        {
+          "Name": "Rows",
+          "Projection": 2,
+          "isActive": false
+        }
+      ]
+    }
+  ],
+  "selects": [
+    {
+      "displayName": "SalesAmount",
+      "queryName": "Sales.SalesAmount",
+      "roles": {
+        "Y": true
+      },
+      "type": {
+        "category": null,
+        "underlyingType": 258
+      },
+      "expr": {
+        "Measure": {
+          "Expression": {
+            "SourceRef": {
+              "Entity": "Sales"
+            }
+          },
+          "Property": "SalesAmount"
+        }
+      }
+    },
+    {
+      "displayName": "Category",
+      "queryName": "Product.Category",
+      "roles": {
+        "Category": true
+      },
+      "type": {
+        "category": null,
+        "underlyingType": 1
+      },
+      "expr": {
+        "Column": {
+          "Expression": {
+            "SourceRef": {
+              "Entity": "Product"
+            }
+          },
+          "Property": "Category"
+        }
+      }
+    },
+    {
+      "displayName": "Color",
+      "queryName": "Product.Color",
+      "roles": {
+        "Rows": true
+      },
+      "type": {
+        "category": null,
+        "underlyingType": 1
+      },
+      "expr": {
+        "Column": {
+          "Expression": {
+            "SourceRef": {
+              "Entity": "Product"
+            }
+          },
+          "Property": "Color"
+        }
+      }
+    }
+  ]
+}

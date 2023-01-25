@@ -1,0 +1,124 @@
+{
+  "Commands": [
+    {
+      "SemanticQueryDataShapeCommand": {
+        "Query": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "s",
+              "Entity": "Sales",
+              "Type": 0
+            },
+            {
+              "Name": "p",
+              "Entity": "Product",
+              "Type": 0
+            }
+          ],
+          "Select": [
+            {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "s"
+                  }
+                },
+                "Property": "SalesAmount"
+              },
+              "Name": "Sales.SalesAmount"
+            },
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "p"
+                  }
+                },
+                "Property": "Category"
+              },
+              "Name": "Product.Category"
+            },
+            {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Source": "p"
+                  }
+                },
+                "Property": "Color"
+              },
+              "Name": "Product.Color"
+            }
+          ]
+        },
+        "Binding": {
+          "Primary": {
+            "Groupings": [
+              {
+                "Projections": [
+                  2
+                ]
+              },
+              {
+                "Projections": [
+                  0,
+                  1
+                ]
+              }
+            ],
+            "Synchronization": [
+              {
+                "Groupings": [
+                  1
+                ]
+              }
+            ]
+          },
+          "DataReduction": {
+            "DataVolume": 6,
+            "Scoped": [
+              {
+                "Scope": {
+                  "Primary": [
+                    0
+                  ]
+                },
+                "Algorithm": {
+                  "Window": {
+                    "Count": 9
+                  }
+                }
+              },
+              {
+                "Scope": {
+                  "Primary": [
+                    1
+                  ]
+                },
+                "Algorithm": {
+                  "Top": {}
+                }
+              }
+            ]
+          },
+          "Aggregates": [
+            {
+              "Select": 0,
+              "Aggregations": [
+                {
+                  "Min": {}
+                },
+                {
+                  "Max": {}
+                }
+              ]
+            }
+          ],
+          "Version": 1
+        },
+        "ExecutionMetricsKind": 1
+      }
+    }
+  ]
+}
