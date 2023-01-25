@@ -1,0 +1,102 @@
+{
+  "name": "9caecb97de90ec4ab770",
+  "layouts": [
+    {
+      "id": 0,
+      "position": {
+        "x": 488.57142857142856,
+        "y": 34.581280788177338,
+        "z": 1,
+        "width": 510.73891625615767,
+        "height": 339.60591133004925
+      }
+    }
+  ],
+  "singleVisual": {
+    "visualType": "columnChart",
+    "projections": {
+      "Y": [
+        {
+          "queryRef": "Sales.SalesAmount"
+        }
+      ],
+      "Category": [
+        {
+          "queryRef": "Product.Category",
+          "active": true
+        }
+      ]
+    },
+    "prototypeQuery": {
+      "Version": 2,
+      "From": [
+        {
+          "Name": "s",
+          "Entity": "Sales",
+          "Type": 0
+        },
+        {
+          "Name": "p",
+          "Entity": "Product",
+          "Type": 0
+        }
+      ],
+      "Select": [
+        {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "s"
+              }
+            },
+            "Property": "SalesAmount"
+          },
+          "Name": "Sales.SalesAmount"
+        },
+        {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Source": "p"
+              }
+            },
+            "Property": "Category"
+          },
+          "Name": "Product.Category"
+        }
+      ],
+      "OrderBy": [
+        {
+          "Direction": 2,
+          "Expression": {
+            "Measure": {
+              "Expression": {
+                "SourceRef": {
+                  "Source": "s"
+                }
+              },
+              "Property": "SalesAmount"
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "hasDefaultSort": true,
+    "objects": {
+      "smallMultiplesLayout": [
+        {
+          "properties": {
+            "columnCount": {
+              "expr": {
+                "Literal": {
+                  "Value": "3L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
