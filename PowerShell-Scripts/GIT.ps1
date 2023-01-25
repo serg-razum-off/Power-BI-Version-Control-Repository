@@ -155,17 +155,15 @@ class GIT {
     
         <#  --------------- some logic for checking if current user is a provoliged one ---------------  #>
     
-        git merge main $currBranch
+        git merge main ($currBranch)
     }    
     [void] MergeFromMain() {
         #	Merge from Master to current branch --> to FF other developers' changes
         & $this.writeVerboseFunction ">>> MergeFromMain <<<"
     
         $currBranch = git branch --show-current
-        $cbUpper = $currBranch.ToUpper()
-        if ((Read-Host -Prompt "Are you sure want to merge Main into >> $cbUpper << ? [Y] / N") -eq "N") { break }
         
         git merge main   
-        & this.writeVerboseFunction ">>> Branch merged to Main <<<"
+        & this.writeVerboseFunction ">>> Branch merged to Main: $currBranch <<<"
     }
 }

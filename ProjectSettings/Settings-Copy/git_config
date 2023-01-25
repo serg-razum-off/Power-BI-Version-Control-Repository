@@ -21,26 +21,26 @@
 	name = SR
 	email = sergiy.razumov@gmail.com
 [alias]
-		st = status
-		sts = status -s -u
-		df = diff --stat
-		br = branch
-		brv = branch -vv
-		plus = add -A
-		minus = reset
-		minusH = reset --hard
-		hist = log --pretty=format:\">>>        |%h | %ad | [%an] | %s%d \" --graph --date=short
-		cho = checkout
-		cmm = commit -a -m
-		# amm = commit --amend -m	## SR: Use only manually if sure what it does
-		content = cat-file -p
-		type = cat-file -t
-		pull = pull origin
-		pushm = push origin main
-		pushu = push origin -u
-		geturl = config --get remote.origin.url
-		getmain = symbolic-ref refs/remotes/origin/HEAD
-		changes = diff --stat
+	# amm = commit --amend -m
+	br = branch
+	brv = branch -vv
+	changes = diff --stat
+	cho = checkout
+	cmm = commit -a -m
+	content = cat-file -p
+	df = diff --stat
+	getmain = symbolic-ref refs/remotes/origin/HEAD
+	geturl = config --get remote.origin.url
+	hist = log --pretty=format:\">>>        |%h | %ad | [%an] | %s%d \" --graph --date=short
+	minus = reset
+	minusH = reset --hard
+	plus = add -A
+	pull = pull origin
+	pushm = push origin main
+	pushu = push origin -u
+	st = status
+	sts = status -s -u
+	type = cat-file -t
 [branch "Management-Excel----DAX-measures"]
 	remote = origin
 	merge = refs/heads/Management-Excel----DAX-measures
