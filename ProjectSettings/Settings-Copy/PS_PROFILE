@@ -199,7 +199,7 @@ function gpt {
         { $param -match '(pws|powershell).(swi|swt)' } { Start-Process "https://chat.openai.com/chat/a02d2d80-01ae-4397-bec9-cc2f51bb02a7"; break }
         { $param -match '(pws|powershell).(misc|oth)' } { Start-Process "https://chat.openai.com/chat/7f47bb34-eb00-48f7-b483-58bf4901a79f"; break }
         { $param -match '(?i)(C#|json|jsn)' } { Start-Process "https://chat.openai.com/chat/6a1d1e1d-af62-41d8-bfb5-e91daedcfef5"; break }
-        { $param -match 'git.*misc' } { Start-Process "https://chat.openai.com/chat/e898b56a-2ae0-4397-849a-5156252d82c3"; break }
+        { $param -match '(git|misc)' } { Start-Process "https://chat.openai.com/chat/e898b56a-2ae0-4397-849a-5156252d82c3"; break }
         { $param -match '(vba|excel|xls)' } { Start-Process "https://chat.openai.com/chat/12dd2484-e369-4af7-bab9-3a6ca74bf1ae"; break }
         Default { Start-Process "https://chat.openai.com/chat"; break }
     }

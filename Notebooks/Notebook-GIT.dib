@@ -37,12 +37,12 @@ $classes = @{"git"=$git; "pbit"=$pbit}
 $currentUser = git config user.name
 $date = Get-Date -Format "yyy-MM-dd"
 
-$commHeaderMessage = 'Identifuing changes for BarChart'
+$commHeaderMessage = 'Minor Changes'
 
 #Body can be multiline. Make a vivid separator for each of the lines, like '-->'
 $commBodyMessage = ` 
 '
->> Small Mulriples Barchart Added; json files copied to [Design Templates/00000_columnChart (9caec)]
+>> git.config; $PRROFILE
 '
 
 $commMsg = "$currentUser [$date]: $commHeaderMessage `n $commBodyMessage"

@@ -30,6 +30,8 @@
 	content = cat-file -p
 	df = diff --stat
 	getmain = symbolic-ref refs/remotes/origin/HEAD
+	## fixing broken HEAD: # https://stackoverflow.com/questions/45811971/warning-ignoring-broken-ref-refs-remotes-origin-head
+	##		git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/<branch_name>
 	geturl = config --get remote.origin.url
 	hist = log --pretty=format:\">>>        |%h | %ad | [%an] | %s%d \" --graph --date=short
 	minus = reset
