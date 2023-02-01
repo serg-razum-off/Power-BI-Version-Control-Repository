@@ -31,10 +31,10 @@ $pbit = [pbit]::new()
 #!pwsh
 
 $pbit.Launch()
+Start-Sleep -Seconds 9
 
 #!pwsh
 
-Start-Sleep -Seconds 9
 $pbit.WatchMode()
 
 #!markdown

@@ -51,9 +51,8 @@ function lse {
     try { 0..($Error.Count - 1) | ForEach-Object { "[$($_)]--> [$($Error[$_])]" } } catch { "No Errs yet... bad worker"; $error.clear() } 
 }   
 
-function lsed (
-    # displays details about requested Err    
-    [int]$ErrIdx) {
+function lsed ([int]$ErrIdx) {
+    # displays details about requested Err
     if ($null -ne $ErrIdx) { $Error[$ErrIdx] | Get-Error; break } Get-Error 
 } 
 function lsec { $error.clear() }
@@ -79,9 +78,7 @@ function renameblk ([string]$partNameFrom, [string]$partNameTo) {
         ) 
     } 
 }
-function home { Set-Location $HOME }
-function homel { Set-Location $HOME\links }
-function back { Set-Location - } # cd - )))
+function Update-Powershell { Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI" } # iex, irm
 # ================== File System Helpers: end ============================
 #endregion
 
@@ -231,7 +228,16 @@ function Start-tekken3 { Start-Process "https://www.retrogames.cc/psx-games/tekk
 
 function Start-MK3 { Start-Process "https://www.retrogames.cc/psx-games/mortal-kombat-3.html" }
 # function hdtv { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }
-function hd { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }function yt { $lnk = $args.Length -eq 0 ? "https://www.youtube.com/" : "https://www.youtube.com/results?search_query=$($args -join ' ')"; Start-Process $lnk }
+function hd { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }
+function yt { 
+    $param = $args -join ' ';
+    switch ($param) {
+        { $param.Length -eq 0 } { $lnk = "https://www.youtube.com/" }
+        { $param -match 'hist' } { $lnk = "https://www.youtube.com/feed/history" }
+        Default { $lnk = "https://www.youtube.com/results?search_query=$($param)" }
+    }	
+    Start-Process $lnk 
+}
 #endregion
 
 
