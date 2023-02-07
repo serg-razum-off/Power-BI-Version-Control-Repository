@@ -30,7 +30,7 @@ function save-settings {
 # ================== File System Helpers ============================
 Set-Alias -Name 'cat' -Value Get-Content -Scope Global
 Set-Alias -Name 'touch' -Value New-Item -Scope Global
-function touchd { New-Item -Path ($args -Join '\') -Force }
+function touchd { New-Item -Path ($args -Join '\') -Force } #creates file in the folder that don't exist
 Set-Alias -Name 'grep' -Value Select-String -Scope Global
 Set-Alias -Name 'rm' -Value Remove-Item -Scope Global
 Set-Alias -Name 'inv' -Value Invoke-Item -Scope Global 
@@ -143,7 +143,7 @@ function Get-Verbs { get-verb | clip && np } # lists correct verbs in NotePad++.
 #region DataProcess
 # =================== DATA PROCESS helpers: start ========================
 function csv2dt ($scv) {
-    # returns DataTable
+    # returns DataTable ⭐⭐⭐⭐⭐
     # converts content of csv file into a System.Data.DataTable; $csv is object[] that should be derived by 
     #       $csv = Get-Content '.\Wheat Data-All Years.csv' -Force
     #       ConvertTo-Csv, etc
@@ -155,7 +155,14 @@ function csv2dt ($scv) {
     $dt = New-Object System.Data.DataTable
     # $dt.Columns.AddRange($columns) # --> this adds all columns in one bulk but all datatypes are [stting]
 
-    $columns | ForEach-Object -Begin { $i = 0 } -Process { if ($sampleData[$i] -match "[0-9]+.?[0-9]?") { [void]$dt.Columns.Add($_, [double]) } else { [void]$dt.Columns.Add($_, [string]) } $i++ }
+    $columns | ForEach-Object -Begin { $i = 0 } -Process { 
+        if ($sampleData[$i] -match "[0-9]+.?[0-9]?") { 
+            [void]$dt.Columns.Add($_, [double]) 
+        }
+        else { 
+            [void]$dt.Columns.Add($_, [string]) 
+        } $i++ 
+    }
     # $dt.Columns | ft
     $data | ForEach-Object { [void]$dt.Rows.Add($_.split(',')) }
 
@@ -169,17 +176,7 @@ function csv2dt ($scv) {
 #------------------------- Starters helpers -------------------------
 # ⭐⭐⭐ np --> launches notepadd++
 function np { Start-Process notepad++ } 
-Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                  
-function book ([string] $book) {   
-    # ⭐⭐⭐ 4 practice -- starts a script that opens a book. Just to skip explorers and mousclicks. 
-    if ($book -eq "") 
-    { Get-ChildItem "$home\Desktop\PS Launcher\" } 
-    else { 
-        $nm = ( Get-ChildItem "$home\Desktop\PS Launcher\"  | Select-Object Name | Where-Object Name -like "*$book*").Name; 
-        &  "$home\Desktop\PS Launcher\$nm" 
-    }
-    # Write-Host "book = $book; nm = $nm"   
-}                                
+Set-Alias -Name 'dnh' -Value Get-NetHelp -Scope Global # fn in this file                                                                  
 function startm ([string] $AppName) { Search-StartMenu $AppName | invoke-item }   #                     ⭐⭐⭐ requires PowerShellCookbook Module installed 
 Set-Alias -Name getm -Value Get-StartApps
 function gt { Start-Process "https://translate.google.com/?sl=en&tl=uk&text=$($args -join ' ')&op=translate" } 
@@ -219,6 +216,16 @@ function jsonv {
 function dxg 
 #keep in mind structure of the DaxGuide site: /group/section. Groups are dt: datatypes; op: operators; st: statements; blank: functions
 { Start-Process "https://dax.guide/$($args -join '/')" } 
+
+# ---------------------- Melee T -------------------------------------
+# temporary for MPZ 
+function mpz {
+    $param = $args -join ' '
+    switch ($param) {
+        { $param -match '(sht|sh|stat)' } { Start-Process "https://drive.google.com/drive/folders/1Ziq6VHWASvsa3AeoBMifLQB45J0WEUIW" }
+        Default { Start-Process "https://drive.google.com/drive/folders/1TuylLnpaaSqbq8YGIPhHjumny0jqOoCA" }
+    }
+}
 
 #endregion
 
