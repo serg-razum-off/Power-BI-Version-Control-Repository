@@ -222,8 +222,11 @@ function dxg
 function mpz {
     $param = $args -join ' '
     switch ($param) {
-        { $param -match '(sht|sh|stat)' } { Start-Process "https://drive.google.com/drive/folders/1Ziq6VHWASvsa3AeoBMifLQB45J0WEUIW" }
-        Default { Start-Process "https://drive.google.com/drive/folders/1TuylLnpaaSqbq8YGIPhHjumny0jqOoCA" }
+        { $param -match '(sht|sh|shtat)' } { Start-Process "https://drive.google.com/drive/folders/1Ziq6VHWASvsa3AeoBMifLQB45J0WEUIW" ; break }
+        { $param -match '(loc|local)' } { inv 'C:\Users\Sergey\OneDrive\Xls\ТО2022 3р2в\MPZ' ; break}
+        { $param -match '(gpp|gppu)' } { Start-Process 'https://drive.google.com/drive/folders/1XuZSmXD3_DemOraPiB09ilZ4i10lVGDg' ; break}
+        { $param -match '(med|media)' } { Start-Process 'https://drive.google.com/drive/folders/1BD7E4AdjAxM8CAGSfbun_DeYP89b0bwe' ; break}
+        Default { Start-Process "https://drive.google.com/drive/folders/1TuylLnpaaSqbq8YGIPhHjumny0jqOoCA" ; break }
     }
 }
 
@@ -236,11 +239,13 @@ function Start-tekken3 { Start-Process "https://www.retrogames.cc/psx-games/tekk
 function Start-MK3 { Start-Process "https://www.retrogames.cc/psx-games/mortal-kombat-3.html" }
 # function hdtv { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }
 function hd { Start-Process "https://hdtoday.tv/search/$($args -join '-')" }
+function math { Start-Process "https://poki.com/en/g/arithmetica" }
 function yt { 
     $param = $args -join ' ';
     switch ($param) {
         { $param.Length -eq 0 } { $lnk = "https://www.youtube.com/" }
         { $param -match 'hist' } { $lnk = "https://www.youtube.com/feed/history" }
+        { $param -match '(down|dwn|dw)' } { $lnk = "https://www.youtube.com/feed/downloads" }
         Default { $lnk = "https://www.youtube.com/results?search_query=$($param)" }
     }	
     Start-Process $lnk 
@@ -251,7 +256,6 @@ function yt {
 # -------------------------- SETTING UP REQUIRED MODULES ------------------------------
 # requiref modules are here. Yes to [A]lsf  on install request 
 # more on Pester https://pester.dev/docs/introduction/installation 
-# ⭐⭐⭐⭐⭐     
 $modulesListToInstall = @('ImportExcel', 'PowerShellCookbook', 'Pester')
 $modulesListToInstall | ForEach-Object {
     if (    -not (Get-Module $_ -ListAvailable)   ) { Install-Module -Name $_ -AllowClobber }
