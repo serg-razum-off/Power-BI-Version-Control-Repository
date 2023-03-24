@@ -291,7 +291,17 @@ function prompt {
     $isGitDir = git rev-parse --is-inside-work-tree 2>$null
     if ($null -ne $isGitDir) {
         $currBr = git branch --show-current
-        $mainBrName = ([regex]::match((git symbolic-ref refs/remotes/origin/HEAD), "/m\w+").value).Substring(1)
+        
+        try {
+            $mainBrName = ([regex]::match((git symbolic-ref refs/remotes/origin/HEAD), "/m\w+").value).Substring(1)
+        }
+        # catch [System.Management.Automation.MethodInvocationException] {
+        #     $mainBrName = "lc-" + ( git branch --show-current )
+        # }
+        catch{
+            $mainBrName = "#-Err-Id-#"
+        }
+
         try {
             $compMain = git rev-list --left-right --count origin/$mainBrName...origin/$currBr
             $mainBrAhead = $compMain[1] -eq [byte][char]9  ? ( $compMain[0] ) : ( $compMain[0] + $compMain[1] )
